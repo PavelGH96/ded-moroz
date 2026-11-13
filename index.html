@@ -64,8 +64,6 @@ h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);line-height:1.2
 h1{font-size:var(--h1);line-height:1.24}
 h2{font-size:var(--h2)}
 h1,h2{position:relative}
-.snowcap{position:absolute;pointer-events:none;z-index:1;opacity:0;transition:opacity .5s}
-.caps-on .snowcap{opacity:1}
 h3{font-size:1.35rem}
 p{margin:0}
 .wrap{width:min(1120px,100% - 32px);margin-inline:auto}
@@ -336,7 +334,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
   .hero-letter{position:relative;right:auto;bottom:auto;width:100%;max-width:420px;margin-top:4px;transform:rotate(1deg)}
 }
 @media (max-width:480px){.steps{grid-template-columns:1fr}.letter{padding:28px 20px 40px}.form{padding:20px}}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}.snowcap{transition:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
 /* планшет и телефон боком: Дед Мороз и письмо рядом */
 @media (min-width:700px) and (max-width:1060px){
   .hero-art{flex-direction:row;align-items:flex-end;justify-content:center;gap:18px}
@@ -372,6 +370,20 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
 .adult ul{margin:0}
 .seller span{font-variant-numeric:tabular-nums}
 @media (max-width:900px){.gift-demo,.adult{grid-template-columns:1fr;gap:28px}.adult{padding:24px}}
+
+/* новогодние украшения на словах заголовков */
+.deco{position:relative;display:inline-block}
+.deco::before,.deco::after{content:"";position:absolute;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:contain}
+.hat::before{left:-.22em;top:-.86em;width:1.32em;height:1.1em;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 60'%3E%3Cdefs%3E%3ClinearGradient id='r' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff5a48'/%3E%3Cstop offset='.6' stop-color='%23d62b20'/%3E%3Cstop offset='1' stop-color='%239e1a12'/%3E%3C/linearGradient%3E%3CradialGradient id='w' cx='.35' cy='.3' r='.8'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='1' stop-color='%23dfe6ea'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath d='M7 44 C10 22 24 6 42 7 C54 8 62 16 63 30 C59 25 53 23 48 25 C45 31 44 38 44 44 Z' fill='url%28%23r%29'/%3E%3Cpath d='M24 14 C30 9 37 8 42 9 C34 12 29 20 26 30 Z' fill='%23fff' opacity='.18'/%3E%3Crect x='3' y='39' width='46' height='15' rx='7.5' fill='url%28%23w%29'/%3E%3Cg fill='%23fff' opacity='.9'%3E%3Ccircle cx='9' cy='41' r='3'/%3E%3Ccircle cx='18' cy='40' r='3.4'/%3E%3Ccircle cx='29' cy='40.5' r='3.2'/%3E%3Ccircle cx='40' cy='40' r='3'/%3E%3C/g%3E%3Ccircle cx='63' cy='31' r='8' fill='url%28%23w%29'/%3E%3Ccircle cx='60.5' cy='28.5' r='2.4' fill='%23fff'/%3E%3C/svg%3E");transform:rotate(-17deg);filter:drop-shadow(0 .06em .08em rgba(0,0,0,.4))}
+.tinsel::after{left:-.12em;right:-.12em;bottom:-.62em;height:.72em;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-6 0 112 40'%3E%3Cg stroke-width='1.25' stroke-linecap='round' fill='none'%3E%3Cpath d='M32.4 17.6 l3.6 5.0' stroke='%23ffd36b'/%3E%3Cpath d='M82.1 14.5 l4.8 3.3' stroke='%23f4bf4f'/%3E%3Cpath d='M21.5 15.4 l4.4 2.7' stroke='%23ffe9a8'/%3E%3Cpath d='M9.1 11.6 l-6.1 3.1' stroke='%23ffd36b'/%3E%3Cpath d='M94.7 10.2 l-4.0 -4.3' stroke='%23ffd36b'/%3E%3Cpath d='M57.7 18.7 l-5.9 4.5' stroke='%23ffd36b'/%3E%3Cpath d='M55.7 18.9 l3.5 3.8' stroke='%23f4bf4f'/%3E%3Cpath d='M11.8 12.6 l-2.4 6.3' stroke='%23ffe9a8'/%3E%3Cpath d='M10.3 12.1 l-3.8 -1.8' stroke='%23ffd36b'/%3E%3Cpath d='M54.8 18.9 l3.5 1.4' stroke='%23ffe9a8'/%3E%3Cpath d='M49.6 19.0 l-6.5 -1.3' stroke='%23fff6d6'/%3E%3Cpath d='M58.6 18.7 l-4.5 1.4' stroke='%23ffe9a8'/%3E%3Cpath d='M69.9 17.3 l0.2 5.8' stroke='%23f4bf4f'/%3E%3Cpath d='M49.5 19.0 l-2.9 4.4' stroke='%23f4bf4f'/%3E%3Cpath d='M98.0 8.9 l3.8 3.5' stroke='%23e7a93a'/%3E%3Cpath d='M15.2 13.7 l-3.6 0.3' stroke='%23ffd36b'/%3E%3Cpath d='M76.5 15.9 l-6.3 -3.1' stroke='%23e7a93a'/%3E%3Cpath d='M34.0 17.9 l-3.2 4.4' stroke='%23fff6d6'/%3E%3Cpath d='M6.9 10.8 l3.8 2.5' stroke='%23ffd36b'/%3E%3Cpath d='M6.1 10.5 l-1.8 -5.8' stroke='%23fff6d6'/%3E%3Cpath d='M28.5 17.0 l-4.7 4.1' stroke='%23ffd36b'/%3E%3Cpath d='M94.1 10.5 l-3.7 4.7' stroke='%23fff6d6'/%3E%3Cpath d='M5.9 10.4 l0.5 -4.0' stroke='%23ffe9a8'/%3E%3Cpath d='M39.8 18.5 l4.8 -2.7' stroke='%23ffe9a8'/%3E%3Cpath d='M44.9 18.9 l-6.7 -2.1' stroke='%23fff6d6'/%3E%3Cpath d='M86.4 13.2 l-0.9 5.1' stroke='%23e7a93a'/%3E%3Cpath d='M68.3 17.5 l-3.2 3.0' stroke='%23ffd36b'/%3E%3Cpath d='M17.6 14.4 l0.5 4.4' stroke='%23fff6d6'/%3E%3Cpath d='M83.1 14.2 l1.9 4.2' stroke='%23ffe9a8'/%3E%3Cpath d='M41.9 18.7 l-3.9 4.2' stroke='%23ffe9a8'/%3E%3Cpath d='M69.0 17.4 l-5.9 -0.6' stroke='%23ffd36b'/%3E%3Cpath d='M45.7 18.9 l5.0 -5.3' stroke='%23f4bf4f'/%3E%3Cpath d='M39.2 18.5 l-3.2 2.3' stroke='%23fff6d6'/%3E%3Cpath d='M6.2 10.6 l4.0 1.8' stroke='%23ffe9a8'/%3E%3Cpath d='M11.0 12.3 l-3.2 -2.3' stroke='%23f4bf4f'/%3E%3Cpath d='M15.1 13.6 l4.0 2.9' stroke='%23ffd36b'/%3E%3Cpath d='M7.0 10.9 l1.3 4.8' stroke='%23e7a93a'/%3E%3Cpath d='M95.5 9.9 l-4.3 -3.2' stroke='%23ffd36b'/%3E%3Cpath d='M84.9 13.6 l5.4 -0.2' stroke='%23fff6d6'/%3E%3Cpath d='M31.2 17.4 l4.0 5.1' stroke='%23e7a93a'/%3E%3Cpath d='M47.9 19.0 l-2.0 -5.2' stroke='%23ffe9a8'/%3E%3Cpath d='M95.1 10.1 l-4.0 -0.7' stroke='%23f4bf4f'/%3E%3Cpath d='M91.4 11.5 l0.2 -4.7' stroke='%23ffd36b'/%3E%3Cpath d='M69.6 17.3 l-0.3 5.0' stroke='%23ffe9a8'/%3E%3Cpath d='M35.6 18.1 l1.0 5.6' stroke='%23f4bf4f'/%3E%3Cpath d='M33.0 17.7 l1.1 6.6' stroke='%23ffe9a8'/%3E%3Cpath d='M80.6 14.9 l2.7 -5.9' stroke='%23ffe9a8'/%3E%3Cpath d='M20.0 15.0 l-6.4 0.3' stroke='%23ffd36b'/%3E%3Cpath d='M79.0 15.3 l-4.2 0.7' stroke='%23f4bf4f'/%3E%3Cpath d='M95.7 9.8 l-6.9 2.4' stroke='%23e7a93a'/%3E%3Cpath d='M95.5 9.9 l-2.9 3.3' stroke='%23ffe9a8'/%3E%3Cpath d='M47.0 19.0 l-2.8 4.6' stroke='%23f4bf4f'/%3E%3Cpath d='M84.0 13.9 l-6.1 0.8' stroke='%23ffd36b'/%3E%3Cpath d='M83.5 14.1 l3.7 3.5' stroke='%23ffe9a8'/%3E%3Cpath d='M47.8 19.0 l2.9 6.0' stroke='%23e7a93a'/%3E%3Cpath d='M8.7 11.5 l6.0 -2.1' stroke='%23fff6d6'/%3E%3Cpath d='M40.1 18.6 l6.0 -2.1' stroke='%23ffe9a8'/%3E%3Cpath d='M99.3 8.3 l5.8 1.0' stroke='%23fff6d6'/%3E%3Cpath d='M80.7 14.9 l4.1 5.4' stroke='%23fff6d6'/%3E%3Cpath d='M65.7 17.9 l-3.4 4.6' stroke='%23ffe9a8'/%3E%3Cpath d='M2.1 8.9 l2.0 -6.1' stroke='%23ffd36b'/%3E%3Cpath d='M52.7 19.0 l4.8 -2.1' stroke='%23ffe9a8'/%3E%3Cpath d='M82.6 14.3 l1.1 4.4' stroke='%23e7a93a'/%3E%3Cpath d='M50.1 19.0 l0.4 -4.8' stroke='%23f4bf4f'/%3E%3Cpath d='M41.9 18.7 l4.9 5.2' stroke='%23e7a93a'/%3E%3Cpath d='M89.8 12.0 l-3.5 -5.8' stroke='%23f4bf4f'/%3E%3Cpath d='M42.1 18.7 l4.8 -2.7' stroke='%23f4bf4f'/%3E%3Cpath d='M15.2 13.7 l-7.0 -0.5' stroke='%23ffe9a8'/%3E%3Cpath d='M60.9 18.5 l0.7 -4.0' stroke='%23ffe9a8'/%3E%3Cpath d='M47.3 19.0 l-0.9 -5.7' stroke='%23e7a93a'/%3E%3Cpath d='M68.2 17.5 l-5.3 -1.0' stroke='%23ffd36b'/%3E%3Cpath d='M88.3 12.5 l4.0 1.5' stroke='%23ffd36b'/%3E%3Cpath d='M77.2 15.7 l-5.7 -0.3' stroke='%23ffd36b'/%3E%3Cpath d='M44.3 18.9 l-4.2 -3.6' stroke='%23f4bf4f'/%3E%3Cpath d='M19.9 15.0 l-0.9 5.5' stroke='%23fff6d6'/%3E%3Cpath d='M50.8 19.0 l0.1 5.6' stroke='%23e7a93a'/%3E%3Cpath d='M92.3 11.1 l3.4 -2.7' stroke='%23fff6d6'/%3E%3Cpath d='M13.7 13.2 l3.8 3.6' stroke='%23ffd36b'/%3E%3Cpath d='M67.1 17.7 l-3.9 1.9' stroke='%23e7a93a'/%3E%3Cpath d='M78.4 15.5 l3.3 -2.5' stroke='%23e7a93a'/%3E%3Cpath d='M14.3 13.4 l5.5 -4.9' stroke='%23ffe9a8'/%3E%3Cpath d='M74.7 16.3 l5.8 3.9' stroke='%23ffe9a8'/%3E%3Cpath d='M99.0 8.4 l2.1 -3.6' stroke='%23fff6d6'/%3E%3Cpath d='M99.4 8.3 l-4.3 2.9' stroke='%23e7a93a'/%3E%3Cpath d='M31.9 17.6 l-0.6 -3.5' stroke='%23f4bf4f'/%3E%3Cpath d='M45.9 18.9 l-1.5 -4.8' stroke='%23f4bf4f'/%3E%3Cpath d='M62.4 18.3 l-3.7 -0.3' stroke='%23ffe9a8'/%3E%3Cpath d='M97.2 9.2 l3.6 2.8' stroke='%23ffd36b'/%3E%3Cpath d='M90.6 11.8 l2.7 5.9' stroke='%23fff6d6'/%3E%3Cpath d='M85.0 13.6 l-3.3 -6.5' stroke='%23fff6d6'/%3E%3Cpath d='M14.9 13.6 l5.1 -2.8' stroke='%23e7a93a'/%3E%3Cpath d='M8.9 11.6 l5.8 2.2' stroke='%23fff6d6'/%3E%3Cpath d='M89.5 12.1 l-0.4 3.5' stroke='%23ffd36b'/%3E%3Cpath d='M80.2 15.0 l6.0 3.5' stroke='%23ffd36b'/%3E%3Cpath d='M26.4 16.6 l2.6 2.5' stroke='%23f4bf4f'/%3E%3Cpath d='M41.8 18.7 l5.2 -3.0' stroke='%23ffd36b'/%3E%3Cpath d='M52.7 19.0 l0.3 3.9' stroke='%23ffe9a8'/%3E%3Cpath d='M26.2 16.5 l3.0 6.6' stroke='%23e7a93a'/%3E%3Cpath d='M53.1 19.0 l1.4 5.1' stroke='%23ffe9a8'/%3E%3Cpath d='M27.1 16.7 l2.5 -7.1' stroke='%23ffd36b'/%3E%3Cpath d='M1.5 8.7 l-0.6 -5.7' stroke='%23ffe9a8'/%3E%3Cpath d='M51.4 19.0 l0.1 5.3' stroke='%23fff6d6'/%3E%3Cpath d='M65.7 17.9 l-6.8 -2.0' stroke='%23f4bf4f'/%3E%3Cpath d='M30.8 17.4 l1.0 4.3' stroke='%23ffe9a8'/%3E%3Cpath d='M83.2 14.1 l-1.6 -5.8' stroke='%23fff6d6'/%3E%3Cpath d='M98.9 8.5 l6.8 -0.8' stroke='%23ffd36b'/%3E%3Cpath d='M7.1 10.9 l-0.3 -4.5' stroke='%23ffe9a8'/%3E%3Cpath d='M5.5 10.3 l-2.6 -4.3' stroke='%23f4bf4f'/%3E%3Cpath d='M67.1 17.7 l-0.9 4.4' stroke='%23e7a93a'/%3E%3Cpath d='M4.5 9.9 l1.8 4.2' stroke='%23ffd36b'/%3E%3Cpath d='M26.3 16.5 l7.2 -1.8' stroke='%23f4bf4f'/%3E%3Cpath d='M32.4 17.6 l6.9 1.5' stroke='%23ffe9a8'/%3E%3Cpath d='M35.7 18.1 l5.0 0.0' stroke='%23fff6d6'/%3E%3Cpath d='M27.9 16.8 l-2.5 -3.7' stroke='%23ffd36b'/%3E%3Cpath d='M9.1 11.6 l1.7 -3.7' stroke='%23f4bf4f'/%3E%3Cpath d='M4.2 9.8 l4.7 0.7' stroke='%23ffe9a8'/%3E%3Cpath d='M8.4 11.4 l6.7 -1.8' stroke='%23ffe9a8'/%3E%3Cpath d='M65.8 17.9 l-1.5 -6.9' stroke='%23fff6d6'/%3E%3Cpath d='M76.4 15.9 l-1.0 -5.4' stroke='%23e7a93a'/%3E%3Cpath d='M72.4 16.8 l-2.3 -2.9' stroke='%23f4bf4f'/%3E%3Cpath d='M62.7 18.3 l-0.7 -6.7' stroke='%23ffe9a8'/%3E%3Cpath d='M91.0 11.6 l0.1 -5.8' stroke='%23ffd36b'/%3E%3Cpath d='M82.6 14.3 l-6.1 -3.6' stroke='%23ffe9a8'/%3E%3Cpath d='M8.5 11.4 l5.8 1.6' stroke='%23ffd36b'/%3E%3Cpath d='M37.7 18.3 l-3.5 1.1' stroke='%23ffd36b'/%3E%3Cpath d='M62.6 18.3 l-2.3 -4.9' stroke='%23ffd36b'/%3E%3Cpath d='M45.7 18.9 l6.5 3.1' stroke='%23f4bf4f'/%3E%3Cpath d='M9.2 11.7 l-6.4 -1.1' stroke='%23fff6d6'/%3E%3Cpath d='M25.2 16.3 l4.1 2.1' stroke='%23ffe9a8'/%3E%3Cpath d='M23.1 15.8 l-3.1 -4.3' stroke='%23fff6d6'/%3E%3Cpath d='M7.7 11.1 l3.9 -2.5' stroke='%23ffd36b'/%3E%3Cpath d='M61.7 18.4 l-2.4 -3.0' stroke='%23ffe9a8'/%3E%3Cpath d='M33.2 17.8 l-3.6 -5.1' stroke='%23f4bf4f'/%3E%3Cpath d='M56.8 18.8 l3.7 0.3' stroke='%23e7a93a'/%3E%3Cpath d='M97.3 9.2 l3.5 2.6' stroke='%23fff6d6'/%3E%3Cpath d='M29.1 17.1 l-5.3 -0.6' stroke='%23fff6d6'/%3E%3Cpath d='M76.7 15.9 l5.7 -0.2' stroke='%23e7a93a'/%3E%3Cpath d='M97.8 8.9 l3.3 -1.4' stroke='%23fff6d6'/%3E%3Cpath d='M7.6 11.1 l-7.5 -0.3' stroke='%23e7a93a'/%3E%3Cpath d='M38.7 18.4 l6.3 -3.6' stroke='%23ffd36b'/%3E%3Cpath d='M58.1 18.7 l3.5 4.4' stroke='%23e7a93a'/%3E%3Cpath d='M13.3 13.1 l2.4 -5.0' stroke='%23ffd36b'/%3E%3Cpath d='M70.3 17.2 l0.8 7.0' stroke='%23fff6d6'/%3E%3Cpath d='M39.4 18.5 l3.9 6.1' stroke='%23fff6d6'/%3E%3Cpath d='M40.5 18.6 l-0.7 -5.1' stroke='%23fff6d6'/%3E%3Cpath d='M31.6 17.5 l1.9 -3.0' stroke='%23e7a93a'/%3E%3Cpath d='M83.9 13.9 l5.3 4.9' stroke='%23ffd36b'/%3E%3Cpath d='M90.2 11.9 l-1.2 4.8' stroke='%23fff6d6'/%3E%3Cpath d='M39.0 18.5 l2.6 -2.8' stroke='%23fff6d6'/%3E%3Cpath d='M75.6 16.1 l2.8 -3.7' stroke='%23ffd36b'/%3E%3Cpath d='M83.5 14.1 l-1.6 7.1' stroke='%23ffe9a8'/%3E%3Cpath d='M97.1 9.2 l-4.4 1.9' stroke='%23e7a93a'/%3E%3Cpath d='M78.5 15.4 l-3.2 1.6' stroke='%23fff6d6'/%3E%3Cpath d='M91.3 11.5 l5.3 -2.1' stroke='%23ffd36b'/%3E%3Cpath d='M4.9 10.1 l-0.6 -5.3' stroke='%23ffe9a8'/%3E%3Cpath d='M64.4 18.1 l-0.8 3.6' stroke='%23f4bf4f'/%3E%3Cpath d='M12.7 12.9 l-4.8 0.8' stroke='%23e7a93a'/%3E%3Cpath d='M25.6 16.4 l-0.4 -6.1' stroke='%23fff6d6'/%3E%3Cpath d='M65.6 17.9 l-1.8 5.4' stroke='%23fff6d6'/%3E%3Cpath d='M12.0 12.6 l-2.4 -3.0' stroke='%23f4bf4f'/%3E%3Cpath d='M90.6 11.7 l-4.4 0.1' stroke='%23e7a93a'/%3E%3Cpath d='M99.6 8.2 l-3.9 1.3' stroke='%23ffe9a8'/%3E%3Cpath d='M24.4 16.1 l2.6 5.1' stroke='%23e7a93a'/%3E%3Cpath d='M23.9 16.0 l-0.3 5.8' stroke='%23ffd36b'/%3E%3Cpath d='M75.0 16.3 l-4.4 2.7' stroke='%23f4bf4f'/%3E%3Cpath d='M21.0 15.3 l-0.8 6.5' stroke='%23fff6d6'/%3E%3Cpath d='M27.8 16.8 l3.9 -0.8' stroke='%23f4bf4f'/%3E%3Cpath d='M52.9 19.0 l1.7 -6.7' stroke='%23ffd36b'/%3E%3Cpath d='M27.1 16.7 l0.0 5.1' stroke='%23fff6d6'/%3E%3Cpath d='M43.2 18.8 l-2.6 6.3' stroke='%23ffd36b'/%3E%3Cpath d='M12.7 12.9 l-5.8 3.0' stroke='%23fff6d6'/%3E%3Cpath d='M96.8 9.4 l-3.8 0.2' stroke='%23f4bf4f'/%3E%3Cpath d='M85.5 13.4 l4.4 -0.8' stroke='%23ffd36b'/%3E%3Cpath d='M22.4 15.6 l4.3 6.0' stroke='%23ffd36b'/%3E%3Cpath d='M94.1 10.4 l-1.1 -6.0' stroke='%23fff6d6'/%3E%3Cpath d='M8.5 11.4 l0.6 -3.5' stroke='%23ffe9a8'/%3E%3Cpath d='M23.3 15.9 l5.3 -2.9' stroke='%23e7a93a'/%3E%3Cpath d='M96.2 9.6 l-3.9 -4.0' stroke='%23fff6d6'/%3E%3Cpath d='M69.9 17.3 l2.9 2.4' stroke='%23f4bf4f'/%3E%3Cpath d='M94.4 10.3 l1.6 4.2' stroke='%23f4bf4f'/%3E%3Cpath d='M0.1 8.1 l-7.3 -1.7' stroke='%23e7a93a'/%3E%3Cpath d='M95.9 9.7 l-4.3 -5.5' stroke='%23fff6d6'/%3E%3Cpath d='M52.6 19.0 l-3.5 -1.1' stroke='%23fff6d6'/%3E%3Cpath d='M70.5 17.2 l-1.3 3.4' stroke='%23fff6d6'/%3E%3Cpath d='M88.5 12.5 l-2.3 -3.1' stroke='%23ffe9a8'/%3E%3Cpath d='M66.7 17.8 l3.9 -2.0' stroke='%23ffd36b'/%3E%3Cpath d='M69.6 17.3 l-1.0 -4.9' stroke='%23fff6d6'/%3E%3Cpath d='M19.8 15.0 l1.9 -6.2' stroke='%23f4bf4f'/%3E%3Cpath d='M6.7 10.8 l-4.3 0.1' stroke='%23ffe9a8'/%3E%3Cpath d='M23.1 15.8 l1.2 6.4' stroke='%23e7a93a'/%3E%3Cpath d='M10.9 12.3 l-4.2 -4.2' stroke='%23ffe9a8'/%3E%3Cpath d='M48.5 19.0 l3.2 -2.0' stroke='%23f4bf4f'/%3E%3Cpath d='M14.6 13.5 l-3.4 2.7' stroke='%23f4bf4f'/%3E%3Cpath d='M14.2 13.4 l3.5 1.2' stroke='%23fff6d6'/%3E%3Cpath d='M45.0 18.9 l-1.1 -4.6' stroke='%23ffd36b'/%3E%3Cpath d='M99.8 8.1 l4.4 -2.0' stroke='%23ffe9a8'/%3E%3Cpath d='M65.2 18.0 l-5.3 -0.8' stroke='%23e7a93a'/%3E%3Cpath d='M66.4 17.8 l-3.6 3.5' stroke='%23e7a93a'/%3E%3Cpath d='M44.2 18.9 l3.0 2.4' stroke='%23ffd36b'/%3E%3Cpath d='M35.1 18.0 l3.8 -1.1' stroke='%23ffe9a8'/%3E%3Cpath d='M38.0 18.4 l0.6 -4.7' stroke='%23fff6d6'/%3E%3Cpath d='M8.8 11.5 l-1.2 -4.1' stroke='%23f4bf4f'/%3E%3Cpath d='M92.0 11.3 l1.7 4.6' stroke='%23fff6d6'/%3E%3Cpath d='M3.0 9.3 l-5.7 3.6' stroke='%23fff6d6'/%3E%3Cpath d='M4.1 9.7 l3.7 0.8' stroke='%23ffd36b'/%3E%3Cpath d='M25.7 16.4 l-0.1 -7.1' stroke='%23e7a93a'/%3E%3Cpath d='M36.3 18.2 l-3.7 6.3' stroke='%23ffd36b'/%3E%3Cpath d='M26.2 16.5 l-1.0 -4.7' stroke='%23e7a93a'/%3E%3Cpath d='M29.7 17.2 l-1.0 -5.8' stroke='%23ffd36b'/%3E%3Cpath d='M2.4 9.0 l0.5 5.4' stroke='%23fff6d6'/%3E%3Cpath d='M95.4 9.9 l-3.4 2.9' stroke='%23fff6d6'/%3E%3Cpath d='M81.5 14.6 l3.7 4.1' stroke='%23ffd36b'/%3E%3Cpath d='M80.3 15.0 l-0.5 -6.8' stroke='%23ffe9a8'/%3E%3Cpath d='M60.7 18.5 l-2.2 4.2' stroke='%23e7a93a'/%3E%3Cpath d='M78.4 15.5 l-4.6 -3.1' stroke='%23fff6d6'/%3E%3Cpath d='M75.3 16.2 l0.1 3.8' stroke='%23ffd36b'/%3E%3Cpath d='M48.2 19.0 l-4.0 -1.1' stroke='%23fff6d6'/%3E%3Cpath d='M88.3 12.5 l4.5 -0.3' stroke='%23ffd36b'/%3E%3Cpath d='M20.8 15.3 l-6.6 3.5' stroke='%23fff6d6'/%3E%3Cpath d='M17.3 14.3 l3.6 4.0' stroke='%23ffe9a8'/%3E%3Cpath d='M74.8 16.3 l3.5 -5.0' stroke='%23ffd36b'/%3E%3Cpath d='M78.0 15.6 l-1.3 4.4' stroke='%23e7a93a'/%3E%3Cpath d='M37.3 18.3 l-0.3 -4.3' stroke='%23ffe9a8'/%3E%3Cpath d='M18.6 14.7 l0.4 4.6' stroke='%23f4bf4f'/%3E%3Cpath d='M18.8 14.7 l4.1 1.8' stroke='%23ffe9a8'/%3E%3Cpath d='M50.7 19.0 l0.8 6.7' stroke='%23fff6d6'/%3E%3Cpath d='M99.1 8.4 l4.3 3.2' stroke='%23ffe9a8'/%3E%3Cpath d='M84.1 13.9 l3.1 -1.9' stroke='%23e7a93a'/%3E%3Cpath d='M23.3 15.9 l5.6 1.8' stroke='%23f4bf4f'/%3E%3Cpath d='M19.4 14.9 l4.9 2.5' stroke='%23ffe9a8'/%3E%3Cpath d='M44.9 18.9 l-0.4 6.6' stroke='%23ffd36b'/%3E%3Cpath d='M10.6 12.2 l-4.9 -3.4' stroke='%23ffe9a8'/%3E%3Cpath d='M3.7 9.6 l-2.0 3.1' stroke='%23e7a93a'/%3E%3Cpath d='M3.8 9.6 l-0.8 -7.1' stroke='%23ffd36b'/%3E%3Cpath d='M81.9 14.5 l-4.2 2.7' stroke='%23f4bf4f'/%3E%3Cpath d='M31.2 17.4 l1.9 6.4' stroke='%23f4bf4f'/%3E%3Cpath d='M48.4 19.0 l-5.6 3.6' stroke='%23f4bf4f'/%3E%3Cpath d='M15.5 13.7 l-6.0 -1.3' stroke='%23fff6d6'/%3E%3Cpath d='M69.5 17.3 l-3.9 2.5' stroke='%23e7a93a'/%3E%3Cpath d='M41.8 18.7 l6.1 2.1' stroke='%23e7a93a'/%3E%3Cpath d='M41.4 18.7 l6.5 0.7' stroke='%23e7a93a'/%3E%3Cpath d='M64.4 18.1 l-4.0 3.2' stroke='%23ffd36b'/%3E%3Cpath d='M43.4 18.8 l2.2 3.3' stroke='%23ffd36b'/%3E%3Cpath d='M40.6 18.6 l4.0 -3.6' stroke='%23ffe9a8'/%3E%3Cpath d='M13.0 13.0 l3.9 1.3' stroke='%23fff6d6'/%3E%3Cpath d='M8.9 11.6 l-3.6 -3.5' stroke='%23f4bf4f'/%3E%3Cpath d='M17.2 14.3 l-2.4 3.4' stroke='%23ffe9a8'/%3E%3Cpath d='M92.5 11.0 l4.2 3.4' stroke='%23ffe9a8'/%3E%3Cpath d='M30.2 17.3 l1.9 -3.1' stroke='%23fff6d6'/%3E%3Cpath d='M31.5 17.5 l-4.7 -3.8' stroke='%23ffd36b'/%3E%3Cpath d='M90.4 11.8 l-4.9 -4.7' stroke='%23ffe9a8'/%3E%3Cpath d='M64.0 18.1 l3.7 -4.7' stroke='%23f4bf4f'/%3E%3Cpath d='M84.6 13.7 l2.0 -3.7' stroke='%23ffe9a8'/%3E%3Cpath d='M4.2 9.8 l3.8 -1.6' stroke='%23e7a93a'/%3E%3Cpath d='M12.3 12.7 l0.1 6.4' stroke='%23ffe9a8'/%3E%3Cpath d='M4.1 9.7 l-6.0 -2.5' stroke='%23ffd36b'/%3E%3Cpath d='M66.8 17.8 l-2.3 4.5' stroke='%23fff6d6'/%3E%3Cpath d='M55.0 18.9 l-3.3 -3.4' stroke='%23fff6d6'/%3E%3Cpath d='M30.8 17.4 l0.0 5.1' stroke='%23e7a93a'/%3E%3Cpath d='M44.7 18.9 l-3.3 1.4' stroke='%23f4bf4f'/%3E%3C/g%3E%3Ccircle cx='25.0' cy='16.2' r='2.6' fill='%23e8352a'/%3E%3Ccircle cx='24.2' cy='15.4' r='.8' fill='%23fff' opacity='.8'/%3E%3Ccircle cx='50.0' cy='19.0' r='2.6' fill='%232f9e57'/%3E%3Ccircle cx='49.2' cy='18.2' r='.8' fill='%23fff' opacity='.8'/%3E%3Ccircle cx='75.0' cy='16.2' r='2.6' fill='%233d7ae0'/%3E%3Ccircle cx='74.2' cy='15.4' r='.8' fill='%23fff' opacity='.8'/%3E%3C/svg%3E");background-repeat:repeat-x;background-size:1.9em 100%;background-position:0 0;filter:drop-shadow(0 0 .14em rgba(255,205,100,.6));animation:shimmer 2.6s ease-in-out infinite}
+@keyframes shimmer{50%{filter:drop-shadow(0 0 .28em rgba(255,225,140,.95)) brightness(1.18)}}
+.holly::after{position:relative;display:inline-block;vertical-align:-.12em;margin-left:.14em;width:1.55em;height:.97em;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 50'%3E%3Cdefs%3E%3ClinearGradient id='l' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%234fbf6a'/%3E%3Cstop offset='1' stop-color='%231e7a3c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M38 30 C30 22 22 22 14 14 C16 20 9 22 8 26 C14 27 15 33 22 32 C20 37 26 40 30 39 C30 34 36 33 38 30 Z' fill='url%28%23l%29' stroke='%23145a2b' stroke-width='1'/%3E%3Cpath d='M14 14 L36 30' stroke='%23145a2b' stroke-width='1' opacity='.6'/%3E%3Cpath d='M42 30 C50 22 58 22 66 14 C64 20 71 22 72 26 C66 27 65 33 58 32 C60 37 54 40 50 39 C50 34 44 33 42 30 Z' fill='url%28%23l%29' stroke='%23145a2b' stroke-width='1'/%3E%3Cpath d='M66 14 L44 30' stroke='%23145a2b' stroke-width='1' opacity='.6'/%3E%3Cg%3E%3Ccircle cx='34' cy='32' r='6.5' fill='%23d8261c'/%3E%3Ccircle cx='46' cy='32' r='6.5' fill='%23e3352a'/%3E%3Ccircle cx='40' cy='23' r='6.5' fill='%23c81f16'/%3E%3Ccircle cx='32' cy='30' r='1.8' fill='%23fff' opacity='.75'/%3E%3Ccircle cx='44' cy='30' r='1.8' fill='%23fff' opacity='.75'/%3E%3Ccircle cx='38' cy='21' r='1.8' fill='%23fff' opacity='.75'/%3E%3C/g%3E%3C/svg%3E");filter:drop-shadow(0 .05em .06em rgba(0,0,0,.4))}
+.bauble::after{position:relative;display:inline-block;vertical-align:-.5em;margin-left:.1em;width:1.7em;height:1.3em;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 70'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.35' cy='.3' r='.75'%3E%3Cstop offset='0' stop-color='%23ff8a7a'/%3E%3Cstop offset='.45' stop-color='%23d8291e'/%3E%3Cstop offset='1' stop-color='%237d120c'/%3E%3C/radialGradient%3E%3CradialGradient id='b' cx='.35' cy='.3' r='.75'%3E%3Cstop offset='0' stop-color='%23ffe9a6'/%3E%3Cstop offset='.45' stop-color='%23e2a92f'/%3E%3Cstop offset='1' stop-color='%238a5a10'/%3E%3C/radialGradient%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%23a77a26'/%3E%3Cstop offset='.5' stop-color='%23ffe08a'/%3E%3Cstop offset='1' stop-color='%23a77a26'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M45 6 L30 24 M45 6 L62 30' stroke='%23d9b25c' stroke-width='1.6'/%3E%3Crect x='25.5' y='22' width='9' height='6' rx='1.5' fill='url%28%23g%29'/%3E%3Ccircle cx='30' cy='42' r='15' fill='url%28%23a%29'/%3E%3Cpath d='M17 40 Q30 47 43 40' stroke='%23ffd772' stroke-width='1.8' fill='none'/%3E%3Cellipse cx='24' cy='35' rx='4' ry='2.4' fill='%23fff' opacity='.55' transform='rotate%28-30 24 35%29'/%3E%3Crect x='57.5' y='28' width='9' height='6' rx='1.5' fill='url%28%23g%29'/%3E%3Ccircle cx='62' cy='48' r='12' fill='url%28%23b%29'/%3E%3Cellipse cx='57' cy='43' rx='3.2' ry='2' fill='%23fff' opacity='.6' transform='rotate%28-30 57 43%29'/%3E%3Cpath d='M45 6 c-10 -8 -18 2 -8 4 c-6 6 6 6 8 -4 c2 10 14 10 8 4 c10 -2 2 -12 -8 -4 Z' fill='%23d8291e' stroke='%239e1a12' stroke-width='.8'/%3E%3Ccircle cx='45' cy='6' r='3' fill='%23b8231a'/%3E%3C/svg%3E");transform-origin:50% 8%;animation:swing 3.2s ease-in-out infinite;filter:drop-shadow(0 .06em .08em rgba(0,0,0,.4))}
+@keyframes swing{0%,100%{transform:rotate(6deg)}50%{transform:rotate(-6deg)}}
+.hat-end::before{left:auto;right:-.42em;top:-.82em;transform:rotate(16deg)}
+.hero h1{margin-top:.5em}
+.tinsel{margin-bottom:.32em}
+@media (prefers-reduced-motion:reduce){.tinsel::after,.bauble::after{animation:none}}
 </style>
 </head>
 <body>
@@ -396,7 +408,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   <div class="wrap hero-grid">
     <div>
       <p class="eyebrow">Письмо и видео к Новому году</p>
-      <h1>Утром ребёнок узнает, что ночью к нему приходил <em>Дед Мороз</em></h1>
+      <h1>Утром <span class="deco hat hat-end">ребёнок</span> узнает, что ночью к нему приходил <em>Дед Мороз</em></h1>
       <p class="lead">Именное письмо и короткое видео: Дед Мороз в комнате вашего ребёнка, пока тот спит. Называет по имени, хвалит за настоящие дела и обещает вернуться с подарком.</p>
       <div class="try">
         <label for="heroName">Впишите имя ребёнка и посмотрите на письмо</label>
@@ -441,7 +453,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
 <section class="ny" id="newyear">
   <div class="wrap ny-grid">
     <div class="ny-left">
-      <h2>До Нового года осталось</h2>
+      <h2>До <span class="deco tinsel">Нового года</span> осталось</h2>
       <p class="lead" id="nyLead">До 1 января по московскому времени.</p>
       <p class="note" id="nyDeadline">Заказы на этот Новый год принимаем до 30 декабря.</p>
       <a class="btn btn-main" href="#order">Заказать письмо и видео</a>
@@ -459,7 +471,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
 
 <section id="prices">
   <div class="wrap">
-    <h2>Три формата</h2>
+    <h2>Три <span class="deco holly">формата</span></h2>
     <div class="cards">
       <article class="card">
         <h3>Письмо</h3>
@@ -506,7 +518,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
       <img src="letter/sample.jpg" width="860" height="1217" draggable="false" alt="Образец письма от Деда Мороза для девочки Маши: шапка резиденции с гербом, рукописный текст, портрет Деда Мороза в золотом медальоне, подпись и сургучная печать" loading="lazy" decoding="async">
     </figure>
     <div class="sample-text">
-      <h2>Так выглядит письмо</h2>
+      <h2>Так выглядит <span class="deco bauble">письмо</span></h2>
       <p class="lead">Это образец для девочки Маши, 5 лет. Ваше письмо будет таким же, только с именем, делами и мечтой вашего ребёнка.</p>
       <ul class="checks">
         <li>Бланк резиденции Деда Мороза с золотым гербом и рамкой</li>
@@ -589,7 +601,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
 
 <section class="order" id="order">
   <div class="wrap">
-    <h2>Соберите поздравление</h2>
+    <h2>Соберите <span class="deco tinsel">поздравление</span></h2>
     <p class="lead" style="margin-top:12px">Письмо меняется прямо по ходу заполнения анкеты.</p>
     <div class="order-grid">
       <form class="form" id="form" novalidate>
@@ -716,7 +728,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   <div class="wrap">
     <div class="adult">
       <div>
-        <h2>Взрослым тоже нужно чудо</h2>
+        <h2><span class="deco hat">Взрослым</span> тоже нужно чудо</h2>
         <p>Письмо от Деда Мороза маме, бабушке или любимому человеку. Дед Мороз поблагодарит за то, что вы расскажете, пожелает главного и пообещает исполнить мечту. Хороший подарок от детей и внуков.</p>
       </div>
       <div style="display:flex;flex-direction:column;gap:14px;align-items:flex-start">
@@ -729,7 +741,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
 
 <section id="faq" style="padding-top:0">
   <div class="wrap">
-    <h2>Что обычно спрашивают</h2>
+    <h2>Что обычно <span class="deco holly">спрашивают</span></h2>
     <div class="faq">
       <details><summary>Как быстро придёт заказ?</summary><p>Письмо в течение часа после оплаты, видео в течение 24 часов. В последнюю неделю декабря сроки те же, но заказы принимаем только до 30 числа.</p></details>
       <details><summary>Что такое подарочная ссылка?</summary><p>Это страница с конвертом, запечатанным сургучной печатью. Ребёнок нажимает на печать, она ломается, и появляется его письмо, а если заказано видео, то и видео. Ссылку присылаем вместе с PDF. Работает 90 дней.</p></details>
@@ -1204,106 +1216,8 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
     ctx.restore();
   }
 
-  /* снежные шапки: пухлые сугробы на верхушках букв */
+  /* генератор случайных чисел с зерном (ёлочки внизу страницы) */
   function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-  var heads = Array.prototype.slice.call(document.querySelectorAll('h1, h2'));
-  heads.forEach(function(h){
-    var w = document.createTreeWalker(h, NodeFilter.SHOW_TEXT), nodes = [];
-    while(w.nextNode()) nodes.push(w.currentNode);
-    nodes.forEach(function(n){
-      var frag = document.createDocumentFragment();
-      n.nodeValue.split(/(\s+)/).forEach(function(p){
-        if(!p) return;
-        if(/^\s+$/.test(p)) frag.appendChild(document.createTextNode(p));
-        else { var sp = document.createElement('span'); sp.className = 'sw'; sp.textContent = p; frag.appendChild(sp); }
-      });
-      n.parentNode.replaceChild(frag, n);
-    });
-    var c = document.createElement('canvas'); c.className = 'snowcap'; c.setAttribute('aria-hidden', 'true'); h.appendChild(c);
-  });
-  function paintCap(h, hi){
-    var c = h.querySelector('.snowcap'), hr = h.getBoundingClientRect();
-    if(!hr.width || !hr.height) return;
-    var fs = parseFloat(getComputedStyle(h).fontSize), d = Math.min(window.devicePixelRatio || 1, 2), pad = Math.ceil(fs*0.5);
-    var W = Math.ceil(hr.width + pad*2), H = Math.ceil(hr.height + pad*2), w = Math.round(W*d), hh = Math.round(H*d);
-    c.width = w; c.height = hh; c.style.width = W + 'px'; c.style.height = H + 'px'; c.style.left = -pad + 'px'; c.style.top = -pad + 'px';
-    var m = document.createElement('canvas'); m.width = w; m.height = hh;
-    var g = m.getContext('2d', {willReadFrequently:true}); g.scale(d, d); g.fillStyle = '#000'; g.textBaseline = 'alphabetic';
-    h.querySelectorAll('.sw').forEach(function(sp){
-      var r = sp.getBoundingClientRect(), cs = getComputedStyle(sp);
-      g.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
-      var txt = cs.textTransform === 'uppercase' ? sp.textContent.toUpperCase() : sp.textContent;
-      var mt = g.measureText(txt), asc = mt.fontBoundingBoxAscent, desc = mt.fontBoundingBoxDescent;
-      g.fillText(txt, r.left - hr.left + pad, r.top - hr.top + pad + (r.height - (asc + desc))/2 + asc);
-    });
-    var px = g.getImageData(0, 0, w, hh).data, em = fs*d, L = 0.42*em, maxStep = Math.max(2, Math.round(d*1.5));
-    /* верхние кромки, над которыми открытое небо */
-    var segs = [], open = [];
-    for(var x = 0; x < w; x++){
-      var inG = false, lastEnd = -1e9, tops = [];
-      for(var y = 0; y < hh; y++){
-        var on = px[(y*w + x)*4 + 3] > 110;
-        if(on && !inG){ if(y - lastEnd > L) tops.push(y); inG = true; }
-        else if(!on && inG){ inG = false; lastEnd = y; }
-      }
-      var next = [];
-      tops.forEach(function(ty){
-        var sgm = null;
-        for(var i = 0; i < open.length; i++){ var o = open[i]; if(o && Math.abs(o.pts[o.pts.length-1] - ty) <= maxStep + 1){ sgm = o; open[i] = null; break; } }
-        if(!sgm){ sgm = {x0:x, pts:[]}; segs.push(sgm); }
-        sgm.pts.push(ty); next.push(sgm);
-      });
-      open = next;
-    }
-    /* пологие участки: на крутых боках снег не держится */
-    var runs = [], k = Math.max(2, Math.round(em*0.03));
-    segs.forEach(function(sg){
-      var n = sg.pts.length, st = -1;
-      for(var i = 0; i <= n; i++){
-        var flat = false;
-        if(i < n){ var i0 = Math.max(0, i-k), i1 = Math.min(n-1, i+k); flat = Math.abs(sg.pts[i1] - sg.pts[i0])/((i1 - i0) || 1) < 0.85; }
-        if(flat && st < 0) st = i;
-        if(!flat && st >= 0){ runs.push({x0: sg.x0 + st, pts: sg.pts.slice(st, i)}); st = -1; }
-      }
-    });
-    var rnd = rng(1337 + hi*97 + Math.round(fs)), blobs = [], drips = [], R0 = 0.098*em;
-    runs.forEach(function(run){
-      var n = run.pts.length; if(n < em*0.03) return;
-      function yAt(i){ return run.pts[Math.max(0, Math.min(n-1, Math.round(i)))]; }
-      if(n < R0*1.7){ var r1 = Math.max(n*0.66, em*0.045); blobs.push([run.x0 + n/2, yAt(n/2) - r1*0.45, r1]); return; }
-      var i = -R0*0.2, first = true;
-      while(i < n + R0*0.2){
-        var u = Math.max(0, Math.min(1, i/n)), edge = 0.72 + 0.28*Math.sin(Math.PI*u);
-        var r = R0*(0.78 + 0.5*rnd())*edge;
-        blobs.push([run.x0 + i, yAt(i) - r*0.58 + (first ? r*0.12 : 0), r]);
-        first = false; i += r*(0.62 + 0.3*rnd());
-      }
-      if(n > em*0.28 && rnd() < 0.55){ var di = n*(0.15 + 0.7*rnd()), dr = em*(0.04 + 0.012*rnd()); blobs.push([run.x0 + di, yAt(di) + dr*0.5, dr]); blobs.push([run.x0 + di, yAt(di) + dr*1.7, dr*0.72]); }
-    });
-    var ctx2 = c.getContext('2d'); ctx2.clearRect(0, 0, w, hh);
-    function shape(dy, kr){
-      ctx2.beginPath();
-      blobs.forEach(function(b){ ctx2.moveTo(b[0] + b[2]*kr, b[1] + dy); ctx2.arc(b[0], b[1] + dy, b[2]*kr, 0, 6.2832); });
-      drips.forEach(function(q){ var rw = q[3]*kr; ctx2.moveTo(q[0] + rw, q[1] - R0*0.3 + dy); ctx2.arc(q[0], q[1] + q[2] + dy, rw, 0, Math.PI); ctx2.lineTo(q[0] - rw, q[1] - R0*0.3 + dy); ctx2.closePath(); });
-    }
-    ctx2.save(); ctx2.shadowColor = 'rgba(6,24,14,.5)'; ctx2.shadowBlur = em*0.05; ctx2.shadowOffsetY = em*0.03;
-    ctx2.fillStyle = '#a9c2ec'; shape(0, 1); ctx2.fill(); ctx2.restore();
-    ctx2.fillStyle = '#dfeafc'; shape(-em*0.018, 0.96); ctx2.fill();
-    ctx2.fillStyle = '#ffffff'; shape(-em*0.04, 0.88); ctx2.fill();
-  }
-  var capTimer = 0, capsShown = false;
-  function paintCaps(){ heads.forEach(paintCap); }
-  function revealCaps(){ paintCaps(); if(!capsShown){ capsShown = true; document.documentElement.classList.add('caps-on'); } }
-  function queueCaps(){ clearTimeout(capTimer); capTimer = setTimeout(function(){ capsShown ? paintCaps() : revealCaps(); }, 120); }
-  window.addEventListener('resize', queueCaps); window.addEventListener('load', queueCaps);
-  if(window.ResizeObserver){ var capRO = new ResizeObserver(queueCaps); heads.forEach(function(h){ capRO.observe(h); }); }
-  if(document.fonts){
-    document.fonts.addEventListener('loadingdone', queueCaps);
-    var need = ['800 1em "Shantell Sans"'].map(function(f){ return document.fonts.load(f, 'Утром'); });
-    Promise.all(need).then(queueCaps, queueCaps);
-    document.fonts.ready.then(queueCaps);
-  }
-  setTimeout(revealCaps, 3500);
 
 
   /* Дед Мороз: следит за курсором и стучит посохом */
