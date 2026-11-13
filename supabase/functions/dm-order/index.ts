@@ -84,10 +84,15 @@ async function chatId(): Promise<string | null> {
   const [row] = await sql`select value from dedmoroz.settings where key = 'tg_chat_id'`;
   if (row) return row.value;
   // первый, кто написал боту /start, становится получателем заявок
-  const updates = await tg("getUpdates", { allowed_updates: ["message"], limit: 100 });
-  const starts = (updates as any[]).map((u) => u.message).filter((m) => m && typeof m.text === "string" && m.text.startsWith("/start"));
-  if (!starts.length) return null;
-  const id = String(starts[starts.length - 1].chat.id);
+  const updates = (await tg("getUpdates", { limit: 100 })) as any[];
+  const msgs = updates.map((u) => u.message || u.channel_post || u.my_chat_member).filter((m) => m && m.chat);
+  const starts = msgs.filter((m) => typeof m.text === "string" && m.text.startsWith("/start"));
+  const pick = (starts.length ? starts : msgs).at(-1);
+  if (!pick) {
+    const me = await tg("getMe", {}).catch(() => null);
+    throw new Error(`Боту ${me?.username ? "@" + me.username : ""} ещё никто не написал (обновлений: ${updates.length})`);
+  }
+  const id = String(pick.chat.id);
   await sql`insert into dedmoroz.settings (key, value) values ('tg_chat_id', ${id}) on conflict (key) do nothing`;
   const [saved] = await sql`select value from dedmoroz.settings where key = 'tg_chat_id'`;
   return saved?.value ?? id;
@@ -102,7 +107,7 @@ function contactHtml(c: string) {
 async function notify(order: any, data: any, photo: File | null, pdf: Uint8Array | null) {
   if (!TG) throw new Error("TELEGRAM_BOT_TOKEN не задан");
   const chat = await chatId();
-  if (!chat) throw new Error("Боту ещё никто не написал /start");
+  if (!chat) throw new Error("Не удалось определить чат для заявок");
   const p = PRODUCTS[data.product];
   const g = data.gender === "f" ? "девочка" : data.gender === "m" ? "мальчик" : "";
   const kid = [esc(data.name), years(data.age), g].filter(Boolean).join(", ");
