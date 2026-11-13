@@ -24,7 +24,10 @@
 <meta name="twitter:image" content="https://pavelgh96.github.io/ded-moroz/og.jpg?v=20261113b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:wght@800&family=Onest:wght@400;500;700&family=Marck+Script&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Shantell+Sans:wght@800&family=Onest:wght@400;500;700&family=Marck+Script&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:wght@800&family=Onest:wght@400;500;700&family=Marck+Script&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:wght@800&family=Onest:wght@400;500;700&family=Marck+Script&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" as="image" href="ded-body.webp?v=20261113b" fetchpriority="high">
 <style>
 /* Тема «Вечер у ёлки»: хвойный зелёный фон, тёплые золотые огоньки гирлянд, красные кнопки,
    кремовые заголовки с золотом. Смелое место одно: Дед Мороз и живое письмо в первом экране. */
@@ -402,6 +405,28 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   html{font-size:clamp(16px,calc(.42vw + 10px),20px)}
   :root{--h1:clamp(2.7rem,3.3vw,4.4rem);--h2:clamp(2.2rem,2.6vw,3.3rem)}
 }
+
+/* фоны блоков: у каждого своя праздничная сцена; грузятся, когда блок подъезжает к экрану */
+section[data-bg]{position:relative;isolation:isolate}
+section[data-bg]::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:var(--bgi,none) center/cover no-repeat;opacity:0;transition:opacity 1.2s ease;
+  -webkit-mask:linear-gradient(transparent,#000 90px,#000 calc(100% - 90px),transparent);mask:linear-gradient(transparent,#000 90px,#000 calc(100% - 90px),transparent)}
+section[data-bg].bg-on::before{opacity:var(--bgo,.85)}
+section[data-bg="stars"]{--bgo:1}
+section[data-bg="branches"],section[data-bg="frost"],section[data-bg="bokeh"]{--bgo:.9}
+section[data-bg="wood"]{--bgo:.75}
+section[data-bg="drifts"]{--bgo:.8}
+section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
+
+/* появление при прокрутке: элемент виден и без скрипта, анимация только добавляет движение */
+.rv-on .rv{opacity:0;transform:translate3d(0,28px,0);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform 1s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--d,0)*90ms)}
+.rv-on .rv.rv-l{transform:translate3d(-40px,0,0)}
+.rv-on .rv.rv-r{transform:translate3d(40px,0,0)}
+.rv-on .rv.rv-z{transform:scale(.92) translate3d(0,16px,0)}
+.rv-on .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv-on .rv{opacity:1;transform:none;transition:none}}
+
+/* быстрее: браузер не рисует блоки, пока до них далеко */
+#how,#order,#faq,#adult,footer{content-visibility:auto;contain-intrinsic-size:auto 900px}
 /* новогодние украшения на словах заголовков */
 .deco{position:relative;display:inline-block}
 .deco::before,.deco::after{content:"";position:absolute;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:contain}
@@ -481,8 +506,8 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   <canvas id="fx" aria-hidden="true"></canvas>
 </section>
 
-<section class="ny" id="newyear">
-  <div class="sleigh-lane" aria-hidden="true"><div class="sleigh" id="sleigh"><img src="sleigh.webp?v=1" alt="" width="960" height="350" loading="lazy" decoding="async" draggable="false"></div></div>
+<section class="ny" id="newyear" data-bg="stars">
+  <div class="sleigh-lane" aria-hidden="true"><div class="sleigh" id="sleigh"><img data-src="sleigh.webp?v=1" alt="" width="960" height="350" decoding="async" draggable="false"></div></div>
   <div class="wrap ny-grid">
     <div class="ny-left">
       <h2>До <span class="deco tinsel">Нового года</span> осталось</h2>
@@ -501,7 +526,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   </div>
 </section>
 
-<section id="prices">
+<section id="prices" data-bg="branches">
   <div class="wrap">
     <h2>Три <span class="deco holly">формата</span></h2>
     <div class="cards">
@@ -544,10 +569,10 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   </div>
 </section>
 
-<section class="sample" id="sample">
+<section class="sample" id="sample" data-bg="wood">
   <div class="wrap sample-grid">
     <figure class="sample-pic">
-      <img src="letter/sample.jpg?v=20261113b" width="860" height="1217" draggable="false" alt="Образец письма от Деда Мороза для девочки Маши: шапка резиденции с гербом, рукописный текст, портрет Деда Мороза в золотом медальоне, подпись и сургучная печать" loading="lazy" decoding="async">
+      <img src="letter/sample.webp?v=1" width="860" height="1217" draggable="false" alt="Образец письма от Деда Мороза для девочки Маши: шапка резиденции с гербом, рукописный текст, портрет Деда Мороза в золотом медальоне, подпись и сургучная печать" loading="lazy" decoding="async">
     </figure>
     <div class="sample-text">
       <h2>Так выглядит <span class="deco bauble">письмо</span></h2>
@@ -564,9 +589,9 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   </div>
 </section>
 
-<section id="gift" style="padding-top:0">
+<section id="gift" style="padding-top:0" data-bg="bokeh">
   <div class="wrap gift-demo">
-    <a class="mini-env" href="gift.html?demo=1" target="_blank" rel="noopener" aria-label="Открыть пример конверта с письмом"><img src="letter/seal.png?v=20261113b" alt="" width="340" height="367" loading="lazy" decoding="async" draggable="false"></a>
+    <a class="mini-env" href="gift.html?demo=1" target="_blank" rel="noopener" aria-label="Открыть пример конверта с письмом"><img src="letter/seal.webp?v=1" alt="" width="340" height="367" loading="lazy" decoding="async" draggable="false"></a>
     <div>
       <h2>Письмо приходит в конверте с печатью</h2>
       <p class="lead" style="margin-top:12px">Кроме PDF вы получите подарочную ссылку. Ребёнок открывает её на телефоне, сам ломает сургучную печать, и из конверта появляется письмо, а следом видео.</p>
@@ -580,7 +605,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   </div>
 </section>
 
-<section id="how" style="padding-top:0">
+<section id="how" style="padding-top:0" data-bg="frost">
   <div class="wrap">
     <h2>От анкеты до утра с чудом</h2>
     <ol class="steps">
@@ -592,7 +617,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   </div>
 </section>
 
-<section style="padding-top:0">
+<section style="padding-top:0" data-bg="village">
   <div class="wrap split">
     <figure class="frame">
       <svg viewBox="0 0 640 400" role="img" aria-label="Схема кадра: тёмная детская, окно с луной, кровать и силуэт Деда Мороза рядом">
@@ -631,7 +656,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   </div>
 </section>
 
-<section class="order" id="order">
+<section class="order" id="order" data-bg="drifts">
   <div class="wrap">
     <h2>Соберите <span class="deco tinsel">поздравление</span></h2>
     <p class="lead" style="margin-top:12px">Письмо меняется прямо по ходу заполнения анкеты.</p>
@@ -732,7 +757,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   </div>
 </section>
 
-<section>
+<section data-bg="forest">
   <div class="wrap">
     <h2>Три обещания</h2>
     <div class="promises">
@@ -743,7 +768,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   </div>
 </section>
 
-<section style="padding-top:0">
+<section style="padding-top:0" data-bg="wood">
   <div class="wrap">
     <div class="b2b">
       <div>
@@ -756,7 +781,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   </div>
 </section>
 
-<section id="adult" style="padding-top:0">
+<section id="adult" style="padding-top:0" data-bg="bokeh">
   <div class="wrap">
     <div class="adult">
       <div>
@@ -771,7 +796,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   </div>
 </section>
 
-<section id="faq" style="padding-top:0">
+<section id="faq" style="padding-top:0" data-bg="stars">
   <div class="wrap">
     <h2>Что обычно <span class="deco holly">спрашивают</span></h2>
     <div class="faq">
@@ -1650,6 +1675,8 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
 (function(){
   var sl = document.getElementById('sleigh'), sec = document.getElementById('newyear');
   if(!sl || !('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var img = sl.querySelector('img');
+  new IntersectionObserver(function(es, o){ if(es[0].isIntersecting){ img.src = img.dataset.src; o.disconnect(); } }, {rootMargin:'500px 0px'}).observe(sec);
   var busy = false, armed = true;
   sl.addEventListener('animationend', function(e){ if(e.animationName === 'ride'){ busy = false; sl.classList.remove('ride'); } });
   new IntersectionObserver(function(es){
@@ -1658,6 +1685,39 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
       else if(!e.isIntersecting){ armed = true; }
     });
   }, {threshold:[0, 0.35], rootMargin:'-90px 0px 0px 0px'}).observe(sec);
+})();
+</script>
+<script>
+/* фоны блоков и анимации появления */
+(function(){
+  var small = matchMedia('(max-width:900px)').matches || (navigator.connection && navigator.connection.saveData);
+  var secs = document.querySelectorAll('section[data-bg]');
+  function load(sec){ if(sec.dataset.bgDone) return; sec.dataset.bgDone = 1;
+    var url = 'bg/' + sec.dataset.bg + (small ? '-m' : '') + '.webp?v=1', img = new Image();
+    img.onload = function(){ sec.style.setProperty('--bgi', 'url(' + url + ')'); requestAnimationFrame(function(){ sec.classList.add('bg-on'); }); };
+    img.src = url; }
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ load(e.target); io.unobserve(e.target); } }); }, {rootMargin:'600px 0px'});
+    secs.forEach(function(s){ io.observe(s); });
+  } else secs.forEach(load);
+
+  if(!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var groups = [
+    ['section[data-bg] h2', ''], ['section[data-bg] .lead', ''], ['section[data-bg] .eyebrow', ''],
+    ['.plans > *, .cards > *', 'rv-z'], ['.steps > *', ''], ['.promises > *', 'rv-z'], ['.faq details, #faq details', ''],
+    ['.sample img, .sample-pic', 'rv-l'], ['.mini-env', 'rv-l'], ['.adult', 'rv-z'], ['.b2b', 'rv-z'],
+    ['.checks li', 'rv-r'], ['.order .form, .order .side', ''], ['.cta-row', '']
+  ];
+  var els = [];
+  groups.forEach(function(g){ document.querySelectorAll(g[0]).forEach(function(el, i){
+    if(el.closest('.hero') || el.classList.contains('rv')) return;
+    el.classList.add('rv'); if(g[1]) el.classList.add(g[1]); el.style.setProperty('--d', Math.min(i, 6)); els.push(el); }); });
+  var ro = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); } }); }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
+  document.documentElement.classList.add('rv-on');
+  els.forEach(function(el){ ro.observe(el); });
+  /* страховка: если что-то не появилось (печать, скриншоты), показать всё */
+  setTimeout(function(){ if(document.visibilityState === 'hidden') els.forEach(function(el){ el.classList.add('in'); }); }, 4000);
+  addEventListener('beforeprint', function(){ els.forEach(function(el){ el.classList.add('in'); }); });
 })();
 </script>
 </body>
