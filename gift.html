@@ -7,20 +7,20 @@
 <meta name="robots" content="noindex">
 <title>Тебе письмо от Деда Мороза</title>
 <meta name="description" content="Дед Мороз прислал тебе письмо. Открой конверт!">
-<link rel="icon" href="favicon.ico" sizes="48x48">
-<link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.ico?v=20261113b" sizes="48x48">
+<link rel="icon" type="image/png" href="favicon-32.png?v=20261113b" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=20261113b">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Дед Мороз заходил">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:title" content="Тебе письмо от Деда Мороза ✉️">
 <meta property="og:description" content="Открой конверт и сломай сургучную печать.">
-<meta property="og:image" content="https://pavelgh96.github.io/ded-moroz/og-gift.jpg">
+<meta property="og:image" content="https://pavelgh96.github.io/ded-moroz/og-gift.jpg?v=20261113b">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://pavelgh96.github.io/ded-moroz/og-gift.jpg">
-<link rel="preload" href="letter/seal.png" as="image">
+<meta name="twitter:image" content="https://pavelgh96.github.io/ded-moroz/og-gift.jpg?v=20261113b">
+<link rel="preload" href="letter/seal.png?v=20261113b" as="image">
 <style>
 @font-face{font-family:"Bad Script";src:url(letter/BadScript-Regular.ttf);font-display:swap}
 @font-face{font-family:"Great Vibes";src:url(letter/GreatVibes-Regular.ttf);font-display:swap}
@@ -50,7 +50,7 @@ h1{font:400 clamp(2.1rem,7vw,3.4rem)/1.1 "Great Vibes",cursive;margin:0 0 6px;te
 .flap{position:absolute;left:0;right:0;top:0;height:62%;transform-origin:top center;transform-style:preserve-3d;z-index:4;transition:transform .9s var(--ease) .15s}
 .flap::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#ead8b0,#dfc792);clip-path:polygon(0 0,100% 0,50% 100%);border-radius:8px 8px 0 0;backface-visibility:hidden;filter:drop-shadow(0 3px 2px rgba(0,0,0,.18))}
 .flap::after{content:"";position:absolute;inset:0;background:#e8d5ab;clip-path:polygon(0 0,100% 0,50% 100%);transform:rotateX(180deg);backface-visibility:hidden}
-.peek{position:absolute;left:7%;right:7%;top:8%;height:84%;border-radius:4px;z-index:2;background:#fbf4e3 url(letter/bg-a4.jpg) center top/cover;box-shadow:0 2px 8px rgba(0,0,0,.2);opacity:0;transition:transform 1s var(--ease),opacity .3s ease}
+.peek{position:absolute;left:7%;right:7%;top:8%;height:84%;border-radius:4px;z-index:2;background:#fbf4e3 url(letter/bg-a4.jpg?v=20261113b) center top/cover;box-shadow:0 2px 8px rgba(0,0,0,.2);opacity:0;transition:transform 1s var(--ease),opacity .3s ease}
 .seal{position:absolute;left:50%;top:62%;width:34%;transform:translate(-50%,-50%);z-index:6;border:0;padding:0;background:none;cursor:pointer;filter:drop-shadow(0 6px 8px rgba(40,5,0,.45));animation:pulse 2.2s ease-in-out infinite}
 .seal img{display:block;width:100%;height:auto}
 .seal .half{position:absolute;inset:0;transition:transform .8s var(--ease),opacity .8s ease}
@@ -73,7 +73,7 @@ h1{font:400 clamp(2.1rem,7vw,3.4rem)/1.1 "Great Vibes",cursive;margin:0 0 6px;te
 .view{width:100%;display:flex;flex-direction:column;align-items:center;gap:22px;animation:rise .9s var(--ease) both}
 @keyframes rise{from{opacity:0;transform:translateY(40px) scale(.97)}}
 .sheet{position:relative;width:min(100%,680px);aspect-ratio:794/1123;box-shadow:0 40px 80px -30px rgba(0,0,0,.85),0 0 120px -40px rgba(255,196,107,.4);border-radius:3px;overflow:hidden;background:#f8efdb}
-.sheet-inner{position:absolute;left:0;top:0;width:794px;height:1123px;transform-origin:0 0;background:url(letter/bg-a4.jpg) 0 0/100% 100%}
+.sheet-inner{position:absolute;left:0;top:0;width:794px;height:1123px;transform-origin:0 0;background:url(letter/bg-a4.jpg?v=20261113b) 0 0/100% 100%}
 .txt{position:absolute;left:104px;top:252px;width:586px;color:var(--ink)}
 .txt .date{font-family:"Bad Script",cursive;text-align:right;color:var(--ink-soft)}
 .txt .greet{font-family:"Great Vibes",cursive;line-height:1.05;margin:.35em 0 .3em}
@@ -122,9 +122,9 @@ footer a{color:var(--lamp)}
       <div class="flap"></div>
       <div class="env-front"></div>
       <button type="button" class="seal" id="seal" aria-label="Сломать печать и открыть письмо">
-        <img class="whole" src="letter/seal.png" alt="" style="visibility:hidden">
-        <img class="half l" src="letter/seal.png" alt="">
-        <img class="half r" src="letter/seal.png" alt="">
+        <img class="whole" src="letter/seal.png?v=20261113b" alt="" style="visibility:hidden">
+        <img class="half l" src="letter/seal.png?v=20261113b" alt="">
+        <img class="half r" src="letter/seal.png?v=20261113b" alt="">
       </button>
     </div>
     <p class="hint">Нажми на печать</p>
@@ -181,7 +181,7 @@ footer a{color:var(--lamp)}
       else $('pdf').href = API + '?gift=' + encodeURIComponent(token) + '&pdf=1';
       if(j.video){ $('video').src = j.video; $('videoBox').hidden = false; }
       show('stage');
-      var img = new Image(); img.src = 'letter/bg-a4.jpg';
+      var img = new Image(); img.src = 'letter/bg-a4.jpg?v=20261113b';
     })
     .catch(function(e){ fail(/fetch|network|load failed/i.test(e.message) ? 'Нет связи с почтой Деда Мороза. Проверьте интернет и обновите страницу.' : e.message); });
 
