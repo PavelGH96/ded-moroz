@@ -105,7 +105,22 @@ nav .btn{padding:9px 18px;font-size:.92rem;color:var(--berry-ink);min-height:44p
 .ny-chip:hover{border-color:var(--lamp)}
 .ny-chip .star{width:14px;height:14px}
 nav .ny-chip{color:var(--frost)}
-.ny{padding:56px 0 24px}
+.ny{position:relative;scroll-margin-top:70px;padding:calc(clamp(96px,13vw,210px) + 24px) 0 24px;overflow-x:clip}
+/* Дед Мороз на санях проезжает над таймером, когда блок появляется на экране */
+.sleigh-lane{position:absolute;left:0;right:0;top:18px;height:clamp(96px,13vw,210px);pointer-events:none;z-index:2}
+.sleigh{position:absolute;left:0;top:0;width:clamp(260px,36vw,580px);transform:translateX(-110%);will-change:transform}
+.sleigh img{display:block;width:100%;height:auto;filter:drop-shadow(0 14px 18px rgba(0,0,0,.35))}
+.sleigh::before{content:"";position:absolute;right:92%;top:58%;width:70%;height:34px;
+  background:radial-gradient(circle,rgba(255,226,140,.95) 0 1.6px,transparent 2.4px) 0 0/22px 17px,radial-gradient(circle,rgba(255,255,255,.85) 0 1.2px,transparent 2px) 11px 8px/26px 19px;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 85%);mask:linear-gradient(90deg,transparent,#000 85%);opacity:0;filter:drop-shadow(0 0 4px rgba(255,210,110,.9))}
+.sleigh.ride{animation:ride 8.5s cubic-bezier(.42,.05,.58,.95) forwards}
+.sleigh.ride img{animation:gallop .85s ease-in-out infinite alternate}
+.sleigh.ride::before{animation:trail 8.5s linear forwards,twinkle .5s steps(2) infinite}
+@keyframes ride{from{transform:translateX(-110%)}to{transform:translateX(calc(100vw + 10%))}}
+@keyframes gallop{from{transform:translateY(4px) rotate(.6deg)}to{transform:translateY(-8px) rotate(-1.2deg)}}
+@keyframes trail{0%,8%{opacity:0}18%,85%{opacity:1}100%{opacity:0}}
+@keyframes twinkle{50%{background-position:4px 3px,15px 11px}}
+@media (prefers-reduced-motion:reduce){.sleigh-lane{display:none}.ny{padding-top:56px}}
 .ny-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;align-items:center}
 .ny-left{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
 .ny-left .note{max-width:46ch}
@@ -371,6 +386,22 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
 .seller span{font-variant-numeric:tabular-nums}
 @media (max-width:900px){.gift-demo,.adult{grid-template-columns:1fr;gap:28px}.adult{padding:24px}}
 
+
+/* ПК: сайт на всю ширину экрана, первый экран на всю высоту, Дед Мороз растёт вместе с экраном */
+@media (min-width:1061px){
+  .wrap{width:min(2000px,100% - clamp(48px,6vw,140px))}
+  .hero{min-height:calc(100svh - 64px);display:flex;align-items:center;padding:56px 0 64px}
+  .hero > .wrap{flex:none;width:min(2000px,100% - clamp(48px,6vw,140px));margin-inline:auto}
+  .hero-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(40px,4vw,96px)}
+  .hero-art{--dmh:clamp(600px,calc(100svh - 190px),940px);min-height:var(--dmh);gap:clamp(14px,1.6vw,36px)}
+  .dm-stage{height:var(--dmh);width:calc(var(--dmh)*621/1080)}
+  .hero-letter{flex:0 1 auto;width:clamp(300px,21vw,430px);max-width:none}
+  .hero-letter .letter-body{max-height:clamp(330px,38vh,520px);font-size:clamp(1.12rem,1.15vw,1.4rem);line-height:1.62}
+}
+@media (min-width:1440px){
+  html{font-size:clamp(16px,calc(.42vw + 10px),20px)}
+  :root{--h1:clamp(2.7rem,3.3vw,4.4rem);--h2:clamp(2.2rem,2.6vw,3.3rem)}
+}
 /* новогодние украшения на словах заголовков */
 .deco{position:relative;display:inline-block}
 .deco::before,.deco::after{content:"";position:absolute;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:contain}
@@ -451,6 +482,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
 </section>
 
 <section class="ny" id="newyear">
+  <div class="sleigh-lane" aria-hidden="true"><div class="sleigh" id="sleigh"><img src="sleigh.webp?v=1" alt="" width="960" height="350" loading="lazy" decoding="async" draggable="false"></div></div>
   <div class="wrap ny-grid">
     <div class="ny-left">
       <h2>До <span class="deco tinsel">Нового года</span> осталось</h2>
@@ -1611,6 +1643,21 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
     if(mod && (k === 'c' || k === 'x' || k === 'a') && !field(e.target)) e.preventDefault();
   }, {capture:true});
   document.querySelectorAll('img').forEach(function(i){ i.setAttribute('draggable','false'); });
+})();
+</script>
+<script>
+/* сани с оленями: проезжают слева направо каждый раз, когда блок с таймером появляется на экране */
+(function(){
+  var sl = document.getElementById('sleigh'), sec = document.getElementById('newyear');
+  if(!sl || !('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var busy = false, armed = true;
+  sl.addEventListener('animationend', function(e){ if(e.animationName === 'ride'){ busy = false; sl.classList.remove('ride'); } });
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio >= 0.35 && armed && !busy){ armed = false; busy = true; void sl.offsetWidth; sl.classList.add('ride'); }
+      else if(!e.isIntersecting){ armed = true; }
+    });
+  }, {threshold:[0, 0.35], rootMargin:'-90px 0px 0px 0px'}).observe(sec);
 })();
 </script>
 </body>

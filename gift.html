@@ -115,6 +115,19 @@ h1{font:400 clamp(2.1rem,7vw,3.4rem)/1.1 "Great Vibes",cursive;margin:0 0 6px;te
 .wm .tile{position:absolute;inset:-300px;transform:rotate(-35deg);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='140'%3E%3Ctext x='0' y='30' font-family='serif' font-size='20' fill='rgba(150,50,40,0.07)'%3Eобразец%3C/text%3E%3Ctext x='120' y='100' font-family='serif' font-size='20' fill='rgba(150,50,40,0.07)'%3Eобразец%3C/text%3E%3C/svg%3E")}
 .demo-lock,.demo-lock *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .num{position:absolute;right:104px;top:1038px;font:600 11px/1 "Cormorant SC",serif;letter-spacing:.06em;color:#8a6420}
+.voice{width:min(100%,680px);display:flex;align-items:center;gap:16px;padding:14px 18px 14px 14px;border-radius:999px;background:rgba(10,30,21,.72);border:1px solid rgba(246,197,95,.35);box-shadow:0 18px 40px -20px rgba(0,0,0,.8);animation:fadeUp 1s cubic-bezier(.22,1,.36,1) both;animation-delay:1.8s}
+.voice .vbtn{position:relative;flex:none;width:64px;height:64px;border-radius:50%;border:0;padding:0;cursor:pointer;background:url(letter/portrait.jpg?v=20261113b) center 20%/cover;box-shadow:0 0 0 3px #e2b45a}
+.voice .vbtn::after{content:"";position:absolute;inset:0;border-radius:50%;background:rgba(8,20,14,.35) no-repeat center/26px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M8 5v14l11-7z'/%3E%3C/svg%3E")}
+.voice.playing .vbtn::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M7 5h4v14H7zM13 5h4v14h-4z'/%3E%3C/svg%3E");background-color:rgba(8,20,14,.15)}
+.voice.loading .vbtn::after{background-image:none}
+.voice.loading .vbtn::before{content:"";position:absolute;inset:18px;border-radius:50%;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;animation:spin 1s linear infinite;z-index:1}
+.voice.playing .vbtn{animation:talk 1.6s ease-in-out infinite}
+@keyframes talk{50%{box-shadow:0 0 0 3px #e2b45a,0 0 0 9px rgba(246,197,95,.18)}}
+.voice .vinfo{flex:1;min-width:0}
+.voice b{display:block;font:400 1.6rem/1.1 "Great Vibes",cursive;color:#fff}
+.voice small{display:block;color:var(--muted);font-size:.85rem;margin-top:2px}
+.voice .vbar{height:5px;border-radius:5px;background:rgba(255,255,255,.14);margin-top:8px;overflow:hidden;cursor:pointer}
+.voice .vbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#e2b45a,#ffe08a);border-radius:5px}
 .video{width:min(100%,680px)}
 .video video{width:100%;border-radius:12px;background:#000;box-shadow:0 30px 60px -24px rgba(0,0,0,.8)}
 .video h2,.acts-title{font:400 2rem/1.1 "Great Vibes",cursive;margin:8px 0 12px;text-align:center}
@@ -170,6 +183,10 @@ footer a{color:var(--lamp)}
 
   <section class="view" id="view" hidden>
     <div class="sheet" id="sheet"><div class="sheet-inner" id="inner"><div class="txt" id="txt"></div><div class="num" id="num"></div></div></div>
+    <div class="voice" id="voiceBox" hidden>
+      <button type="button" class="vbtn" id="vbtn" aria-label="Послушать, как Дед Мороз читает письмо"></button>
+      <div class="vinfo"><b>Дед Мороз читает письмо</b><small id="vstate">Нажмите, чтобы послушать</small><div class="vbar" id="vbar"><i id="vprog"></i></div></div>
+    </div>
     <div class="video" id="videoBox" hidden><h2>А ещё Дед Мороз записал видео</h2><video id="video" controls playsinline preload="metadata"></video></div>
     <div class="acts">
       <a class="btn btn-main" id="pdf" download>Скачать письмо (PDF)</a>
@@ -256,12 +273,36 @@ footer a{color:var(--lamp)}
   function scaleSheet(){ var w = $('sheet').clientWidth; $('inner').style.transform = 'scale(' + (w / 794) + ')'; }
   window.addEventListener('resize', scaleSheet);
 
+  /* озвучка письма голосом Деда Мороза */
+  var voice = null, voiceWanted = false;
+  function voiceUrl(){ return demo ? API + '?demo_voice=1' : API + '?gift=' + encodeURIComponent(token) + '&voice=1'; }
+  function setVoice(state, text){ var b = $('voiceBox'); b.classList.toggle('playing', state === 'playing'); b.classList.toggle('loading', state === 'loading'); if(text) $('vstate').textContent = text; }
+  function fmt(t){ t = Math.max(0, Math.round(t || 0)); return Math.floor(t/60) + ':' + String(t%60).padStart(2, '0'); }
+  function prepVoice(){
+    if(voice || !(data && (data.voice || demo))) return;
+    voice = new Audio(); voice.preload = 'auto'; voice.src = voiceUrl();
+    try { var p = voice.play(); voice.pause(); if(p && p.catch) p.catch(function(){}); } catch(e){}  /* разблокировка звука на iPhone в момент нажатия */
+    voice.addEventListener('canplay', function(){ if(voiceWanted && voice.paused) playVoice(); else if(voice.paused) setVoice('', 'Нажмите, чтобы послушать · ' + fmt(voice.duration)); });
+    voice.addEventListener('playing', function(){ setVoice('playing', 'Дед Мороз читает…'); });
+    voice.addEventListener('pause', function(){ if(!voice.ended) setVoice('', 'Пауза · нажмите, чтобы продолжить'); });
+    voice.addEventListener('ended', function(){ voiceWanted = false; setVoice('', 'Послушать ещё раз'); $('vprog').style.width = '100%'; });
+    voice.addEventListener('timeupdate', function(){ if(voice.duration) $('vprog').style.width = (voice.currentTime/voice.duration*100) + '%'; });
+    voice.addEventListener('error', function(){ $('voiceBox').hidden = true; });
+  }
+  function playVoice(){
+    voiceWanted = true;
+    if(voice.readyState < 3){ setVoice('loading', 'Дед Мороз откашливается…'); }
+    var p = voice.play(); if(p && p.catch) p.catch(function(){ if(voice.readyState >= 3){ voiceWanted = false; setVoice('', 'Нажмите, чтобы послушать'); } });
+  }
+  $('vbtn').addEventListener('click', function(){ if(!voice) prepVoice(); if(!voice) return; if(voice.paused){ if(voice.ended) voice.currentTime = 0; playVoice(); } else { voiceWanted = false; voice.pause(); } });
+  $('vbar').addEventListener('click', function(e){ if(!voice || !voice.duration) return; var r = this.getBoundingClientRect(); voice.currentTime = (e.clientX - r.left)/r.width*voice.duration; });
+
   var opened = false;
   function at(ms, fn){ setTimeout(fn, still ? 0 : ms); }
   $('seal').addEventListener('click', function(){
     if(opened) return; opened = true;
     var env = $('env'), seal = $('seal');
-    audio.init();
+    audio.init(); prepVoice();
     var stage = $('stage');
     seal.classList.add('shake');
     at(380, function(){ env.classList.add('open'); stage.classList.add('opened'); crumbs(); audio.crack(); });
@@ -274,6 +315,7 @@ footer a{color:var(--lamp)}
       $('view').hidden = false; $('loading').hidden = true; scaleSheet();
       (document.fonts ? document.fonts.ready : Promise.resolve()).then(function(){ fitText(); });
       audio.chime();
+      if(voice){ $('voiceBox').hidden = false; setTimeout(function(){ playVoice(); }, still ? 0 : 2200); }
       setTimeout(sheetSparkles, still ? 0 : 1100);
       setTimeout(function(){ stage.hidden = true; stage.classList.remove('overlay'); window.scrollTo({top:0, behavior:'smooth'}); }, still ? 0 : 1100);
     });

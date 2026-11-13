@@ -7,6 +7,9 @@
 //   TELEGRAM_BOT_TOKEN  токен бота от @BotFather (обязателен для уведомлений)
 //   TELEGRAM_CHAT_ID    необязателен: если не задан, берётся чат, где боту написали /start
 //   ALLOWED_ORIGINS     необязателен: список доменов сайта через запятую, по умолчанию все
+//   ELEVENLABS_API_KEY  необязателен: ключ ElevenLabs, включает озвучку письма голосом Деда Мороза
+//   ELEVENLABS_VOICE_ID необязателен: id голоса из библиотеки ElevenLabs (по умолчанию стандартный голос)
+//   ELEVENLABS_MODEL    необязателен: модель, по умолчанию eleven_multilingual_v2
 import postgres from "npm:postgres@3.4.5";
 import * as PL from "npm:pdf-lib@1.17.1";
 import fontkit from "npm:@pdf-lib/fontkit@1.1.1";
@@ -84,6 +87,54 @@ async function addonPdf(kind: string, data: Record<string, unknown>) {
   const fonts = await loadAssets();
   return kind === "tags" ? await makeTagsPdf({ ...PL, fontkit }, fonts, data) : await makeBlankPdf({ ...PL, fontkit }, fonts, data);
 }
+// ---------- озвучка письма (ElevenLabs) ----------
+// Голос создаётся один раз, при первом открытии подарочной ссылки, и хранится в dedmoroz.voice.
+const XI = Deno.env.get("ELEVENLABS_API_KEY") || "";
+const VOICE_ID = Deno.env.get("ELEVENLABS_VOICE_ID") || "JBFqnCBsd6RMkjVDRZzb";
+const VOICE_MODEL = Deno.env.get("ELEVENLABS_MODEL") || "eleven_multilingual_v2";
+const DEMO = { recipient: "child", name: "Маша", age: 5, gender: "f", praise: "научилась кататься на коньках и сама заплетаешь косички", wish: "не спорить с братом за пульт", gift: "кукольный домик с фонариками" };
+function voiceText(d: Record<string, unknown>) {
+  const l = buildLetter(d);
+  const t = (runs: { t: string }[]) => runs.map((r) => r.t).join("");
+  return [t(l.greeting), ...l.paragraphs.map(t), "С любовью, твой Дед Мороз."].join("\n\n");
+}
+const voiceJobs = new Map<string, Promise<Uint8Array>>();
+async function getVoice(key: string, orderId: number | null, data: Record<string, unknown>) {
+  const [row] = await sql`select mp3 from dedmoroz.voice where key = ${key}`;
+  if (row) return new Uint8Array(row.mp3);
+  if (!XI) throw new Error("озвучка не настроена");
+  if (!voiceJobs.has(key)) {
+    voiceJobs.set(key, (async () => {
+      const text = voiceText(data);
+      const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}?output_format=mp3_44100_128`, {
+        method: "POST",
+        headers: { "xi-api-key": XI, "Content-Type": "application/json", Accept: "audio/mpeg" },
+        body: JSON.stringify({ text, model_id: VOICE_MODEL, voice_settings: { stability: 0.55, similarity_boost: 0.8, style: 0.25, use_speaker_boost: true, speed: 0.92 } }),
+      });
+      if (!r.ok) throw new Error(`ElevenLabs ${r.status}: ${(await r.text()).slice(0, 200)}`);
+      const mp3 = new Uint8Array(await r.arrayBuffer());
+      await sql`insert into dedmoroz.voice (key, order_id, mp3, chars) values (${key}, ${orderId}, ${mp3}, ${text.length}) on conflict (key) do nothing`;
+      return mp3;
+    })().finally(() => setTimeout(() => voiceJobs.delete(key), 1000)));
+  }
+  return await voiceJobs.get(key)!;
+}
+// отдаёт mp3 с поддержкой Range: без этого Safari на iPhone не проигрывает звук
+function audioResponse(req: Request, mp3: Uint8Array) {
+  const base = { ...corsHeaders(req), "Content-Type": "audio/mpeg", "Accept-Ranges": "bytes", "Cache-Control": "private, max-age=86400" };
+  const m = /bytes=(\d*)-(\d*)/.exec(req.headers.get("range") || "");
+  if (m) {
+    const size = mp3.length;
+    let start = m[1] ? parseInt(m[1], 10) : size - parseInt(m[2] || "0", 10);
+    let end = m[1] && m[2] ? parseInt(m[2], 10) : size - 1;
+    if (isNaN(start) || start < 0) start = 0;
+    if (end >= size) end = size - 1;
+    if (start > end) return new Response(null, { status: 416, headers: { ...base, "Content-Range": `bytes */${size}` } });
+    return new Response(mp3.slice(start, end + 1) as BodyInit, { status: 206, headers: { ...base, "Content-Range": `bytes ${start}-${end}/${size}`, "Content-Length": String(end - start + 1) } });
+  }
+  return new Response(mp3 as BodyInit, { headers: { ...base, "Content-Length": String(mp3.length) } });
+}
+
 const giftUrl = (token: string) => `${SITE}/gift.html?t=${token}`;
 function newToken() {
   const b = crypto.getRandomValues(new Uint8Array(16));
@@ -219,6 +270,10 @@ function rowToData(r: any) {
 }
 async function giftHandler(req: Request) {
   const u = new URL(req.url);
+  if (u.searchParams.get("demo_voice")) {
+    try { return audioResponse(req, await getVoice("demo", null, DEMO)); }
+    catch (e) { return json(req, 503, { ok: false, error: (e as Error).message }); }
+  }
   const token = (u.searchParams.get("gift") || "").trim();
   if (!/^[A-Za-z0-9_-]{16,40}$/.test(token)) return json(req, 400, { ok: false, error: "Ссылка неполная. Проверьте, что она скопирована целиком." });
   const [r] = await sql`select id, recipient, child_name, child_age, child_gender, praise, wish, gift, has_letter_photo, video_url, created_at, anonymized_at
@@ -229,8 +284,12 @@ async function giftHandler(req: Request) {
     const bytes = await letterPdf(data, Number(r.id));
     return new Response(bytes as BodyInit, { headers: { ...corsHeaders(req), "Content-Type": "application/pdf", "Content-Disposition": `attachment; filename="pismo-deda-moroza-${r.id}.pdf"`, "Cache-Control": "private, max-age=300" } });
   }
+  if (u.searchParams.get("voice")) {
+    try { return audioResponse(req, await getVoice(`order:${r.id}`, Number(r.id), data)); }
+    catch (e) { console.error("voice", (e as Error).message); return json(req, 503, { ok: false, error: "Озвучка сейчас недоступна." }); }
+  }
   sql`update dedmoroz.orders set gift_opened_at = now() where id = ${r.id} and gift_opened_at is null`.catch(() => {});
-  return json(req, 200, { ok: true, id: Number(r.id), year: newYear(), recipient: r.recipient, gender: data.gender, letter: buildLetter(data), video: r.video_url || null });
+  return json(req, 200, { ok: true, id: Number(r.id), year: newYear(), recipient: r.recipient, gender: data.gender, letter: buildLetter(data), video: r.video_url || null, voice: !!XI });
 }
 
 // ---------- обработчик ----------
