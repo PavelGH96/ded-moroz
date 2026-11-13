@@ -63,46 +63,47 @@ h1{font:400 clamp(2.1rem,7vw,3.4rem)/1.1 "Great Vibes",cursive;margin:0 0 6px;te
 /* открытие: дрожь печати, трещина, половинки падают, клапан, свечение, письмо выезжает */
 .seal .crack{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;opacity:0}
 .seal .crack path{fill:none;stroke:#3a0604;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:130;stroke-dashoffset:130}
-.seal.shake{animation:sealShake .26s ease-in-out}
+.seal.shake{animation:sealShake .42s ease-in-out}
 .seal.shake .crack{opacity:1}
-.seal.shake .crack path{transition:stroke-dashoffset .22s ease-in;stroke-dashoffset:0}
-@keyframes sealShake{0%,100%{transform:translate(-50%,-50%) rotate(0)}20%{transform:translate(-52%,-50%) rotate(-5deg) scale(1.04)}45%{transform:translate(-48%,-51%) rotate(5deg) scale(1.06)}70%{transform:translate(-51%,-50%) rotate(-3deg) scale(1.03)}}
+.seal.shake .crack path{transition:stroke-dashoffset .34s ease-out;stroke-dashoffset:0}
+@keyframes sealShake{0%,100%{transform:translate(-50%,-50%) rotate(0) scale(1)}30%{transform:translate(-50.6%,-50%) rotate(-2.5deg) scale(1.05)}65%{transform:translate(-49.4%,-50.3%) rotate(2deg) scale(1.07)}}
 .env.open .seal{animation:none;pointer-events:none}
-.env.open .seal .crack{opacity:0;transition:opacity .1s}
+.env.open .seal .crack{opacity:0;transition:opacity .25s}
 .env.open .seal .half{transition:none}
-.env.open .seal .half.l{animation:fallL 1.05s cubic-bezier(.35,0,.75,1) forwards}
-.env.open .seal .half.r{animation:fallR 1.1s cubic-bezier(.35,0,.75,1) forwards}
-@keyframes fallL{0%{transform:none;opacity:1}22%{transform:translate(-22%,-10%) rotate(-14deg)}100%{transform:translate(-95%,190%) rotate(-62deg);opacity:0}}
-@keyframes fallR{0%{transform:none;opacity:1}22%{transform:translate(24%,-8%) rotate(15deg)}100%{transform:translate(100%,175%) rotate(70deg);opacity:0}}
+.seal .half{will-change:transform,opacity}
+.env.open .seal .half.l{animation:fallL 1.7s cubic-bezier(.45,.05,.55,.95) forwards}
+.env.open .seal .half.r{animation:fallR 1.8s cubic-bezier(.45,.05,.55,.95) forwards}
+@keyframes fallL{0%{transform:none;opacity:1}25%{transform:translate(-16%,-5%) rotate(-9deg);opacity:1}100%{transform:translate(-80%,150%) rotate(-48deg);opacity:0}}
+@keyframes fallR{0%{transform:none;opacity:1}25%{transform:translate(17%,-4%) rotate(10deg);opacity:1}100%{transform:translate(85%,140%) rotate(52deg);opacity:0}}
 .stage.opened .hint{visibility:hidden}
-.flap{transition:transform 1s cubic-bezier(.3,1.25,.5,1) .3s}
+.flap{transition:transform 1.4s cubic-bezier(.65,0,.35,1) .25s;will-change:transform}
 .env.open .flap{transform:rotateX(180deg);z-index:1}
 .env-glow{position:absolute;left:-8%;right:-8%;top:-55%;height:130%;z-index:1;pointer-events:none;opacity:0;transform:scale(.5);transform-origin:50% 75%;
-  background:radial-gradient(ellipse 45% 50% at 50% 72%,rgba(255,236,170,.95),rgba(255,200,100,.45) 45%,transparent 72%);filter:blur(4px);
-  transition:opacity .7s ease .55s,transform 1.2s var(--ease) .55s}
+  background:radial-gradient(ellipse 45% 50% at 50% 72%,rgba(255,236,170,.9),rgba(255,200,100,.4) 45%,transparent 72%);will-change:transform,opacity;
+  transition:opacity 1.4s ease .7s,transform 2s cubic-bezier(.22,1,.36,1) .7s}
 .env-glow::before{content:"";position:absolute;inset:-20%;background:repeating-conic-gradient(from 0deg at 50% 70%,rgba(255,230,160,.5) 0 5deg,transparent 5deg 18deg);
-  -webkit-mask:radial-gradient(circle at 50% 70%,#000 0,transparent 55%);mask:radial-gradient(circle at 50% 70%,#000 0,transparent 55%);animation:rays 9s linear infinite}
+  -webkit-mask:radial-gradient(circle at 50% 70%,#000 0,transparent 55%);mask:radial-gradient(circle at 50% 70%,#000 0,transparent 55%);animation:rays 16s linear infinite;will-change:transform}
 @keyframes rays{to{transform:rotate(360deg)}}
 .env.open .env-glow{opacity:1;transform:scale(1.15)}
-.peek{transition:transform 1.25s cubic-bezier(.2,.9,.25,1) .8s,opacity .3s ease .6s}
+.peek{transition:transform 1.9s cubic-bezier(.65,0,.35,1) 1s,opacity .5s ease .8s;will-change:transform}
 .env.open .peek{transform:translateY(-72%);opacity:1}
-.env{transition:transform .5s var(--ease)}
-.env.open{animation:envBump .5s ease .15s}
-@keyframes envBump{40%{transform:translateY(5px) scale(1.01)}}
-.env.gone{transition:opacity .55s ease,transform .7s cubic-bezier(.5,0,.75,0);opacity:0;transform:translateY(90px) scale(.9)}
-.stage h1,.stage .sub{transition:opacity .5s ease,transform .6s var(--ease)}
+.env.open{animation:envBump .9s ease-in-out .2s}
+@keyframes envBump{45%{transform:translateY(3px) scale(1.005)}}
+.env.gone{transition:opacity 1s ease,transform 1.2s cubic-bezier(.45,0,.55,1);opacity:0;transform:translateY(40px) scale(.94)}
+.stage h1,.stage .sub{transition:opacity .9s ease,transform 1.1s cubic-bezier(.22,1,.36,1)}
+.stage.overlay{position:absolute;left:0;right:0;z-index:2;pointer-events:none}
 .stage.leaving h1,.stage.leaving .sub{opacity:0;transform:translateY(-16px)}
 
 /* письмо */
 .view{width:100%;display:flex;flex-direction:column;align-items:center;gap:22px}
-.view .sheet{animation:unfold 1.1s cubic-bezier(.2,.9,.25,1) both;transform-origin:50% 0}
-@keyframes unfold{0%{opacity:0;transform:perspective(1600px) translateY(160px) rotateX(62deg) scale(.62)}45%{opacity:1}100%{opacity:1;transform:none}}
-.view .sheet::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(105deg,transparent 35%,rgba(255,240,200,.55) 50%,transparent 65%);transform:translateX(-120%);animation:sweep 1.4s ease-in-out 1s forwards}
+.view .sheet{animation:unfold 1.8s cubic-bezier(.22,1,.36,1) both;transform-origin:50% 0;will-change:transform,opacity}
+@keyframes unfold{0%{opacity:0;transform:perspective(1800px) translateY(110px) rotateX(38deg) scale(.7)}35%{opacity:1}100%{opacity:1;transform:none}}
+.view .sheet::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(105deg,transparent 35%,rgba(255,240,200,.55) 50%,transparent 65%);transform:translateX(-120%);animation:sweep 2.2s cubic-bezier(.45,0,.55,1) 1.3s forwards}
 @keyframes sweep{to{transform:translateX(120%)}}
-.view .acts,.view .video,.view .msg{animation:fadeUp .7s var(--ease) both;animation-delay:1.6s}
+.view .acts,.view .video,.view .msg{animation:fadeUp 1.1s cubic-bezier(.22,1,.36,1) both;animation-delay:2.6s}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}}
-.txt > *{animation:ink .7s ease both;animation-delay:calc(.75s + var(--i,0)*.16s)}
-@keyframes ink{from{opacity:0;transform:translateY(5px);filter:blur(2px)}}
+.txt > *{animation:ink 1.2s ease-out both;animation-delay:calc(1s + var(--i,0)*.26s)}
+@keyframes ink{from{opacity:0;transform:translateY(4px)}}
 .sheet{position:relative;width:min(100%,680px);aspect-ratio:794/1123;box-shadow:0 40px 80px -30px rgba(0,0,0,.85),0 0 120px -40px rgba(255,196,107,.4);border-radius:3px;overflow:hidden;background:#f8efdb}
 .sheet-inner{position:absolute;left:0;top:0;width:794px;height:1123px;transform-origin:0 0;background:url(letter/bg-a4.jpg?v=20261113b) 0 0/100% 100%}
 .txt{position:absolute;left:104px;top:252px;width:586px;color:var(--ink)}
@@ -261,17 +262,20 @@ footer a{color:var(--lamp)}
     if(opened) return; opened = true;
     var env = $('env'), seal = $('seal');
     audio.init();
+    var stage = $('stage');
     seal.classList.add('shake');
-    at(240, function(){ env.classList.add('open'); $('stage').classList.add('opened'); crumbs(); audio.crack(); });
-    at(900, function(){ glowBurst(); });
+    at(380, function(){ env.classList.add('open'); stage.classList.add('opened'); crumbs(); audio.crack(); });
+    at(1150, function(){ glowBurst(); });
     at(1500, function(){ audio.rustle(); });
-    at(2250, function(){ env.classList.add('gone'); $('stage').classList.add('leaving'); });
-    at(2800, function(){
-      show('view'); scaleSheet();
+    at(3000, function(){ env.classList.add('gone'); stage.classList.add('leaving'); });
+    at(3350, function(){
+      /* конверт растворяется поверх письма, без пустой паузы */
+      if(!still){ var top = stage.offsetTop; stage.classList.add('overlay'); stage.style.top = top + 'px'; }
+      $('view').hidden = false; $('loading').hidden = true; scaleSheet();
       (document.fonts ? document.fonts.ready : Promise.resolve()).then(function(){ fitText(); });
-      window.scrollTo({top:0, behavior: still ? 'auto' : 'smooth'});
       audio.chime();
-      setTimeout(sheetSparkles, still ? 0 : 700);
+      setTimeout(sheetSparkles, still ? 0 : 1100);
+      setTimeout(function(){ stage.hidden = true; stage.classList.remove('overlay'); window.scrollTo({top:0, behavior:'smooth'}); }, still ? 0 : 1100);
     });
   });
 
@@ -338,24 +342,24 @@ footer a{color:var(--lamp)}
   function crumbs(){
     if(still) return;
     var b = $('seal').getBoundingClientRect(), cx = b.left + b.width/2, cy = b.top + b.height*0.42;
-    for(var i = 0; i < 26; i++){ var a = -Math.PI/2 + (Math.random() - .5)*2.6, s = Math.random()*5 + 2;
-      sparks.push({k:'chunk', x:cx + (Math.random() - .5)*b.width*0.3, y:cy, vx:Math.cos(a)*s, vy:Math.sin(a)*s, g:.32, life:1, fade:.012, r:Math.random()*4 + 2, rot:Math.random()*6, vr:(Math.random() - .5)*.4, c:['#b3261b','#7d120c','#d8392b','#5e0d08'][i%4]}); }
-    for(var j = 0; j < 30; j++){ var a2 = Math.random()*Math.PI*2, s2 = Math.random()*4 + 1.5;
-      sparks.push({x:cx, y:cy, vx:Math.cos(a2)*s2, vy:Math.sin(a2)*s2 - 1.5, g:.1, life:1, fade:.025, r:1.8, c:'#ffd27a'}); }
+    for(var i = 0; i < 18; i++){ var a = -Math.PI/2 + (Math.random() - .5)*2.4, s = Math.random()*3.2 + 1.4;
+      sparks.push({k:'chunk', x:cx + (Math.random() - .5)*b.width*0.3, y:cy, vx:Math.cos(a)*s, vy:Math.sin(a)*s, g:.16, life:1, fade:.009, r:Math.random()*4 + 2, rot:Math.random()*6, vr:(Math.random() - .5)*.4, c:['#b3261b','#7d120c','#d8392b','#5e0d08'][i%4]}); }
+    for(var j = 0; j < 22; j++){ var a2 = Math.random()*Math.PI*2, s2 = Math.random()*2.4 + .8;
+      sparks.push({x:cx, y:cy, vx:Math.cos(a2)*s2, vy:Math.sin(a2)*s2 - .8, g:.04, drag:.985, life:1, fade:.013, r:1.8, c:'#ffd27a'}); }
   }
   function glowBurst(){
     if(still) return;
     var b = $('env').getBoundingClientRect(), cx = b.left + b.width/2, cy = b.top + b.height*0.1;
-    for(var i = 0; i < 60; i++){ var a = -Math.PI/2 + (Math.random() - .5)*1.6, s = Math.random()*6 + 2;
-      sparks.push({k: i%5 ? 'dot' : 'star', x:cx + (Math.random() - .5)*b.width*0.5, y:cy, vx:Math.cos(a)*s*0.7, vy:Math.sin(a)*s, g:.06, drag:.985, life:1, fade:.012 + Math.random()*.01, r:Math.random()*1.6 + 1, c:['#ffe39a','#fff6d8','#ffd27a','#ffffff'][i%4]}); }
+    for(var i = 0; i < 48; i++){ var a = -Math.PI/2 + (Math.random() - .5)*1.5, s = Math.random()*3.4 + 1.2;
+      sparks.push({k: i%5 ? 'dot' : 'star', x:cx + (Math.random() - .5)*b.width*0.5, y:cy, vx:Math.cos(a)*s*0.6, vy:Math.sin(a)*s, g:.025, drag:.99, life:1, fade:.007 + Math.random()*.005, r:Math.random()*1.6 + 1, c:['#ffe39a','#fff6d8','#ffd27a','#ffffff'][i%4]}); }
   }
   function sheetSparkles(){
     if(still) return;
     var b = $('sheet').getBoundingClientRect();
     for(var i = 0; i < 46; i++){
       var side = i%4, x = side === 0 ? b.left : side === 1 ? b.right : b.left + Math.random()*b.width, y = side < 2 ? b.top + Math.random()*Math.min(b.height, innerHeight) : (side === 2 ? b.top : Math.min(b.bottom, innerHeight - 10));
-      var a = Math.random()*Math.PI*2, s = Math.random()*2.5 + .8;
-      sparks.push({k: i%3 ? 'dot' : 'star', x:x, y:y, vx:Math.cos(a)*s, vy:Math.sin(a)*s - .6, g:.02, drag:.98, life:1, fade:.014, r:Math.random()*1.5 + 1, c:['#ffe39a','#ffffff','#ffd27a'][i%3]}); }
+      var a = Math.random()*Math.PI*2, s = Math.random()*1.4 + .4;
+      sparks.push({k: i%3 ? 'dot' : 'star', x:x, y:y, vx:Math.cos(a)*s, vy:Math.sin(a)*s - .4, g:.008, drag:.985, life:1, fade:.008, r:Math.random()*1.5 + 1, c:['#ffe39a','#ffffff','#ffd27a'][i%3]}); }
   }
   var last = 0;
   function loop(t){
