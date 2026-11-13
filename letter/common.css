@@ -1,0 +1,7 @@
+@font-face{font-family:"Cormorant SC";src:url(CormorantSC-SemiBold.ttf);font-weight:600}
+@font-face{font-family:"Bad Script";src:url(BadScript-Regular.ttf)}
+@font-face{font-family:"Great Vibes";src:url(GreatVibes-Regular.ttf)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:794px;height:1123px;overflow:hidden;background:#fff}
+.abs{position:absolute}
+.paper{background:radial-gradient(ellipse 80% 70% at 50% 45%,#fdf8ec 0%,#f8efdb 60%,#efe1c2 100%)}

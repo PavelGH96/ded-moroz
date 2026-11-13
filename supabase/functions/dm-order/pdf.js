@@ -154,3 +154,55 @@ function kerner(fontkit, bytes, handFix) {
     },
   };
 }
+
+// ---------- допродажи ----------
+async function simpleDoc(lib, fonts, bgBytes, title) {
+  const { PDFDocument, rgb, fontkit } = lib;
+  const doc = await PDFDocument.create();
+  doc.registerFontkit(fontkit);
+  doc.setTitle(title);
+  doc.setAuthor("Дед Мороз");
+  doc.setCreator("Дед Мороз заходил");
+  const page = doc.addPage([W, H]);
+  if (bgBytes) page.drawImage(await doc.embedJpg(bgBytes), { x: 0, y: 0, width: W, height: H });
+  else page.drawRectangle({ x: 0, y: 0, width: W, height: H, color: rgb(0.98, 0.95, 0.89) });
+  return { doc, page, col: (a) => rgb(a[0], a[1], a[2]) };
+}
+function fitSize(font, str, max, start, min) {
+  let s = start;
+  while (s > min && font.widthOfTextAtSize(str, s) > max) s -= 0.5;
+  return s;
+}
+const firstName = (d) => { const n = String(d.name || "").replace(/\s+/g, " ").trim(); return n ? n[0].toUpperCase() + n.slice(1) : ""; };
+
+// Бирки на подарки: 8 штук на листе, в строке «Кому» имя получателя (фон letter/tags-a4.jpg)
+export async function makeTagsPdf(lib, fonts, data) {
+  const name = firstName(data);
+  const { doc, page, col } = await simpleDoc(lib, fonts, fonts.tagsBg, name ? `Бирки на подарки для ${name}` : "Бирки на подарки");
+  if (name) {
+    const callig = await doc.embedFont(fonts.callig, { subset: true });
+    const size = fitSize(callig, name, px(166), 30, 14);
+    for (const ty of [40, 301, 562, 823]) for (const tx of [40, 407]) {
+      const w = callig.widthOfTextAtSize(name, size);
+      page.drawText(name, { x: px(tx + 196) - w / 2, y: py(ty + 136), size, font: callig, color: col(INK) });
+    }
+  }
+  return await doc.save();
+}
+
+// Бланк «Письмо Деду Морозу» для ребёнка: имя и возраст уже вписаны (фон letter/blank-a4.jpg)
+export async function makeBlankPdf(lib, fonts, data) {
+  const name = firstName(data);
+  const { doc, page, col } = await simpleDoc(lib, fonts, fonts.blankBg, "Письмо Деду Морозу");
+  const hand = await doc.embedFont(fonts.hand, { subset: true });
+  if (name) {
+    const size = fitSize(hand, name, px(306), 24, 14);
+    page.drawText(name, { x: px(214), y: py(339), size, font: hand, color: col(INK) });
+  }
+  const age = parseInt(data.age, 10);
+  if (age > 0 && age < 18) {
+    const s = String(age), size = 24;
+    page.drawText(s, { x: px(626) - hand.widthOfTextAtSize(s, size) / 2, y: py(339), size, font: hand, color: col(INK) });
+  }
+  return await doc.save();
+}

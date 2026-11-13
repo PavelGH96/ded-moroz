@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><title>Бирки на подарки</title>
+<!-- Фон PDF «Бирки на подарки» (A4, 2×4). Имя «Кому» накладывает сервер (pdf.js, makeTagsPdf):
+     центр строки имени каждой бирки = левый край бирки + 196 px, верх бирки + 128 px. -->
+<link rel="stylesheet" href="common.css"><style>
+.tag{position:absolute;width:347px;height:241px;border-radius:14px;overflow:hidden;box-shadow:0 0 0 .6px rgba(120,90,40,.25)}
+.tag svg{position:absolute;inset:0;width:100%;height:100%}
+.kom{left:110px;width:172px;top:62px;text-align:center;font:600 13px/1 "Cormorant SC";letter-spacing:.32em;color:#8a6420;padding-left:.32em}
+.line{left:112px;width:168px;top:142px;border-top:1px solid rgba(138,100,32,.55)}
+.from{left:84px;width:224px;top:164px;text-align:center;font:600 11px/1 "Cormorant SC";letter-spacing:.28em;color:#8a6420;padding-left:.28em}
+.sig{left:84px;width:224px;top:180px;text-align:center;font:34px/1 "Great Vibes";color:#1b2a5e}
+.seal{right:12px;top:10px;width:52px}
+.cut{position:absolute;border:0 dashed rgba(90,90,90,.35)}
+</style></head><body><div id="p"></div>
+<script>
+var html='',X=[40,407],Y=[40,301,562,823];
+for(var r=0;r<4;r++)for(var c=0;c<2;c++){var x=X[c],y=Y[r];
+html+='<div class="tag paper" style="left:'+x+'px;top:'+y+'px">'+
+'<svg viewBox="0 0 347 241"><defs><linearGradient id="g'+r+c+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7d5a1a"/><stop offset=".3" stop-color="#e6c877"/><stop offset=".55" stop-color="#9c7428"/><stop offset=".8" stop-color="#f1d98c"/><stop offset="1" stop-color="#7d5a1a"/></linearGradient></defs>'+
+'<rect x="8" y="8" width="331" height="225" rx="10" fill="none" stroke="url(#g'+r+c+')" stroke-width="2.2"/>'+
+'<rect x="14" y="14" width="319" height="213" rx="7" fill="none" stroke="url(#g'+r+c+')" stroke-width=".7"/>'+
+'<circle cx="44" cy="120.5" r="13" fill="#fff" stroke="url(#g'+r+c+')" stroke-width="3"/>'+
+'<circle cx="44" cy="120.5" r="7" fill="#efe3c8" stroke="#a57d32" stroke-width=".8"/>'+
+'<path d="M66 40 V201" stroke="url(#g'+r+c+')" stroke-width=".8" stroke-dasharray="2 4"/>'+
+'<g stroke="#c9a24b" stroke-width="1.1" fill="none" stroke-linecap="round" opacity=".8">'+
+flake(96,206,7)+flake(300,206,7)+flake(196,30,6)+'</g></svg>'+
+'<div class="abs kom">Кому</div><div class="abs line"></div><div class="abs from">от</div><div class="abs sig">Деда Мороза</div>'+
+'<img class="abs seal" src="seal.png" alt=""></div>';}
+function flake(x,y,s){var o='';for(var a=0;a<3;a++){var t=a*Math.PI/3,dx=Math.cos(t)*s,dy=Math.sin(t)*s;o+='<line x1="'+(x-dx)+'" y1="'+(y-dy)+'" x2="'+(x+dx)+'" y2="'+(y+dy)+'"/>';}return o;}
+html+='<div class="cut" style="left:397px;top:20px;bottom:20px;border-left-width:1px"></div>';
+[291,552,813].forEach(function(y){html+='<div class="cut" style="top:'+y+'px;left:20px;right:20px;border-top-width:1px"></div>';});
+html+='<div class="abs" style="left:0;right:0;bottom:12px;text-align:center;font:600 10px \'Cormorant SC\';letter-spacing:.2em;color:#9a8a6a">вырежьте по пунктиру · привяжите ленточкой к подарку</div>';
+document.getElementById('p').innerHTML=html;
+</script></body></html>

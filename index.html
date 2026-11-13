@@ -338,6 +338,29 @@ input,textarea,select,[contenteditable]{-webkit-user-select:text;user-select:tex
 img,svg,canvas{-webkit-user-drag:none;user-drag:none}
 .sample-pic{position:relative}
 .sample-pic::after{content:"";position:absolute;inset:0}
+/* получатель, допродажи, подсказки к фото, подарочная ссылка, реквизиты */
+.addons{margin-top:18px;display:flex;flex-direction:column;gap:8px}
+.addons .flabel{margin-bottom:2px}
+.opt.small{padding:12px 14px}
+.guarantee{margin-top:14px;color:var(--muted);font-size:.92rem;display:flex;gap:8px;align-items:flex-start;max-width:520px}
+.guarantee svg{flex:none;width:18px;height:18px;margin-top:2px;fill:var(--lamp)}
+.linkbtn{background:none;border:0;padding:0;color:var(--lamp);font:inherit;font-size:.9rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer;align-self:flex-start;min-height:32px}
+.tips{border:0;border-radius:var(--r);padding:28px;max-width:min(92vw,520px);background:var(--night-2);color:var(--frost);box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.tips::backdrop{background:rgba(5,10,25,.72)}
+.tips h3{margin:0 0 12px}
+.tips ol{margin:0 0 18px;padding-left:20px;display:flex;flex-direction:column;gap:10px;color:var(--muted)}
+.tips ol b{color:var(--frost)}
+.gift-demo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+.mini-env{position:relative;width:min(100%,420px);aspect-ratio:1.5;margin:0 auto;border-radius:8px;background:linear-gradient(160deg,#f1e2bf,#e2cc9c);box-shadow:0 30px 60px -20px rgba(0,0,0,.7);transform:rotate(-3deg);display:block}
+.mini-env::before{content:"";position:absolute;inset:0 0 38% 0;background:linear-gradient(180deg,#ead8b0,#dfc792);clip-path:polygon(0 0,100% 0,50% 100%);filter:drop-shadow(0 3px 2px rgba(0,0,0,.18))}
+.mini-env::after{content:"";position:absolute;inset:0;border-radius:8px;box-shadow:inset 0 0 0 2px rgba(201,162,75,.65)}
+.mini-env img{position:absolute;left:50%;top:62%;width:34%;transform:translate(-50%,-50%);filter:drop-shadow(0 6px 8px rgba(40,5,0,.45));transition:transform .4s var(--ease, ease)}
+.mini-env:hover img{transform:translate(-50%,-50%) scale(1.06)}
+.adult{background:linear-gradient(120deg,var(--night-3),var(--night-2));border:1px solid var(--line);border-radius:var(--r);padding:36px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:center}
+.adult p{color:var(--muted);margin-top:10px}
+.adult ul{margin:0}
+.seller span{font-variant-numeric:tabular-nums}
+@media (max-width:900px){.gift-demo,.adult{grid-template-columns:1fr;gap:28px}.adult{padding:24px}}
 </style>
 </head>
 <body>
@@ -372,6 +395,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
         <a class="btn btn-main" href="#order">Собрать поздравление</a>
         <a class="btn btn-ghost" href="#prices">Что входит и сколько стоит</a>
       </div>
+      <p class="guarantee"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.1 4.9-4.9 1.4 1.4-6.3 6.3z"/></svg><span>Если что-то не так, бесплатно переделаем. Не успеем к Новому году — вернём деньги.</span></p>
       <ul class="facts">
         <li>Письмо готово за час</li>
         <li>Видео за 24 часа</li>
@@ -432,6 +456,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
         <ul>
           <li>Имя, возраст и 3 личных факта о ребёнке</li>
           <li>PDF для печати на А4</li>
+          <li>Подарочная ссылка: конверт с печатью на телефоне</li>
           <li>Готово за час</li>
         </ul>
         <a class="btn btn-ghost" href="#order" data-pick="letter">Выбрать письмо</a>
@@ -444,6 +469,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
           <li>Всё из письма</li>
           <li>Видео 40–60 секунд в комнате ребёнка</li>
           <li>Дед Мороз говорит то же, что написал в письме</li>
+          <li>Письмо и видео в одной подарочной ссылке</li>
           <li>Одна бесплатная правка</li>
         </ul>
         <a class="btn btn-main" href="#order" data-pick="both">Выбрать комплект</a>
@@ -454,11 +480,12 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
         <ul>
           <li>Дед Мороз у кровати спящего ребёнка</li>
           <li>Обращение по имени и похвала</li>
-          <li>Файл MP4 для телефона и телевизора</li>
+          <li>Файл MP4 и подарочная ссылка с конвертом</li>
         </ul>
         <a class="btn btn-ghost" href="#order" data-pick="video">Выбрать видео</a>
       </article>
     </div>
+    <p class="lead" style="margin-top:22px;font-size:1rem">К любому заказу можно добавить <b style="color:var(--frost)">именные бирки на подарки</b> («Кому: Миша, от Деда Мороза») и <b style="color:var(--frost)">бланк «Письмо Деду Морозу»</b>, который ребёнок заполнит сам. 99 ₽ за каждый.</p>
   </div>
 </section>
 
@@ -478,6 +505,22 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
         <li>PDF в качестве для печати на листе A4</li>
       </ul>
       <a class="btn btn-main" href="#order">Собрать такое письмо</a>
+    </div>
+  </div>
+</section>
+
+<section id="gift" style="padding-top:0">
+  <div class="wrap gift-demo">
+    <a class="mini-env" href="gift.html?demo=1" target="_blank" rel="noopener" aria-label="Открыть пример конверта с письмом"><img src="letter/seal.png" alt="" width="340" height="367" loading="lazy" decoding="async" draggable="false"></a>
+    <div>
+      <h2>Письмо приходит в конверте с печатью</h2>
+      <p class="lead" style="margin-top:12px">Кроме PDF вы получите подарочную ссылку. Ребёнок открывает её на телефоне, сам ломает сургучную печать, и из конверта появляется письмо, а следом видео.</p>
+      <ul class="checks">
+        <li>Ссылку можно переслать бабушке и дедушке в Telegram или ВКонтакте</li>
+        <li>Есть QR-код: распечатайте и вложите в открытку под ёлкой</li>
+        <li>Если ребёнок писал Деду Морозу, пришлите фото письма: Дед Мороз поблагодарит за него</li>
+      </ul>
+      <div class="cta-row"><a class="btn btn-main" href="gift.html?demo=1" target="_blank" rel="noopener">Открыть пример конверта</a></div>
     </div>
   </div>
 </section>
@@ -544,21 +587,33 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
 
         <fieldset data-step="format">
           <legend>Что готовим?</legend>
+          <div class="field" style="margin-bottom:14px"><span class="flabel" id="r-label">Кого поздравляем</span><div class="seg" role="radiogroup" aria-labelledby="r-label"><label class="seg-opt"><input type="radio" name="recipient" id="r-child" value="child"><span>Ребёнка</span></label><label class="seg-opt"><input type="radio" name="recipient" id="r-adult" value="adult"><span>Взрослого</span></label></div></div>
           <div class="opts">
             <label class="opt"><input type="radio" name="product" id="p-both" value="both"><div><b>Письмо и видео</b><span>Одна история в двух форматах</span></div><span class="p">1490 ₽</span></label>
             <label class="opt"><input type="radio" name="product" id="p-letter" value="letter"><div><b>Только письмо</b><span>PDF для печати</span></div><span class="p">390 ₽</span></label>
             <label class="opt"><input type="radio" name="product" id="p-video" value="video"><div><b>Только видео</b><span>40–60 секунд, MP4</span></div><span class="p">1490 ₽</span></label>
           </div>
+          <div class="addons">
+            <span class="flabel">Добавить к заказу</span>
+            <label class="opt small"><input type="checkbox" id="a-tags" value="tags"><div><b>Именные бирки на подарки</b><span>8 бирок «Кому: имя, от Деда Мороза», PDF для печати</span></div><span class="p">+99 ₽</span></label>
+            <label class="opt small" id="a-blank-row"><input type="checkbox" id="a-blank" value="blank"><div><b>Бланк «Письмо Деду Морозу»</b><span>Ребёнок сам напишет, о чём мечтает. Имя и возраст уже вписаны</span></div><span class="p">+99 ₽</span></label>
+          </div>
         </fieldset>
 
         <fieldset data-step="child" hidden>
-          <legend>Расскажите о ребёнке</legend>
-          <div class="field"><label for="f-name">Имя, как его зовут дома</label><input type="text" id="f-name" maxlength="24" placeholder="Миша"><div class="err" id="e-name"></div></div>
-          <div class="field"><span class="flabel" id="g-label">Кто получит письмо</span><div class="seg" role="radiogroup" aria-labelledby="g-label"><label class="seg-opt"><input type="radio" name="gender" id="g-m" value="m"><span>Мальчик</span></label><label class="seg-opt"><input type="radio" name="gender" id="g-f" value="f"><span>Девочка</span></label></div><small>Чтобы Дед Мороз написал «старался» или «старалась».</small><div class="err" id="e-gender"></div></div>
-          <div class="field"><label for="f-age">Возраст, лет</label><input type="number" id="f-age" min="1" max="14" placeholder="5"></div>
-          <div class="field"><label for="f-praise">За что похвалить</label><textarea id="f-praise" maxlength="140" placeholder="научился кататься на самокате и сам убираешь игрушки"></textarea><small>Продолжите фразу «в этом году ты…»</small></div>
-          <div class="field"><label for="f-wish">Над чем постараться в новом году</label><input type="text" id="f-wish" maxlength="100" placeholder="чистить зубы без напоминаний"></div>
-          <div class="field"><label for="f-gift">О каком подарке мечтает</label><input type="text" id="f-gift" maxlength="80" placeholder="пожарная машина"></div>
+          <legend id="childLegend">Расскажите о ребёнке</legend>
+          <div class="field"><label for="f-name" id="l-name">Имя, как его зовут дома</label><input type="text" id="f-name" maxlength="24" placeholder="Миша"><div class="err" id="e-name"></div></div>
+          <div class="field"><span class="flabel" id="g-label">Кто получит письмо</span><div class="seg" role="radiogroup" aria-labelledby="g-label"><label class="seg-opt"><input type="radio" name="gender" id="g-m" value="m"><span id="g-m-t">Мальчик</span></label><label class="seg-opt"><input type="radio" name="gender" id="g-f" value="f"><span id="g-f-t">Девочка</span></label></div><small id="g-hint">Чтобы Дед Мороз написал «старался» или «старалась».</small><div class="err" id="e-gender"></div></div>
+          <div class="field" id="ageField"><label for="f-age">Возраст, лет</label><input type="number" id="f-age" min="1" max="14" placeholder="5"></div>
+          <div class="field"><label for="f-praise" id="l-praise">За что похвалить</label><textarea id="f-praise" maxlength="140" placeholder="научился кататься на самокате и сам убираешь игрушки"></textarea><small>Продолжите фразу «в этом году ты…»</small></div>
+          <div class="field"><label for="f-wish" id="l-wish">Над чем постараться в новом году</label><input type="text" id="f-wish" maxlength="100" placeholder="чистить зубы без напоминаний"></div>
+          <div class="field"><label for="f-gift" id="l-gift">О каком подарке мечтает</label><input type="text" id="f-gift" maxlength="80" placeholder="пожарная машина"></div>
+          <div class="field" id="childLetterField">
+            <label for="f-letter">Фото письма Деду Морозу, если ребёнок писал</label>
+            <input type="file" id="f-letter" accept="image/*">
+            <small>Необязательно. Дед Мороз поблагодарит за письмо, а в видео покажет его.</small>
+            <img class="thumb" id="letterThumb" alt="Фото письма ребёнка" hidden>
+          </div>
         </fieldset>
 
         <fieldset data-step="photo" hidden>
@@ -567,6 +622,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
             <label for="f-photo">Снимок спящего ребёнка или его кровати</label>
             <input type="file" id="f-photo" accept="image/*">
             <small>Горизонтальный кадр, свет ночника, с расстояния 2–3 метра. Можно без лица: со спины или под одеялом.</small>
+            <button type="button" class="linkbtn" id="tipsBtn">Как сделать хорошее фото?</button>
           </div>
           <img class="thumb" id="thumb" alt="Выбранное фото" hidden>
           <div class="note">Можно пропустить этот шаг и прислать фото позже в переписке.</div>
@@ -577,7 +633,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
           <div class="field"><label for="f-parent">Как к вам обращаться</label><input type="text" id="f-parent" maxlength="40" placeholder="Анна"></div>
           <div class="field"><label for="f-contact">Telegram, телефон или почта</label><input type="text" id="f-contact" maxlength="60" placeholder="@username"><div class="err" id="e-contact"></div></div>
           <div class="hp" aria-hidden="true"><label for="f-website">Сайт</label><input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off"></div>
-          <label class="consent" for="f-consent"><input type="checkbox" id="f-consent"><span>Я родитель или законный представитель ребёнка и даю <a href="#docs">согласие на обработку персональных данных</a> для выполнения заказа.</span></label>
+          <label class="consent" for="f-consent"><input type="checkbox" id="f-consent"><span id="consentText">Я родитель или законный представитель ребёнка и даю <a href="#docs">согласие на обработку персональных данных</a> для выполнения заказа.</span></label>
           <div class="err" id="e-consent"></div>
           <div class="err" id="e-send" role="alert"></div>
           <button type="button" class="btn btn-ghost" id="copyFallback" hidden>Скопировать заявку</button>
@@ -585,7 +641,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
 
         <fieldset data-step="done" hidden>
           <legend id="doneTitle">Заявка принята</legend>
-          <p class="done-lead" id="doneLead">Мы напишем вам в течение часа по указанному контакту и пришлём ссылку на оплату.</p>
+          <p class="done-lead" id="doneLead">Мы напишем вам в течение часа по указанному контакту и пришлём ссылку на оплату. После оплаты пришлём PDF и подарочную ссылку: конверт с печатью, который можно открыть на телефоне.</p>
           <div class="summary" id="summary"></div>
           <button type="button" class="btn btn-ghost" id="copy">Скопировать заявку</button>
           <button type="button" class="btn btn-ghost" id="again">Заказать ещё одно письмо</button>
@@ -597,6 +653,17 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
           <button type="button" class="btn btn-main" id="next">Дальше</button>
         </div>
       </form>
+      <dialog class="tips" id="tipsDlg" aria-labelledby="tipsTitle">
+        <h3 id="tipsTitle">Как сфотографировать комнату</h3>
+        <ol>
+          <li><b>Горизонтально.</b> Держите телефон боком, как для видео.</li>
+          <li><b>С расстояния 2–3 метра.</b> Чтобы в кадр попала кровать целиком и немного места рядом: туда встанет Дед Мороз.</li>
+          <li><b>Свет ночника или вечерний свет.</b> Без вспышки, но и не в полной темноте, иначе снимок будет шуметь.</li>
+          <li><b>Не двигайте телефон.</b> Обопритесь на шкаф или дверной косяк, чтобы кадр был резким.</li>
+          <li><b>Лицо не обязательно.</b> Подойдёт ребёнок под одеялом, со спины или пустая кровать с любимой игрушкой.</li>
+        </ol>
+        <button type="button" class="btn btn-main" id="tipsClose">Понятно</button>
+      </dialog>
 
       <aside class="side">
         <p>Так письмо увидит ребёнок</p>
@@ -634,11 +701,27 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   </div>
 </section>
 
+<section id="adult" style="padding-top:0">
+  <div class="wrap">
+    <div class="adult">
+      <div>
+        <h2>Взрослым тоже нужно чудо</h2>
+        <p>Письмо от Деда Мороза маме, бабушке или любимому человеку. Дед Мороз поблагодарит за то, что вы расскажете, пожелает главного и пообещает исполнить мечту. Хороший подарок от детей и внуков.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+        <ul class="checks" style="margin-top:0"><li>Тот же бланк, печать и подпись</li><li>Свой тёплый текст для взрослого</li><li>Письмо 390 ₽, с видео 1490 ₽</li></ul>
+        <a class="btn btn-main" href="#order" data-recipient="adult">Поздравить взрослого</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="faq" style="padding-top:0">
   <div class="wrap">
     <h2>Что обычно спрашивают</h2>
     <div class="faq">
       <details><summary>Как быстро придёт заказ?</summary><p>Письмо в течение часа после оплаты, видео в течение 24 часов. В последнюю неделю декабря сроки те же, но заказы принимаем только до 30 числа.</p></details>
+      <details><summary>Что такое подарочная ссылка?</summary><p>Это страница с конвертом, запечатанным сургучной печатью. Ребёнок нажимает на печать, она ломается, и появляется его письмо, а если заказано видео, то и видео. Ссылку присылаем вместе с PDF. Работает 90 дней.</p></details>
       <details><summary>Обязательно ли показывать лицо ребёнка?</summary><p>Нет. Подойдёт кадр со спины, под одеялом или просто кровать в детской. Главное, чтобы ребёнок узнал свою комнату.</p></details>
       <details><summary>Как сделано видео?</summary><p>Образ и голос Деда Мороза записаны с актёром. В кадр с вашей комнатой он попадает при монтаже с помощью компьютерной графики. Домой к вам никто не приходит.</p></details>
       <details><summary>Как показать это ребёнку?</summary><p>Письмо распечатайте и положите под ёлку, на подоконник или в морозилку. Видео покажите утром на телефоне: «Смотри, что ночью записала камера».</p></details>
@@ -662,6 +745,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   <div class="wrap foot">
     <div><b style="color:var(--frost)">Дед Мороз заходил</b><span>Письма и видео от Деда Мороза для детей</span><span>Заказы на этот Новый год до 30 декабря</span></div>
     <div><b style="color:var(--frost)">Связаться</b><span>Telegram: укажите ваш контакт</span><span>Почта: укажите вашу почту</span></div>
+    <div class="seller" id="seller" hidden><b style="color:var(--frost)">Продавец</b><span id="sellerName"></span><span id="sellerInn"></span></div>
     <div id="docs"><b style="color:var(--frost)">Документы</b><span>Публичная оферта</span><span>Политика конфиденциальности</span><span>Согласие на обработку персональных данных</span></div>
   </div>
 </footer>
@@ -670,9 +754,16 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
 (function(){
   var PRICES = {both:1490, letter:390, video:1490};
   var NAMES = {both:'Письмо и видео', letter:'Только письмо', video:'Только видео'};
+  var ADDONS = {tags:{title:'Бирки на подарки', price:99}, blank:{title:'Бланк «Письмо Деду Морозу»', price:99, childOnly:true}};
+  /* реквизиты продавца для подвала сайта: заполните, и блок «Продавец» появится сам */
+  var SELLER = {name:'', inn:''};
   var $ = function(id){ return document.getElementById(id); };
   var ORDER_URL = 'https://tribgnfjiiwmiktzjeyy.supabase.co/functions/v1/dm-order';
-  var state = {product:'both', name:'', age:'', gender:'', praise:'', wish:'', gift:'', parent:'', contact:'', consent:false, step:0, sentId:0};
+  var state = {product:'both', recipient:'child', addons:[], name:'', age:'', gender:'', praise:'', wish:'', gift:'', parent:'', contact:'', consent:false, step:0, sentId:0};
+  function adult(){ return state.recipient === 'adult'; }
+  function addonsOn(){ return state.addons.filter(function(a){ return ADDONS[a] && !(adult() && ADDONS[a].childOnly); }); }
+  function total(){ return PRICES[state.product] + addonsOn().reduce(function(s, a){ return s + ADDONS[a].price; }, 0); }
+  function childLetter(){ var f = document.getElementById('f-letter'); return !adult() && !!(f && f.files.length); }
 
   function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function years(n){
@@ -681,25 +772,53 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
     var w = (a===1 && b!==11) ? 'год' : (a>=2 && a<=4 && (b<12 || b>14)) ? 'года' : 'лет';
     return n + ' ' + w;
   }
-  /* тот же текст, что в PDF и в Telegram (supabase/functions/dm-order/letter.js) */
-  /* тот же текст, что в PDF и в Telegram (supabase/functions/dm-order/letter.js) */
+  /* тот же текст, что в PDF, на подарочной странице и в Telegram (supabase/functions/dm-order/letter.js) */
   function letterHtml(){
-    var girl = state.gender === 'f', g = function(f, m){ return girl ? f : m; };
+    var female = state.gender === 'f', g = function(f, m){ return female ? f : m; };
     var clean = function(v){ return String(v || '').replace(/\s+/g, ' ').trim().replace(/[.!…]+$/, ''); };
     var name = clean(state.name); if(name) name = name[0].toUpperCase() + name.slice(1);
-    var praise = clean(state.praise) || g('очень старалась и радовала родных', 'очень старался и радовал родных');
-    var wish = clean(state.wish), gift = clean(state.gift), n = parseInt(state.age, 10), age = years(n);
+    var praise = clean(state.praise), wish = clean(state.wish), gift = clean(state.gift);
     var b = function(v){ return '<b>' + esc(v) + '</b>'; };
-    var out = '<span class="greet">' + (name ? 'Здравствуй, ' + g('дорогая', 'дорогой') + ' ' + b(name) + '!' : g('Здравствуй, моя юная подруга!', 'Здравствуй, мой юный друг!')) + '</span>\n';
+    var greet = name ? 'Здравствуй, ' + g('дорогая', 'дорогой') + ' ' + b(name) + '!' : adult() ? g('Здравствуй, дорогая моя!', 'Здравствуй, дорогой мой!') : g('Здравствуй, моя юная подруга!', 'Здравствуй, мой юный друг!');
+    var out = '<span class="greet">' + greet + '</span>\n';
     out += 'Пишу тебе из Великого Устюга. За окном метёт метель, а в моей мастерской помощники заворачивают последние подарки и спорят, у кого бантик красивее.\n';
-    out += 'Этой ночью я заглянул к тебе. Ты так сладко ' + g('спала', 'спал') + ', что я не стал тебя будить и ушёл на цыпочках, чтобы не скрипнула ни одна половица.\n';
-    var big = n <= 7 ? g('совсем большая девочка', 'совсем большой мальчик') : g('совсем взрослая', 'совсем взрослый');
-    out += (age ? 'Тебе уже ' + b(age) + ' — ' + big + '! ' : '') + 'Мои помощники-снегири весь год присматривали за тобой и рассказали, что ты ' + b(praise) + '. Я очень тобой горжусь!\n';
-    if(wish) out += 'В новом году у меня к тебе маленькая просьба: постарайся ' + b(wish) + '. Я верю, что у тебя обязательно получится.\n';
-    out += gift ? 'А про твоё желание я помню: ' + b(gift) + '. Загляни утром под ёлку!\n' : 'А твой подарок уже ждёт тебя под ёлкой.\n';
-    out += 'Расти ' + g('доброй', 'добрым') + ', береги родных и всегда верь в чудеса.';
+    if(adult()){
+      out += 'Этой ночью я заглянул и к тебе. Взрослые редко пишут мне письма, но я помню каждого, кто когда-то ждал меня у ёлки, и тебя тоже.\n';
+      out += (praise ? 'Мои помощники-снегири рассказали, что в этом году ты ' + b(praise) + '.' : 'Мои помощники-снегири рассказали, сколько тепла ты подарил' + g('а', '') + ' родным в этом году.') + ' Спасибо тебе! Такие люди и делают Новый год волшебным.\n';
+      if(wish) out += 'В новом году я желаю тебе ' + b(wish) + '. Пусть всё задуманное сбудется.\n';
+      out += gift ? 'А про твою мечту я помню: ' + b(gift) + '. Загляни утром под ёлку!\n' : 'А твой подарок уже ждёт тебя под ёлкой.\n';
+      out += 'Береги себя и близких и не переставай верить в чудеса: они случаются и со взрослыми.';
+    } else {
+      var n = parseInt(state.age, 10), age = years(n);
+      out += 'Этой ночью я заглянул к тебе. Ты так сладко ' + g('спала', 'спал') + ', что я не стал тебя будить и ушёл на цыпочках, чтобы не скрипнула ни одна половица.\n';
+      if(childLetter()) out += 'Твоё письмо до меня дошло! Я прочитал его два раза и положил в самую главную шкатулку, где храню самые добрые письма.\n';
+      var big = n <= 7 ? g('совсем большая девочка', 'совсем большой мальчик') : g('совсем взрослая', 'совсем взрослый');
+      out += (age ? 'Тебе уже ' + b(age) + ' — ' + big + '! ' : '') + 'Мои помощники-снегири весь год присматривали за тобой и рассказали, что ты ' + b(praise || g('очень старалась и радовала родных', 'очень старался и радовал родных')) + '. Я очень тобой горжусь!\n';
+      if(wish) out += 'В новом году у меня к тебе маленькая просьба: постарайся ' + b(wish) + '. Я верю, что у тебя обязательно получится.\n';
+      out += gift ? 'А про твоё желание я помню: ' + b(gift) + '. Загляни утром под ёлку!\n' : 'А твой подарок уже ждёт тебя под ёлкой.\n';
+      out += 'Расти ' + g('доброй', 'добрым') + ', береги родных и всегда верь в чудеса.';
+    }
     out += '<span class="sign">С любовью, твой Дед Мороз</span>';
     return out;
+  }
+  /* подписи анкеты под ребёнка или взрослого */
+  var TEXTS = {
+    child:{legend:'Расскажите о ребёнке', name:'Имя, как его зовут дома', namePh:'Миша', m:'Мальчик', f:'Девочка', gHint:'Чтобы Дед Мороз написал «старался» или «старалась».',
+      praise:'За что похвалить', praisePh:'научился кататься на самокате и сам убираешь игрушки', wish:'Над чем постараться в новом году', wishPh:'чистить зубы без напоминаний', gift:'О каком подарке мечтает', giftPh:'пожарная машина',
+      consent:'Я родитель или законный представитель ребёнка и даю <a href="#docs">согласие на обработку персональных данных</a> для выполнения заказа.'},
+    adult:{legend:'Расскажите, кого поздравляем', name:'Имя получателя', namePh:'Анна', m:'Мужчина', f:'Женщина', gHint:'Чтобы Дед Мороз написал «подарил» или «подарила».',
+      praise:'За что поблагодарить', praisePh:'встречала нас с самыми вкусными пирогами и всегда находила доброе слово', wish:'Что пожелать в новом году', wishPh:'больше отдыхать и путешествовать', gift:'О чём мечтает', giftPh:'поездка на море',
+      consent:'Даю <a href="#docs">согласие на обработку персональных данных</a> для выполнения заказа. Данные получателя указываю с его ведома.'}
+  };
+  function applyRecipient(){
+    var t = TEXTS[state.recipient];
+    $('childLegend').textContent = t.legend; $('l-name').textContent = t.name; $('f-name').placeholder = t.namePh;
+    $('g-m-t').textContent = t.m; $('g-f-t').textContent = t.f; $('g-hint').textContent = t.gHint;
+    $('l-praise').textContent = t.praise; $('f-praise').placeholder = t.praisePh; $('f-praise').nextElementSibling.hidden = adult();
+    $('l-wish').textContent = t.wish; $('f-wish').placeholder = t.wishPh; $('l-gift').textContent = t.gift; $('f-gift').placeholder = t.giftPh;
+    $('consentText').innerHTML = t.consent;
+    $('ageField').hidden = adult(); $('childLetterField').hidden = adult(); $('a-blank-row').hidden = adult();
+    $('heroName').placeholder = adult() ? 'Например, Анна' : 'Например, Миша';
   }
   function renderLetter(){
     var h = letterHtml();
@@ -715,7 +834,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
     var cur = list[state.step];
     document.querySelectorAll('fieldset[data-step]').forEach(function(f){ f.hidden = f.dataset.step !== cur; });
     $('progress').innerHTML = list.map(function(_, i){ return '<span class="' + (i<=state.step ? 'on' : '') + '"></span>'; }).join('');
-    $('stepTitle').textContent = 'Шаг ' + (state.step+1) + ' из ' + list.length + ' · ' + NAMES[state.product] + ', ' + PRICES[state.product] + ' ₽';
+    $('stepTitle').textContent = 'Шаг ' + (state.step+1) + ' из ' + list.length + ' · ' + NAMES[state.product] + addonsOn().map(function(x){ return x === 'tags' ? ' + бирки' : ' + бланк'; }).join('') + ', ' + total() + ' ₽';
     $('back').style.visibility = state.step === 0 ? 'hidden' : 'visible';
     $('next').hidden = cur === 'done';
     $('next').textContent = cur === 'contact' ? 'Отправить заявку' : 'Дальше';
@@ -725,12 +844,15 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
   function summaryText(){
     var t = [
       'Заказ: ' + NAMES[state.product] + ', ' + PRICES[state.product] + ' ₽',
-      (state.sentId ? 'Заявка №' + state.sentId + '\n' : '') + 'Ребёнок: ' + state.name.trim() + (years(state.age) ? ', ' + years(state.age) : '') + (state.gender ? ', ' + (state.gender === 'f' ? 'девочка' : 'мальчик') : ''),
-      'Похвалить: ' + (state.praise.trim() || 'не указано'),
-      'Постараться: ' + (state.wish.trim() || 'не указано'),
-      'Подарок: ' + (state.gift.trim() || 'не указано')
     ];
-    if(state.product !== 'letter') t.push('Фото: ' + ($('f-photo').files.length ? 'отправлено' : 'пришлю позже'));
+    addonsOn().forEach(function(a){ t.push('Добавить: ' + ADDONS[a].title + ', ' + ADDONS[a].price + ' ₽'); });
+    if(addonsOn().length) t.push('Итого: ' + total() + ' ₽');
+    t.push((state.sentId ? 'Заявка №' + state.sentId + '\n' : '') + (adult() ? 'Взрослому: ' + state.name.trim() + (state.gender ? ', ' + (state.gender === 'f' ? 'женщина' : 'мужчина') : '') : 'Ребёнок: ' + state.name.trim() + (years(state.age) ? ', ' + years(state.age) : '') + (state.gender ? ', ' + (state.gender === 'f' ? 'девочка' : 'мальчик') : '')));
+    t.push((adult() ? 'Поблагодарить: ' : 'Похвалить: ') + (state.praise.trim() || 'не указано'));
+    t.push((adult() ? 'Пожелать: ' : 'Постараться: ') + (state.wish.trim() || 'не указано'));
+    t.push('Подарок: ' + (state.gift.trim() || 'не указано'));
+    if(childLetter()) t.push('Фото письма Деду Морозу: отправлено');
+    if(state.product !== 'letter') t.push('Фото комнаты: ' + ($('f-photo').files.length ? 'отправлено' : 'пришлю позже'));
     t.push('Родитель: ' + (state.parent.trim() || 'не указано'));
     t.push('Контакт: ' + state.contact.trim());
     return t.join('\n');
@@ -739,9 +861,9 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
     var ok = true;
     if(cur === 'child'){
       var bad = !state.name.trim();
-      $('e-name').textContent = bad ? 'Впишите имя: без него Дед Мороз не сможет обратиться к ребёнку.' : '';
+      $('e-name').textContent = bad ? (adult() ? 'Впишите имя: без него Дед Мороз не сможет обратиться к получателю.' : 'Впишите имя: без него Дед Мороз не сможет обратиться к ребёнку.') : '';
       var noG = !state.gender;
-      $('e-gender').textContent = noG ? 'Выберите, мальчик или девочка: от этого зависит текст письма.' : '';
+      $('e-gender').textContent = noG ? (adult() ? 'Выберите, мужчина или женщина: от этого зависит текст письма.' : 'Выберите, мальчик или девочка: от этого зависит текст письма.') : '';
       if(bad){ ok = false; $('f-name').focus(); } else if(noG){ ok = false; $('g-m').focus(); }
     }
     if(cur === 'contact'){
@@ -759,6 +881,9 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
     $('f-parent').value = state.parent; $('f-contact').value = state.contact; $('f-consent').checked = !!state.consent;
     var r = $('p-' + state.product); if(r) r.checked = true;
     $('g-m').checked = state.gender === 'm'; $('g-f').checked = state.gender === 'f';
+    $('r-' + state.recipient).checked = true;
+    $('a-tags').checked = state.addons.indexOf('tags') > -1; $('a-blank').checked = state.addons.indexOf('blank') > -1;
+    applyRecipient();
   }
   function bind(id, key){
     $(id).addEventListener('input', function(e){
@@ -778,6 +903,12 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
     fd.append('gender', state.gender); fd.append('praise', state.praise.trim()); fd.append('wish', state.wish.trim());
     fd.append('gift', state.gift.trim()); fd.append('parent', state.parent.trim()); fd.append('contact', state.contact.trim());
     fd.append('consent', state.consent ? '1' : ''); fd.append('website', $('f-website').value);
+    fd.append('recipient', state.recipient); fd.append('addons', addonsOn().join(','));
+    var letterPhoto = $('f-letter').files[0];
+    if(letterPhoto && !adult()){
+      if(letterPhoto.size > 10*1024*1024){ msg.textContent = 'Фото письма больше 10 МБ. Вернитесь назад и выберите снимок поменьше.'; return; }
+      fd.append('letter_photo', letterPhoto, letterPhoto.name);
+    }
     var photo = $('f-photo').files[0];
     if(photo && state.product !== 'letter'){
       if(photo.size > 10*1024*1024){ msg.textContent = 'Фото больше 10 МБ. Вернитесь на шаг назад и выберите другое или пришлите его позже в переписке.'; return; }
@@ -811,6 +942,27 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
     document.querySelectorAll('input[name=product]').forEach(function(r){
       r.addEventListener('change', function(){ state.product = r.value; renderStep(); });
     });
+    document.querySelectorAll('input[name=recipient]').forEach(function(r){
+      r.addEventListener('change', function(){ state.recipient = r.value; applyRecipient(); renderLetter(); renderStep(); });
+    });
+    ['a-tags','a-blank'].forEach(function(id){
+      $(id).addEventListener('change', function(e){
+        var v = e.target.value, i = state.addons.indexOf(v);
+        if(e.target.checked && i < 0) state.addons.push(v); else if(!e.target.checked && i > -1) state.addons.splice(i, 1);
+        renderStep();
+      });
+    });
+    document.querySelectorAll('[data-recipient]').forEach(function(a){
+      a.addEventListener('click', function(){ state.recipient = a.dataset.recipient; state.step = 0; sync(); renderLetter(); renderStep(); });
+    });
+    $('tipsBtn').addEventListener('click', function(){ $('tipsDlg').showModal(); });
+    $('tipsClose').addEventListener('click', function(){ $('tipsDlg').close(); });
+    $('f-letter').addEventListener('change', function(e){
+      var f = e.target.files[0], img = $('letterThumb');
+      if(f){ img.src = URL.createObjectURL(f); img.hidden = false; } else { img.hidden = true; }
+      renderLetter();
+    });
+    if(SELLER.name || SELLER.inn){ $('sellerName').textContent = SELLER.name; $('sellerInn').textContent = SELLER.inn ? 'ИНН ' + SELLER.inn : ''; $('seller').hidden = false; }
     document.querySelectorAll('[data-pick]').forEach(function(a){
       a.addEventListener('click', function(){ state.product = a.dataset.pick; state.step = 0; sync(); renderStep(); });
     });
@@ -825,7 +977,7 @@ img,svg,canvas{-webkit-user-drag:none;user-drag:none}
     });
     $('again').addEventListener('click', function(){
       state.name = ''; state.age = ''; state.gender = ''; state.praise = ''; state.wish = ''; state.gift = ''; state.sentId = 0; state.step = 1;
-      $('f-photo').value = ''; $('thumb').hidden = true;
+      $('f-photo').value = ''; $('thumb').hidden = true; $('f-letter').value = ''; $('letterThumb').hidden = true;
       sync(); renderLetter(); renderStep(); $('f-name').focus();
     });
     $('back').addEventListener('click', function(){ if(state.step>0){ state.step--; renderStep(); } });

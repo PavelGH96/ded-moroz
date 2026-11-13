@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d1836">
+<meta name="robots" content="noindex">
+<title>Тебе письмо от Деда Мороза</title>
+<meta name="description" content="Дед Мороз прислал тебе письмо. Открой конверт!">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Дед Мороз заходил">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Тебе письмо от Деда Мороза ✉️">
+<meta property="og:description" content="Открой конверт и сломай сургучную печать.">
+<meta property="og:image" content="https://pavelgh96.github.io/ded-moroz/og-gift.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pavelgh96.github.io/ded-moroz/og-gift.jpg">
+<link rel="preload" href="letter/seal.png" as="image">
+<style>
+@font-face{font-family:"Bad Script";src:url(letter/BadScript-Regular.ttf);font-display:swap}
+@font-face{font-family:"Great Vibes";src:url(letter/GreatVibes-Regular.ttf);font-display:swap}
+@font-face{font-family:"Cormorant SC";src:url(letter/CormorantSC-SemiBold.ttf);font-weight:600;font-display:swap}
+:root{--night:#0d1836;--frost:#eef3ff;--lamp:#ffc46b;--lamp-ink:#2a1a05;--muted:#b9c6e6;--ink:#1b2a5e;--ink-soft:#4c5a86;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html{background:#0a1330}
+html,body{margin:0;min-height:100%}
+body{background:radial-gradient(900px 600px at 50% 30%,rgba(255,196,107,.12),transparent 65%),linear-gradient(170deg,#1e3166,#0d1836 60%,#0a1330);background-attachment:fixed;color:var(--frost);
+  font:500 1rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+#snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+main{position:relative;z-index:1;min-height:100svh;display:flex;flex-direction:column;align-items:center;padding:28px 14px 48px}
+.brand{font:600 .8rem/1 "Cormorant SC",serif;letter-spacing:.28em;color:var(--lamp);text-transform:uppercase;margin-bottom:18px;text-decoration:none}
+h1{font:400 clamp(2.1rem,7vw,3.4rem)/1.1 "Great Vibes",cursive;margin:0 0 6px;text-align:center;color:#fff;text-wrap:balance}
+.sub{margin:0;color:var(--muted);text-align:center}
+
+/* конверт */
+.stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;padding-bottom:6vh}
+.env{position:relative;width:min(88vw,460px);aspect-ratio:1.5;perspective:1100px;margin-top:min(38vw,200px)}
+.env-back,.env-front{position:absolute;inset:0;border-radius:8px}
+.env-back{background:linear-gradient(160deg,#f1e2bf,#e2cc9c);box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
+.env-front{background:
+  linear-gradient(to top right,#f6ead0 49.6%,transparent 50.4%) left bottom/50.5% 100% no-repeat,
+  linear-gradient(to top left,#f2e3c3 49.6%,transparent 50.4%) right bottom/50.5% 100% no-repeat;z-index:3;pointer-events:none}
+.env-front::after{content:"";position:absolute;inset:0;border-radius:8px;box-shadow:inset 0 0 0 2px rgba(201,162,75,.65),inset 0 0 0 7px rgba(255,255,255,.25)}
+.flap{position:absolute;left:0;right:0;top:0;height:62%;transform-origin:top center;transform-style:preserve-3d;z-index:4;transition:transform .9s var(--ease) .15s}
+.flap::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#ead8b0,#dfc792);clip-path:polygon(0 0,100% 0,50% 100%);border-radius:8px 8px 0 0;backface-visibility:hidden;filter:drop-shadow(0 3px 2px rgba(0,0,0,.18))}
+.flap::after{content:"";position:absolute;inset:0;background:#e8d5ab;clip-path:polygon(0 0,100% 0,50% 100%);transform:rotateX(180deg);backface-visibility:hidden}
+.peek{position:absolute;left:7%;right:7%;top:8%;height:84%;border-radius:4px;z-index:2;background:#fbf4e3 url(letter/bg-a4.jpg) center top/cover;box-shadow:0 2px 8px rgba(0,0,0,.2);opacity:0;transition:transform 1s var(--ease),opacity .3s ease}
+.seal{position:absolute;left:50%;top:62%;width:34%;transform:translate(-50%,-50%);z-index:6;border:0;padding:0;background:none;cursor:pointer;filter:drop-shadow(0 6px 8px rgba(40,5,0,.45));animation:pulse 2.2s ease-in-out infinite}
+.seal img{display:block;width:100%;height:auto}
+.seal .half{position:absolute;inset:0;transition:transform .8s var(--ease),opacity .8s ease}
+.seal .half.l{clip-path:polygon(0 0,52% 0,46% 22%,55% 40%,45% 58%,54% 76%,48% 100%,0 100%)}
+.seal .half.r{clip-path:polygon(52% 0,100% 0,100% 100%,48% 100%,54% 76%,45% 58%,55% 40%,46% 22%)}
+.seal:focus-visible{outline:3px solid var(--lamp);outline-offset:6px;border-radius:50%}
+@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
+.hint{margin-top:26px;color:var(--lamp);font-weight:600;letter-spacing:.02em;animation:fade 2.2s ease-in-out infinite}
+@keyframes fade{50%{opacity:.55}}
+.env.open .seal{animation:none;pointer-events:none}
+.env.open .seal .half.l{transform:translate(-70%,40%) rotate(-28deg);opacity:0}
+.env.open .seal .half.r{transform:translate(70%,48%) rotate(30deg);opacity:0}
+.stage.opened .hint{visibility:hidden}
+.env.open .flap{transform:rotateX(180deg)}
+.env.open .flap{z-index:1}
+.env.open .peek{transform:translateY(-58%);opacity:1}
+.env.gone{transition:opacity .5s ease,transform .6s var(--ease);opacity:0;transform:scale(.92)}
+
+/* письмо */
+.view{width:100%;display:flex;flex-direction:column;align-items:center;gap:22px;animation:rise .9s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(40px) scale(.97)}}
+.sheet{position:relative;width:min(100%,680px);aspect-ratio:794/1123;box-shadow:0 40px 80px -30px rgba(0,0,0,.85),0 0 120px -40px rgba(255,196,107,.4);border-radius:3px;overflow:hidden;background:#f8efdb}
+.sheet-inner{position:absolute;left:0;top:0;width:794px;height:1123px;transform-origin:0 0;background:url(letter/bg-a4.jpg) 0 0/100% 100%}
+.txt{position:absolute;left:104px;top:252px;width:586px;color:var(--ink)}
+.txt .date{font-family:"Bad Script",cursive;text-align:right;color:var(--ink-soft)}
+.txt .greet{font-family:"Great Vibes",cursive;line-height:1.05;margin:.35em 0 .3em}
+.txt p{font-family:"Bad Script",cursive;margin:0;text-indent:1.6em;line-height:1.6}
+.num{position:absolute;right:104px;top:1038px;font:600 11px/1 "Cormorant SC",serif;letter-spacing:.06em;color:#8a6420}
+.video{width:min(100%,680px)}
+.video video{width:100%;border-radius:12px;background:#000;box-shadow:0 30px 60px -24px rgba(0,0,0,.8)}
+.video h2,.acts-title{font:400 2rem/1.1 "Great Vibes",cursive;margin:8px 0 12px;text-align:center}
+.acts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;width:min(100%,794px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:999px;border:1px solid rgba(238,243,255,.28);background:rgba(13,24,54,.6);color:var(--frost);font:600 1rem/1 inherit;text-decoration:none;cursor:pointer;transition:background .2s,border-color .2s}
+.btn:hover{border-color:var(--lamp)}
+.btn-main{background:var(--lamp);color:var(--lamp-ink);border-color:var(--lamp)}
+.btn:focus-visible{outline:3px solid var(--lamp);outline-offset:3px}
+.msg{min-height:1.4em;color:var(--lamp);text-align:center;margin:0}
+.state{max-width:440px;text-align:center;margin:auto 0}
+.state p{color:var(--muted)}
+.spinner{width:44px;height:44px;margin:0 auto 16px;border-radius:50%;border:3px solid rgba(255,255,255,.15);border-top-color:var(--lamp);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+dialog{border:0;border-radius:16px;padding:24px;max-width:min(92vw,360px);background:#fbf4e3;color:var(--ink);text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+dialog::backdrop{background:rgba(5,10,25,.7)}
+dialog h3{font:400 2rem/1.1 "Great Vibes",cursive;margin:0 0 6px}
+dialog p{margin:0 0 14px;color:var(--ink-soft);font-size:.95rem}
+#qrBox canvas{width:220px;height:220px;image-rendering:pixelated;background:#fff;padding:10px;border-radius:8px}
+dialog .row{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+dialog .btn{background:var(--ink);color:#fff;border-color:var(--ink);min-height:44px}
+dialog .btn.ghost{background:transparent;color:var(--ink);border-color:rgba(27,42,94,.35)}
+footer{position:relative;z-index:1;text-align:center;padding:0 16px 28px;color:var(--muted);font-size:.85rem}
+footer a{color:var(--lamp)}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition-duration:.01s !important}}
+</style>
+</head>
+<body>
+<canvas id="snow" aria-hidden="true"></canvas>
+<main>
+  <a class="brand" href="./">❄ Дед Мороз заходил</a>
+
+  <div class="state" id="loading" role="status"><div class="spinner"></div><p>Почта Деда Мороза ищет твоё письмо…</p></div>
+  <div class="state" id="error" hidden><h1>Ой!</h1><p id="errText"></p><a class="btn btn-main" href="./">На сайт Деда Мороза</a></div>
+
+  <section class="stage" id="stage" hidden>
+    <h1 id="title">Тебе письмо от Деда Мороза!</h1>
+    <p class="sub">Прямо из Великого Устюга</p>
+    <div class="env" id="env">
+      <div class="env-back"></div>
+      <div class="peek"></div>
+      <div class="flap"></div>
+      <div class="env-front"></div>
+      <button type="button" class="seal" id="seal" aria-label="Сломать печать и открыть письмо">
+        <img class="whole" src="letter/seal.png" alt="" style="visibility:hidden">
+        <img class="half l" src="letter/seal.png" alt="">
+        <img class="half r" src="letter/seal.png" alt="">
+      </button>
+    </div>
+    <p class="hint">Нажми на печать</p>
+  </section>
+
+  <section class="view" id="view" hidden>
+    <div class="sheet" id="sheet"><div class="sheet-inner" id="inner"><div class="txt" id="txt"></div><div class="num" id="num"></div></div></div>
+    <div class="video" id="videoBox" hidden><h2>А ещё Дед Мороз записал видео</h2><video id="video" controls playsinline preload="metadata"></video></div>
+    <div class="acts">
+      <a class="btn btn-main" id="pdf" download>Скачать письмо (PDF)</a>
+      <button type="button" class="btn" id="share">Поделиться</button>
+      <button type="button" class="btn" id="qr">QR-код для открытки</button>
+    </div>
+    <p class="msg" id="msg" aria-live="polite"></p>
+    <p class="msg" id="demoNote" hidden style="color:var(--muted);max-width:520px">Это пример. Ваш ребёнок получит такую же ссылку со своим письмом: сам сломает печать, прочитает письмо и посмотрит видео.</p>
+  </section>
+</main>
+<footer>Письмо приготовлено на сайте <a href="./">«Дед Мороз заходил»</a></footer>
+
+<dialog id="qrDlg">
+  <h3>QR-код письма</h3>
+  <p>Распечатайте и вложите в открытку: письмо откроется, если навести на код камеру телефона.</p>
+  <div id="qrBox"></div>
+  <div class="row"><button type="button" class="btn" id="qrSave">Сохранить картинку</button><button type="button" class="btn ghost" id="qrClose">Закрыть</button></div>
+</dialog>
+
+<script>
+(function(){
+  var API = 'https://tribgnfjiiwmiktzjeyy.supabase.co/functions/v1/dm-order';
+  var MONTHS = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  var $ = function(id){ return document.getElementById(id); };
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var qs = new URLSearchParams(location.search), demo = qs.has('demo');
+  var token = (qs.get('t') || '').trim();
+  var data = null;
+  /* пример для сайта: письмо девочке Маше, без обращения к серверу */
+  var DEMO = {"ok":true,"id":128,"year":2026,"recipient":"child","gender":"f","demo":true,"letter":{"greeting":[{"t":"Здравствуй, дорогая "},{"t":"Маша","em":true},{"t":"!"}],"paragraphs":[[{"t":"Пишу тебе из Великого Устюга. За окном метёт метель, а в моей мастерской помощники заворачивают последние подарки и спорят, у кого бантик красивее."}],[{"t":"Этой ночью я заглянул к тебе. Ты так сладко спала, что я не стал тебя будить и ушёл на цыпочках, чтобы не скрипнула ни одна половица."}],[{"t":"Тебе уже "},{"t":"5 лет","em":true},{"t":" — совсем большая девочка! "},{"t":"Мои помощники-снегири весь год присматривали за тобой и рассказали, что ты "},{"t":"научилась кататься на коньках и сама заплетаешь косички","em":true},{"t":". Я очень тобой горжусь!"}],[{"t":"В новом году у меня к тебе маленькая просьба: постарайся "},{"t":"не спорить с братом за пульт","em":true},{"t":". Я верю, что у тебя обязательно получится."}],[{"t":"А про твоё желание я помню: "},{"t":"кукольный домик с фонариками","em":true},{"t":". Загляни утром под ёлку!"}],[{"t":"Расти доброй, береги родных и всегда верь в чудеса."}]],"closing":"С любовью,","signature":"Дед Мороз"},"video":null};
+
+  function show(id){ ['loading','error','stage','view'].forEach(function(k){ $(k).hidden = k !== id; }); }
+  function fail(t){ $('errText').textContent = t; show('error'); }
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function runs(r){ return r.map(function(x){ return esc(x.t); }).join(''); }
+
+  if(!demo && !/^[A-Za-z0-9_-]{16,40}$/.test(token)) { fail('В ссылке не хватает кусочка. Попросите прислать её ещё раз целиком.'); return; }
+
+  (demo ? Promise.resolve(DEMO) : fetch(API + '?gift=' + encodeURIComponent(token)).then(function(r){ return r.json().catch(function(){ return {ok:false}; }); }))
+    .then(function(j){
+      if(!j || !j.ok) throw new Error((j && j.error) || 'Письмо пока не нашлось. Попробуйте открыть ссылку чуть позже.');
+      data = j;
+      var name = j.letter.greeting.filter(function(x){ return x.em; }).map(function(x){ return x.t; })[0];
+      if(name){ $('title').textContent = name + ', тебе письмо!'; document.title = name + ', тебе письмо от Деда Мороза'; }
+      buildLetter(j);
+      if(demo){ $('pdf').href = './#order'; $('pdf').removeAttribute('download'); $('pdf').textContent = 'Заказать такое письмо'; $('share').hidden = true; $('qr').hidden = true; $('demoNote').hidden = false; }
+      else $('pdf').href = API + '?gift=' + encodeURIComponent(token) + '&pdf=1';
+      if(j.video){ $('video').src = j.video; $('videoBox').hidden = false; }
+      show('stage');
+      var img = new Image(); img.src = 'letter/bg-a4.jpg';
+    })
+    .catch(function(e){ fail(/fetch|network|load failed/i.test(e.message) ? 'Нет связи с почтой Деда Мороза. Проверьте интернет и обновите страницу.' : e.message); });
+
+  function buildLetter(j){
+    var d = new Date(Date.UTC(j.year, 11, 31));
+    var html = '<div class="date">' + d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + ' года</div>';
+    html += '<div class="greet">' + runs(j.letter.greeting) + '</div>';
+    j.letter.paragraphs.forEach(function(p, i){ html += '<p style="margin-top:' + (i ? '.42em' : '0') + '">' + runs(p) + '</p>'; });
+    $('txt').innerHTML = html;
+    $('num').textContent = 'письмо № ' + String(j.id).padStart(4, '0');
+  }
+  /* текст подбирается по размеру так же, как в PDF: от 22,7 до 15,3 px, пока не влезет в поле бланка */
+  function fitText(){
+    var t = $('txt'), s = 22.7;
+    for(; s >= 15.3; s -= 0.65){
+      t.style.fontSize = s + 'px';
+      t.querySelector('.greet').style.fontSize = Math.min(45.3, s * 2.05) + 'px';
+      if(t.scrollHeight <= 590) break;
+    }
+  }
+  function scaleSheet(){ var w = $('sheet').clientWidth; $('inner').style.transform = 'scale(' + (w / 794) + ')'; }
+  window.addEventListener('resize', scaleSheet);
+
+  $('seal').addEventListener('click', function(){
+    var env = $('env'); env.classList.add('open'); $('stage').classList.add('opened'); burst();
+    setTimeout(function(){ env.classList.add('gone'); }, still ? 50 : 1300);
+    setTimeout(function(){
+      show('view'); scaleSheet();
+      (document.fonts ? document.fonts.ready : Promise.resolve()).then(function(){ fitText(); });
+      window.scrollTo({top:0, behavior: still ? 'auto' : 'smooth'});
+    }, still ? 100 : 1800);
+  });
+
+  function link(){ return location.origin + location.pathname + (demo ? '?demo=1' : '?t=' + token); }
+  $('share').addEventListener('click', function(){
+    var url = link(), text = 'Письмо от Деда Мороза ✉️';
+    if(navigator.share){ navigator.share({title:text, url:url}).catch(function(){}); return; }
+    (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(function(){ $('msg').textContent = 'Ссылка скопирована. Отправьте её бабушке, дедушке или друзьям.'; },
+      function(){ $('msg').textContent = url; });
+  });
+
+  var qrReady = null;
+  function loadQr(){
+    if(!qrReady) qrReady = new Promise(function(ok, no){ var s = document.createElement('script'); s.src = 'js/qrcode.min.js'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+    return qrReady;
+  }
+  $('qr').addEventListener('click', function(){
+    loadQr().then(function(){
+      var q = qrcode(0, 'M'); q.addData(link()); q.make();
+      var n = q.getModuleCount(), cell = 8, pad = 4, size = (n + pad*2) * cell, c = document.createElement('canvas');
+      c.width = c.height = size; var g = c.getContext('2d');
+      g.fillStyle = '#fff'; g.fillRect(0, 0, size, size); g.fillStyle = '#1b2a5e';
+      for(var r = 0; r < n; r++) for(var k = 0; k < n; k++) if(q.isDark(r, k)) g.fillRect((k + pad)*cell, (r + pad)*cell, cell, cell);
+      var box = $('qrBox'); box.innerHTML = ''; box.appendChild(c);
+      $('qrDlg').showModal();
+    }, function(){ $('msg').textContent = 'Не получилось сделать QR-код. Обновите страницу и попробуйте ещё раз.'; });
+  });
+  $('qrClose').addEventListener('click', function(){ $('qrDlg').close(); });
+  $('qrSave').addEventListener('click', function(){
+    var c = $('qrBox').querySelector('canvas'); if(!c) return;
+    var a = document.createElement('a'); a.href = c.toDataURL('image/png'); a.download = 'qr-pismo-deda-moroza.png'; document.body.appendChild(a); a.click(); a.remove();
+  });
+
+  /* снег и искры */
+  var cv = $('snow'), ctx = cv.getContext('2d'), flakes = [], sparks = [], W = 0, H = 0, dpr = Math.min(2, window.devicePixelRatio || 1);
+  function size(){ W = innerWidth; H = innerHeight; cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  size(); addEventListener('resize', size);
+  for(var i = 0; i < (still ? 0 : 90); i++) flakes.push({x:Math.random(), y:Math.random(), r:Math.random()*2.2+.6, v:Math.random()*.25+.12, a:Math.random()*.6+.3, w:Math.random()*6});
+  function burst(){
+    if(still) return;
+    var b = $('seal').getBoundingClientRect(), cx = b.left + b.width/2, cy = b.top + b.height/2;
+    for(var i = 0; i < 70; i++){ var a = Math.random()*Math.PI*2, s = Math.random()*5+2; sparks.push({x:cx, y:cy, vx:Math.cos(a)*s, vy:Math.sin(a)*s - 2, life:1, c: Math.random() < .5 ? '#ffd27a' : '#ffffff'}); }
+  }
+  var last = 0;
+  function loop(t){
+    var dt = Math.min(50, t - (last || t)) / 16.7; last = t;
+    ctx.clearRect(0, 0, W, H);
+    for(var i = 0; i < flakes.length; i++){ var f = flakes[i]; f.y += f.v*dt/100*3; f.w += .01*dt; if(f.y > 1.02){ f.y = -.02; f.x = Math.random(); }
+      ctx.globalAlpha = f.a; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(f.x*W + Math.sin(f.w)*14, f.y*H, f.r, 0, 7); ctx.fill(); }
+    for(var j = sparks.length - 1; j >= 0; j--){ var s = sparks[j]; s.x += s.vx*dt; s.y += s.vy*dt; s.vy += .12*dt; s.life -= .018*dt;
+      if(s.life <= 0){ sparks.splice(j, 1); continue; } ctx.globalAlpha = s.life; ctx.fillStyle = s.c; ctx.beginPath(); ctx.arc(s.x, s.y, 2.2, 0, 7); ctx.fill(); }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(loop);
+  }
+  if(!still) requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
