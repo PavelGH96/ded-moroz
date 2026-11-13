@@ -47,7 +47,7 @@ html,body{width:794px;height:1123px;overflow:hidden;background:#efe3c8}
 .sig-flourish{right:74px;top:954px;width:250px;height:46px}
 
 /* печать */
-.seal{left:312px;top:920px;width:124px;height:158px}
+.seal{left:264px;top:884px;width:150px;height:187.5px}
 </style>
 </head>
 <body>
@@ -185,41 +185,91 @@ html,body{width:794px;height:1123px;overflow:hidden;background:#efe3c8}
     <path d="M60 40 C120 52 190 50 250 38" fill="none" stroke="#1b2a5e" stroke-width="1" stroke-linecap="round" opacity=".55"/>
   </svg>
 
-  <!-- сургучная печать с лентами -->
-  <svg class="abs seal" viewBox="0 0 118 150" aria-hidden="true">
+  <!-- сургучная печать «Почта Деда Мороза · г. Великий Устюг» -->
+  <svg class="abs seal" viewBox="0 0 160 200" aria-hidden="true">
     <defs>
       <linearGradient id="rib" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stop-color="#6e120c"/><stop offset=".35" stop-color="#c2382a"/>
         <stop offset=".55" stop-color="#e05a48"/><stop offset=".75" stop-color="#a3241a"/><stop offset="1" stop-color="#6e120c"/>
       </linearGradient>
-      <radialGradient id="waxg" cx="40%" cy="35%" r="70%">
-        <stop offset="0" stop-color="#d4473a"/><stop offset=".55" stop-color="#a3241a"/><stop offset="1" stop-color="#5e0d08"/>
+      <radialGradient id="waxg" cx="38%" cy="32%" r="75%">
+        <stop offset="0" stop-color="#d8493b"/><stop offset=".5" stop-color="#a8261b"/><stop offset="1" stop-color="#5a0c07"/>
+      </radialGradient>
+      <radialGradient id="waxIn" cx="60%" cy="65%" r="70%">
+        <stop offset="0" stop-color="#b4301f"/><stop offset=".7" stop-color="#951f15"/><stop offset="1" stop-color="#6a100a"/>
       </radialGradient>
       <filter id="emboss" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="b"/>
-        <feSpecularLighting in="b" surfaceScale="3.5" specularConstant=".7" specularExponent="18" lighting-color="#ffd9c8" result="s">
-          <fePointLight x="20" y="-10" z="60"/>
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2.2" result="b"/>
+        <feSpecularLighting in="b" surfaceScale="4" specularConstant=".75" specularExponent="16" lighting-color="#ffd9c8" result="s">
+          <fePointLight x="30" y="-20" z="80"/>
         </feSpecularLighting>
         <feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/>
-        <feComposite in="SourceGraphic" in2="s2" operator="arithmetic" k1="0" k2="1" k3=".55" k4="0"/>
+        <feComposite in="SourceGraphic" in2="s2" operator="arithmetic" k1="0" k2="1" k3=".5" k4="0"/>
       </filter>
       <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
         <feDropShadow dx="1.5" dy="3" stdDeviation="2.5" flood-color="#3a1505" flood-opacity=".45"/>
       </filter>
+      <path id="arcTop" d="M -42 0 A 42 42 0 0 1 42 0"/>
+      <path id="arcBot" d="M -50.5 0 A 50.5 50.5 0 0 0 50.5 0"/>
+      <!-- оттиск: всё, что выдавлено в сургуче -->
+      <g id="stamp" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <circle r="56" stroke-width="1.6"/>
+        <circle r="53.2" stroke-width=".7"/>
+        <circle r="37.5" stroke-width="1.3"/>
+        <g stroke-width="1.1">
+          <g transform="translate(-45.5 0)"><path d="M0 -5V5M-4.3 -2.5L4.3 2.5M-4.3 2.5L4.3 -2.5"/></g>
+          <g transform="translate(45.5 0)"><path d="M0 -5V5M-4.3 -2.5L4.3 2.5M-4.3 2.5L4.3 -2.5"/></g>
+        </g>
+        <!-- Дед Мороз -->
+        <g stroke-width="1.35">
+          <!-- шапка -->
+          <path d="M-19 -9 C-18 -22 -6 -31 8 -29 C15 -28 20 -24 22 -18"/>
+          <circle cx="22.5" cy="-15" r="3.6"/>
+          <path d="M-21 -8.5 C-21 -12.5 -14 -13.5 0 -13.5 C14 -13.5 21 -12.5 21 -8.5 C21 -4.5 14 -4 0 -4 C-14 -4 -21 -4.5 -21 -8.5 Z"/>
+          <!-- глаза-улыбки и брови -->
+          <path d="M-10 0.5 Q-7 -2.6 -4 0.5"/><path d="M4 0.5 Q7 -2.6 10 0.5"/>
+          <path d="M-11.5 -2.6 Q-7.5 -4.6 -3.5 -3" stroke-width="1"/><path d="M3.5 -3 Q7.5 -4.6 11.5 -2.6" stroke-width="1"/>
+          <!-- нос и щёки -->
+          <circle cx="0" cy="4.2" r="2.7"/>
+          <path d="M-13.5 3.5 Q-12 6.5 -9 6" stroke-width=".9"/><path d="M13.5 3.5 Q12 6.5 9 6" stroke-width=".9"/>
+          <!-- усы -->
+          <path d="M-0.5 7.6 C-4 5.6 -9 6 -12.5 9.8 C-14 11.4 -16.5 11 -17 9.4 C-15 14.6 -7 13.6 -0.5 9.4"/>
+          <path d="M0.5 7.6 C4 5.6 9 6 12.5 9.8 C14 11.4 16.5 11 17 9.4 C15 14.6 7 13.6 0.5 9.4"/>
+          <!-- рот -->
+          <path d="M-3 13.4 Q0 15.8 3 13.4" stroke-width="1"/>
+          <!-- борода -->
+          <path d="M-20 -3 C-23 6 -21 14 -17 19 C-14 24 -10 27.5 -6 29.5 C-4 32 -1.5 33 0 33 C1.5 33 4 32 6 29.5 C10 27.5 14 24 17 19 C21 14 23 6 20 -3"/>
+          <path d="M-14 17 Q-12 21 -8 22 M-6 25 Q-3 28 0 28 Q3 28 6 25 M14 17 Q12 21 8 22" stroke-width=".85"/>
+        </g>
+      </g>
     </defs>
     <g filter="url(#shadow)">
-      <path d="M44 66 L26 146 L38 136 L48 148 L60 70 Z" fill="url(#rib)"/>
-      <path d="M74 66 L92 146 L80 136 L70 148 L58 70 Z" fill="url(#rib)"/>
+      <path d="M58 104 L36 190 L50 179 L62 196 L78 108 Z" fill="url(#rib)"/>
+      <path d="M102 104 L124 190 L110 179 L98 196 L82 108 Z" fill="url(#rib)"/>
     </g>
     <g filter="url(#shadow)">
       <path id="blob" fill="url(#waxg)" filter="url(#emboss)"/>
     </g>
-    <circle cx="59" cy="58" r="31" fill="none" stroke="#5e0d08" stroke-opacity=".55" stroke-width="1.6"/>
-    <circle cx="59" cy="58" r="28" fill="none" stroke="#ff9d86" stroke-opacity=".22" stroke-width=".8"/>
-    <text x="59" y="67" text-anchor="middle" font-family="Cormorant SC" font-weight="600" font-size="26" fill="#6e120c" opacity=".9">ДМ</text>
-    <text x="58.3" y="66.2" text-anchor="middle" font-family="Cormorant SC" font-weight="600" font-size="26" fill="#ff8f78" opacity=".35">ДМ</text>
-    <g transform="translate(59 58)" fill="#6e120c" opacity=".7">
-      <circle cy="-23" r="1.4"/><circle cy="23" r="1.4"/><circle cx="-23" r="1.4"/><circle cx="23" r="1.4"/>
+    <g transform="translate(80 78)">
+      <!-- поле печати чуть утоплено -->
+      <circle r="57.5" fill="url(#waxIn)" opacity=".55"/>
+      <circle r="58.6" fill="none" stroke="#ff9d86" stroke-opacity=".28" stroke-width="1"/>
+      <!-- рельеф: тень снизу-справа, блик сверху-слева, сам оттиск -->
+      <use href="#stamp" transform="translate(.7 .9)" stroke="#4a0804" fill="#4a0804" opacity=".75"/>
+      <use href="#stamp" transform="translate(-.6 -.6)" stroke="#ffb3a0" fill="#ffb3a0" opacity=".4"/>
+      <use href="#stamp" stroke="#7e150d" fill="#7e150d"/>
+      <g transform="translate(.7 .9)" fill="#4a0804" opacity=".75" font-family="Cormorant SC" font-weight="600" font-size="12.2" letter-spacing=".6">
+        <text><textPath href="#arcTop" startOffset="50%" text-anchor="middle">Почта Деда Мороза</textPath></text>
+        <text><textPath href="#arcBot" startOffset="50%" text-anchor="middle">г. Великий Устюг</textPath></text>
+      </g>
+      <g transform="translate(-.6 -.6)" fill="#ffb3a0" opacity=".4" font-family="Cormorant SC" font-weight="600" font-size="12.2" letter-spacing=".6">
+        <text><textPath href="#arcTop" startOffset="50%" text-anchor="middle">Почта Деда Мороза</textPath></text>
+        <text><textPath href="#arcBot" startOffset="50%" text-anchor="middle">г. Великий Устюг</textPath></text>
+      </g>
+      <g transform="translate(0 0)" fill="#7e150d" opacity="1" font-family="Cormorant SC" font-weight="600" font-size="12.2" letter-spacing=".6">
+        <text><textPath href="#arcTop" startOffset="50%" text-anchor="middle">Почта Деда Мороза</textPath></text>
+        <text><textPath href="#arcBot" startOffset="50%" text-anchor="middle">г. Великий Устюг</textPath></text>
+      </g>
     </g>
   </svg>
 </div>
@@ -241,11 +291,11 @@ html,body{width:794px;height:1123px;overflow:hidden;background:#efe3c8}
     }
   }
   /* неровный край сургуча */
-  var p = '', R = 34, seed = 7;
+  var p = '', R = 63, seed = 7;
   function rnd(){ seed = (seed*9301 + 49297) % 233280; return seed/233280; }
-  for(var k = 0; k <= 48; k++){
-    var t = k/48*Math.PI*2, rr = R + (rnd() - 0.5)*4 + Math.sin(t*6)*1.6 + (k % 7 === 0 ? 3 : 0);
-    p += (k ? ' L ' : 'M ') + (59 + Math.cos(t)*rr).toFixed(2) + ' ' + (58 + Math.sin(t)*rr).toFixed(2);
+  for(var k = 0; k <= 64; k++){
+    var t = k/64*Math.PI*2, rr = R + (rnd() - 0.5)*5 + Math.sin(t*6)*2 + (k % 7 === 0 ? 4.5 : 0);
+    p += (k ? ' L ' : 'M ') + (80 + Math.cos(t)*rr).toFixed(2) + ' ' + (78 + Math.sin(t)*rr).toFixed(2);
   }
   document.getElementById('blob').setAttribute('d', p + ' Z');
 })();
