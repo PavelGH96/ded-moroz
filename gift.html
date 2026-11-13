@@ -78,6 +78,10 @@ h1{font:400 clamp(2.1rem,7vw,3.4rem)/1.1 "Great Vibes",cursive;margin:0 0 6px;te
 .txt .date{font-family:"Bad Script",cursive;text-align:right;color:var(--ink-soft)}
 .txt .greet{font-family:"Great Vibes",cursive;line-height:1.05;margin:.35em 0 .3em}
 .txt p{font-family:"Bad Script",cursive;margin:0;text-indent:1.6em;line-height:1.6}
+.wm{position:absolute;inset:0;pointer-events:none;z-index:2}
+.wm .big{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%) rotate(-35deg);font:600 150px/1 "Cormorant SC",serif;letter-spacing:.04em;color:rgba(170,40,30,.13);white-space:nowrap}
+.wm .tile{position:absolute;inset:-300px;transform:rotate(-35deg);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='140'%3E%3Ctext x='0' y='30' font-family='serif' font-size='20' fill='rgba(150,50,40,0.07)'%3Eобразец%3C/text%3E%3Ctext x='120' y='100' font-family='serif' font-size='20' fill='rgba(150,50,40,0.07)'%3Eобразец%3C/text%3E%3C/svg%3E")}
+.demo-lock,.demo-lock *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .num{position:absolute;right:104px;top:1038px;font:600 11px/1 "Cormorant SC",serif;letter-spacing:.06em;color:#8a6420}
 .video{width:min(100%,680px)}
 .video video{width:100%;border-radius:12px;background:#000;box-shadow:0 30px 60px -24px rgba(0,0,0,.8)}
@@ -177,7 +181,7 @@ footer a{color:var(--lamp)}
       var name = j.letter.greeting.filter(function(x){ return x.em; }).map(function(x){ return x.t; })[0];
       if(name){ $('title').textContent = name + ', тебе письмо!'; document.title = name + ', тебе письмо от Деда Мороза'; }
       buildLetter(j);
-      if(demo){ $('pdf').href = './#order'; $('pdf').removeAttribute('download'); $('pdf').textContent = 'Заказать такое письмо'; $('share').hidden = true; $('qr').hidden = true; $('demoNote').hidden = false; }
+      if(demo){ addWatermark(); $('pdf').href = './#order'; $('pdf').removeAttribute('download'); $('pdf').textContent = 'Заказать такое письмо'; $('share').hidden = true; $('qr').hidden = true; $('demoNote').hidden = false; }
       else $('pdf').href = API + '?gift=' + encodeURIComponent(token) + '&pdf=1';
       if(j.video){ $('video').src = j.video; $('videoBox').hidden = false; }
       show('stage');
@@ -185,6 +189,18 @@ footer a{color:var(--lamp)}
     })
     .catch(function(e){ fail(/fetch|network|load failed/i.test(e.message) ? 'Нет связи с почтой Деда Мороза. Проверьте интернет и обновите страницу.' : e.message); });
 
+  /* пример: водяной знак «образец» поверх письма и запрет копирования */
+  function addWatermark(){
+    var w = document.createElement('div'); w.className = 'wm'; w.setAttribute('aria-hidden', 'true');
+    w.innerHTML = '<div class="tile"></div><div class="big">ОБРАЗЕЦ</div>';
+    $('inner').appendChild(w);
+    document.body.classList.add('demo-lock');
+    ['contextmenu','copy','cut','dragstart','selectstart'].forEach(function(ev){ document.addEventListener(ev, function(e){ e.preventDefault(); }, {capture:true}); });
+    document.addEventListener('keydown', function(e){
+      var k = (e.key || '').toLowerCase(), mod = e.ctrlKey || e.metaKey;
+      if(e.key === 'F12' || (mod && e.shiftKey && 'ijc'.indexOf(k) > -1) || (mod && 'uspcax'.indexOf(k) > -1)) e.preventDefault();
+    }, {capture:true});
+  }
   function buildLetter(j){
     var d = new Date(Date.UTC(j.year, 11, 31));
     var html = '<div class="date">' + d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + ' года</div>';
