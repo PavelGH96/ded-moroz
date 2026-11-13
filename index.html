@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d1836">
+<meta name="description" content="Именное письмо и видео от Деда Мороза: он заходит в комнату вашего ребёнка, пока тот спит. Заказы к Новому году до 28 декабря.">
 <title>Дед Мороз заходил</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +37,8 @@
 *{box-sizing:border-box}
 [hidden]{display:none !important}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--night);color:var(--frost);font-family:var(--body);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent;margin:0;background:var(--night);color:var(--frost);font-family:var(--body);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
 img,svg{max-width:100%}
 a{color:var(--lamp)}
 h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);line-height:1.2;margin:0;text-wrap:balance}
@@ -68,7 +71,7 @@ header{position:sticky;top:0;z-index:20;background:rgba(13,24,54,.86);backdrop-f
 nav{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
 nav a{color:var(--muted);text-decoration:none;font-size:.95rem}
 nav a:hover{color:var(--frost)}
-nav .btn{padding:9px 18px;font-size:.92rem;color:var(--lamp-ink)}
+nav .btn{padding:9px 18px;font-size:.92rem;color:var(--lamp-ink);min-height:44px}
 
 /* новогоднее */
 .garland{position:absolute;left:0;right:0;top:100%;height:46px;pointer-events:none;overflow:hidden}
@@ -125,6 +128,24 @@ nav .ny-chip{color:var(--frost)}
 @media (max-width:640px){.ny-chip{display:none}.bar{flex-wrap:nowrap;gap:10px}.logo{font-size:1.02rem;gap:8px;min-width:0}nav .btn{padding:8px 14px;font-size:.88rem;white-space:nowrap}}
 @media (prefers-reduced-motion:reduce){.gl-bulb .glow,.gl-bulb .glass,.b,.tick,.star,.forest .glow{animation:none}.gl-bulb .glow,.forest .glow{opacity:.8}}
 
+/* музыка */
+.music{position:fixed;right:16px;bottom:16px;z-index:40;display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 16px 0 14px;border-radius:999px;border:1px solid rgba(255,196,107,.45);background:rgba(13,24,54,.9);color:var(--frost);font:500 .9rem var(--body);cursor:pointer;box-shadow:0 8px 24px -10px rgba(0,0,0,.7);-webkit-tap-highlight-color:transparent;transition:border-color .2s,background .2s}
+.music:hover{border-color:var(--lamp)}
+.music-ico{width:20px;height:20px;fill:var(--lamp);flex:none}
+.music .eq{display:none;align-items:flex-end;gap:2px;height:16px;width:16px}
+.music .eq i{display:block;width:4px;background:var(--lamp);border-radius:2px;height:30%;animation:eq 1s ease-in-out infinite}
+.music .eq i:nth-child(2){animation-delay:-.35s}
+.music .eq i:nth-child(3){animation-delay:-.7s}
+@keyframes eq{0%,100%{height:25%}50%{height:100%}}
+.music[aria-pressed="true"]{background:var(--lamp);color:var(--lamp-ink);border-color:var(--lamp)}
+.music[aria-pressed="true"] .music-ico{display:none}
+.music[aria-pressed="true"] .eq{display:inline-flex}
+.music[aria-pressed="true"] .eq i{background:var(--lamp-ink)}
+.music.nudge{animation:nudge 2.4s ease-in-out 1.2s 3}
+@keyframes nudge{0%,100%{box-shadow:0 8px 24px -10px rgba(0,0,0,.7)}50%{box-shadow:0 0 0 8px rgba(255,196,107,.18),0 8px 24px -10px rgba(0,0,0,.7)}}
+@media (max-width:640px){.music{right:12px;bottom:12px;padding:0;width:48px;justify-content:center}.music-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
+@media (prefers-reduced-motion:reduce){.music .eq i,.music.nudge{animation:none}.music .eq i{height:70%}}
+
 /* первый экран */
 .hero{position:relative;overflow:hidden;padding:88px 0 80px;background:radial-gradient(900px 500px at 78% 40%, rgba(255,196,107,.13), transparent 60%), linear-gradient(rgba(52,84,170,.28), rgba(52,84,170,0))}
 #snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
@@ -155,7 +176,8 @@ main,footer{position:relative;z-index:1}
 .dm:focus-visible{outline:3px solid var(--lamp);outline-offset:6px;border-radius:20px}
 .dm-follow,.dm-strike{position:absolute;inset:0;display:block;transform-origin:50% 100%;will-change:transform}
 .dm-strike img{position:absolute;left:0;bottom:0;width:100%;height:100%;object-fit:contain;object-position:bottom;filter:drop-shadow(0 18px 30px rgba(0,0,0,.45));user-select:none;-webkit-user-drag:none}
-.dm-3d{position:absolute;left:-25%;width:150%;top:-6%;height:109%;pointer-events:none;filter:drop-shadow(0 18px 30px rgba(0,0,0,.45))}
+.dm-3d{position:absolute;left:-25%;width:150%;top:-6%;height:109%;pointer-events:none;filter:drop-shadow(0 18px 30px rgba(0,0,0,.45));animation:fadein .5s ease-out}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
 .dm-strike.is3d img{opacity:0}
 #dmCuff,#dmStaff{filter:none;transform-origin:27% 32%;will-change:transform}
 .dm-tip{position:absolute;left:21.8%;bottom:0;width:1px;height:1px}
@@ -206,6 +228,7 @@ fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:16px
 legend{font-family:var(--display);font-weight:var(--display-w);font-size:1.4rem;padding:0;margin-bottom:16px}
 .field{display:flex;flex-direction:column;gap:6px}
 .field label{font-size:.92rem;color:var(--muted)}
+.field input[type=file]{font-size:16px;color:var(--muted);max-width:100%}
 .field input[type=text],.field input[type=number],.field textarea{font:400 1rem var(--body);padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--frost);width:100%}
 .field textarea{min-height:72px;resize:vertical}
 .field small{color:var(--muted);font-size:.82rem}
@@ -252,7 +275,7 @@ legend{font-family:var(--display);font-weight:var(--display-w);font-size:1.4rem;
 /* вопросы */
 .faq{margin-top:28px;max-width:780px;display:flex;flex-direction:column}
 details{border-bottom:1px solid var(--line);padding:16px 0}
-summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:10px 0;margin:-10px 0}
 summary::after{content:"+";color:var(--lamp);font-size:1.3rem;line-height:1}
 details[open] summary::after{content:"−"}
 summary::-webkit-details-marker{display:none}
@@ -276,6 +299,11 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
 }
 @media (max-width:480px){.steps{grid-template-columns:1fr}.letter{padding:28px 20px 40px}.form{padding:20px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}.snowcap{transition:none}}
+/* планшет и телефон боком: Дед Мороз и письмо рядом */
+@media (min-width:700px) and (max-width:1060px){
+  .hero-art{flex-direction:row;align-items:flex-end;justify-content:center;gap:18px}
+  .hero-letter{flex:1 1 0;width:auto;max-width:320px;margin:0 0 40px}
+}
 </style>
 </head>
 <body>
@@ -322,9 +350,9 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
         <button type="button" class="dm" id="dm" aria-label="Дед Мороз. Нажмите, и он стукнет посохом">
           <span class="dm-follow" id="dmFollow">
             <span class="dm-strike" id="dmStrike">
-              <img src="ded-body.webp" alt="" width="496" height="1080" draggable="false">
-              <img src="ded-cuff.webp" id="dmCuff" alt="" width="496" height="1080" draggable="false">
-              <img src="ded-staff.webp" id="dmStaff" alt="" width="496" height="1080" draggable="false">
+              <img src="ded-body.webp" alt="" width="496" height="1080" draggable="false" decoding="async" fetchpriority="high">
+              <img src="ded-cuff.webp" id="dmCuff" alt="" width="496" height="1080" draggable="false" decoding="async">
+              <img src="ded-staff.webp" id="dmStaff" alt="" width="496" height="1080" draggable="false" decoding="async">
               <span class="dm-tip" id="dmTip"></span>
             </span>
           </span>
@@ -454,7 +482,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
 <section class="order" id="order">
   <div class="wrap">
     <h2>Соберите поздравление</h2>
-    <p class="lead" style="margin-top:12px">Письмо справа меняется по мере того, как вы заполняете анкету.</p>
+    <p class="lead" style="margin-top:12px">Письмо меняется прямо по ходу заполнения анкеты.</p>
     <div class="order-grid">
       <form class="form" id="form" novalidate>
         <div class="progress" id="progress" aria-hidden="true"></div>
@@ -570,6 +598,12 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
 
 <div class="forest" id="forest" aria-hidden="true"></div>
 
+<button type="button" class="music" id="music" aria-pressed="false" aria-label="Включить новогоднюю музыку">
+  <svg class="music-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18.5a2.5 2.5 0 1 1-2-2.45V5.6l11-2.1v11.9a2.5 2.5 0 1 1-2-2.45V7.3l-7 1.35z"/></svg>
+  <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span class="music-label">Музыка</span>
+</button>
+
 <footer id="contacts">
   <div class="wrap foot">
     <div><b style="color:var(--frost)">Дед Мороз заходил</b><span>Письма и видео от Деда Мороза для детей</span><span>Заказы на этот Новый год до 28 декабря</span></div>
@@ -578,7 +612,6 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function(){
   var PRICES = {both:1490, letter:390, video:1490};
@@ -782,13 +815,18 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
     f.depth = [0.35, 0.7, 1.25, 0.9][layer];
     return f;
   }
+  var lastW = 0;
   function size(){
-    var d = Math.min(window.devicePixelRatio || 1, 2);
-    VW = window.innerWidth; VH = window.innerHeight;
-    cv.width = VW*d; cv.height = VH*d; ctx.setTransform(d,0,0,d,0,0);
-    var k = VW*VH/100000, plan = [Math.round(k*11), Math.round(k*5), Math.round(k*0.9), Math.round(k*0.7)];
-    flakes = [];
-    plan.forEach(function(n, layer){ for(var i=0;i<n;i++) flakes.push(make(layer, true)); });
+    var d = Math.min(window.devicePixelRatio || 1, window.innerWidth < 700 ? 1.5 : 2);
+    var w = window.innerWidth, h = window.innerHeight;
+    cv.width = w*d; cv.height = h*d; ctx.setTransform(d,0,0,d,0,0);
+    /* на телефоне высота окна меняется при прокрутке (панель Safari): снег не пересоздаём */
+    if(Math.abs(w - lastW) > 40 || !flakes.length){
+      VW = w; VH = h; lastW = w;
+      var k = VW*VH/100000, plan = [Math.round(k*11), Math.round(k*5), Math.round(k*0.9), Math.round(k*0.7)];
+      flakes = [];
+      plan.forEach(function(n, layer){ for(var i=0;i<n;i++) flakes.push(make(layer, true)); });
+    } else { VW = w; VH = h; }
     draw(0);
   }
   function draw(t){
@@ -1052,7 +1090,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
   var cur = {x:0, y:0}, target = {x:0, y:0}, lastMove = 0, t0 = performance.now();
 
   function fxSize(){
-    var r = hero.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
+    var r = hero.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, window.innerWidth < 700 ? 1.5 : 2);
     fx.width = r.width*d; fx.height = r.height*d; fctx.setTransform(d,0,0,d,0,0);
   }
   fxSize(); window.addEventListener('resize', fxSize);
@@ -1094,8 +1132,8 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
 
   /* объёмный Дед Мороз: рельеф по карте глубины */
   var dm3 = null, smile = 0, smileUntil = 0;
-  (function init3D(){
-    if(!window.THREE) return;
+  function init3D(){
+    if(!window.THREE || dm3) return;
     var img = strike.querySelector('img'), canvas = document.createElement('canvas'), renderer;
     canvas.className = 'dm-3d';
     try{ renderer = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true, premultipliedAlpha:true}); }catch(e){ return; }
@@ -1111,7 +1149,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
       var t = loader.load(src, done, undefined, fail);
       t.premultiplyAlpha = !!pre; t.minFilter = THREE.LinearFilter; t.generateMipmaps = false; return t;
     }
-    var tBody = tex('ded-body.webp', 1), tCuff = tex('ded-cuff.webp', 1), tStaff = tex('ded-staff.webp', 1), dep = tex('ded-moroz-depth.png', 0);
+    var tBody = tex('ded-body.webp', 1), tCuff = tex('ded-cuff.webp', 1), tStaff = tex('ded-staff.webp', 1), dep = tex('ded-moroz-depth.webp', 0);
     function build(){
       var shared = {uLight:{value:new THREE.Vector3(-0.3,0.4,1)}, uFlash:{value:0}};
       var geo = new THREE.PlaneGeometry(PW, 2, 124, 270), group = new THREE.Group();
@@ -1138,14 +1176,36 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
       strike.classList.add('is3d');
       dm3 = {group:group, cam:cam, canvas:canvas, u:shared, body:mBody, cuff:mCuff, staff:mStaff, renderer:renderer, scene:scene,
              tip:new THREE.Vector3((0.218-0.5)*PW, -1, (Math.pow(0.9,0.85)-0.45)*STR)};
+      imgStaff.style.transform = ''; imgCuff.style.transform = '';
+      dirty = true; wake();
     }
-  })();
+  }
+  /* 3D грузится после страницы и только там, где оно потянет */
+  function want3D(){
+    var c = navigator.connection;
+    if(c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''))) return false;
+    try{ var t = document.createElement('canvas'); return !!(t.getContext('webgl') || t.getContext('experimental-webgl')); }catch(e){ return false; }
+  }
+  function load3D(){
+    if(!want3D()) return;
+    var sc = document.createElement('script');
+    sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+    sc.async = true; sc.onload = init3D;
+    document.head.appendChild(sc);
+  }
+  function after(fn){ (window.requestIdleCallback || function(f){ return setTimeout(f, 600); })(fn, {timeout: 2500}); }
+  if(document.readyState === 'complete') after(load3D); else window.addEventListener('load', function(){ after(load3D); });
+  var dirty = true, last3 = '';
   function render3D(){
     if(!dm3) return;
+    var now = performance.now(), on = now < smileUntil;
+    if(dm3.u.uFlash.value > 0.002) dm3.u.uFlash.value *= 0.93; else dm3.u.uFlash.value = 0;
+    smile += ((on ? 1 : 0) - smile) * (on ? 0.14 : 0.06); if(smile < 0.002) smile = 0;
+    var key = cur.x.toFixed(4) + cur.y.toFixed(4) + smile.toFixed(3) + dm3.u.uFlash.value.toFixed(3);
+    if(!dirty && !strikeT0 && key === last3) return;
+    last3 = key; dirty = false;
     dm3.group.rotation.y = cur.x*(cur.x < 0 ? 0.16 : 0.45); dm3.group.rotation.x = cur.y*0.09;
     dm3.u.uLight.value.set(-0.25 + cur.x*0.9, 0.45 - cur.y*0.3, 1);
-    dm3.u.uFlash.value *= 0.93;
-    smile += ((performance.now() < smileUntil ? 1 : 0) - smile) * (performance.now() < smileUntil ? 0.14 : 0.06);
     dm3.body.uniforms.uSmile.value = smile;
     dm3.renderer.render(dm3.scene, dm3.cam);
   }
@@ -1244,6 +1304,118 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
     }catch(err){}
   }
 
+
+  /* фоновая музыка: «Jingle Bells» (Дж. Пирпонт, 1857, общественное достояние), музыкальная шкатулка + колокольчики */
+  var music = (function(){
+    var btn = $('music'), BPM = 100, B = 60/BPM, LOOK = 0.5;
+    var NOTE = {C:0, D:2, E:4, F:5, G:7, A:9, B:11};
+    function hz(n){ var m = 12*(+n.slice(-1) + 1) + NOTE[n[0]] + (n[1] === '#' ? 1 : 0); return 440*Math.pow(2, (m - 69)/12); }
+    function seq(str){ return str.trim().split(/\s+/).map(function(t){ var a = t.split(':'); return [a[0], +a[1]]; }); }
+    var verseA = seq('G4:1 E5:1 D5:1 C5:1 G4:3 r:1 G4:1 E5:1 D5:1 C5:1 A4:3 r:1 A4:1 F5:1 E5:1 D5:1 B4:3 r:1 G5:1 G5:1 F5:1 D5:1 E5:4');
+    var verseB = seq('G4:1 E5:1 D5:1 C5:1 G4:3 r:1 G4:1 E5:1 D5:1 C5:1 A4:3 A4:1 A4:1 F5:1 E5:1 D5:1 G5:1 G5:1 G5:1 G5:1 A5:1 G5:1 F5:1 D5:1 C5:3 r:1');
+    var chorusA = seq('E5:1 E5:1 E5:2 E5:1 E5:1 E5:2 E5:1 G5:1 C5:1.5 D5:0.5 E5:4 F5:1 F5:1 F5:1.5 F5:0.5 F5:1 E5:1 E5:1 E5:0.5 E5:0.5 E5:1 D5:1 D5:1 E5:1 D5:2 G5:2');
+    var chorusB = seq('E5:1 E5:1 E5:2 E5:1 E5:1 E5:2 E5:1 G5:1 C5:1.5 D5:0.5 E5:4 F5:1 F5:1 F5:1.5 F5:0.5 F5:1 E5:1 E5:1 E5:0.5 E5:0.5 G5:1 G5:1 F5:1 D5:1 C5:4');
+    var interlude = seq('C5:1 E5:1 G5:1 C6:1 G5:1 E5:1 C5:2');
+    var bassVerse = 'C3 C3 C3 F2 F2 G2 G2 C3 C3 C3 C3 F2 F2 G2 G2 C3'.split(' ');
+    var bassChorus = 'C3 C3 C3 C3 F2 C3 D3 G2 C3 C3 C3 C3 F2 C3 G2 C3'.split(' ');
+    var bassInter = 'C3 C3'.split(' ');
+    var song = [], bells = [], bars = [], t = 0;
+    function add(mel, bass, withBells){
+      var start = t;
+      mel.forEach(function(n){ if(n[0] !== 'r') song.push([t, n[0], n[1]]); t += n[1]; });
+      bass.forEach(function(b, i){ bars.push([start + i*4, b]); if(withBells) for(var k=0;k<4;k++) bells.push([start + i*4 + k, k % 2 ? 1 : 0.55]); });
+    }
+    add(verseA.concat(verseB), bassVerse, false);
+    add(chorusA.concat(chorusB), bassChorus, true);
+    add(interlude, bassInter, false);
+    var LEN = t;
+
+    var ctx, out, wet, noise, playing = false, timer = 0, loopAt = 0, iS = 0, iB = 0, iR = 0;
+    function setup(){
+      if(ctx) return true;
+      try{ ctx = audio = audio || new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return false; }
+      out = ctx.createGain(); out.gain.value = 0; out.connect(ctx.destination);
+      var len = ctx.sampleRate*2.4, ir = ctx.createBuffer(2, len, ctx.sampleRate);
+      for(var c=0;c<2;c++){ var d = ir.getChannelData(c); for(var i=0;i<len;i++) d[i] = (Math.random()*2 - 1)*Math.pow(1 - i/len, 3.2); }
+      var conv = ctx.createConvolver(); conv.buffer = ir; wet = ctx.createGain(); wet.gain.value = 0.32; wet.connect(conv); conv.connect(out);
+      noise = ctx.createBuffer(1, ctx.sampleRate*0.25, ctx.sampleRate);
+      var nd = noise.getChannelData(0); for(var j=0;j<nd.length;j++) nd[j] = Math.random()*2 - 1;
+      return true;
+    }
+    function send(node){ node.connect(out); node.connect(wet); }
+    function box(at, f, beats){
+      var g = ctx.createGain(), dur = Math.min(2.2, 0.9 + beats*B);
+      g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(0.22, at + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+      [[1, 1], [2, 0.28], [4.02, 0.07], [5.4, 0.035]].forEach(function(p){
+        var o = ctx.createOscillator(), og = ctx.createGain(); o.type = 'sine'; o.frequency.value = f*p[0];
+        og.gain.value = p[1]; if(p[0] > 3){ og.gain.setValueAtTime(p[1], at); og.gain.exponentialRampToValueAtTime(0.0001, at + 0.35); }
+        o.connect(og).connect(g); o.start(at); o.stop(at + dur + 0.05);
+      });
+      send(g);
+    }
+    function bass(at, f){
+      [[0, 1, 0.16], [2*B, 1.5, 0.09]].forEach(function(p){
+        var o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter(), s = at + p[0];
+        o.type = 'triangle'; o.frequency.value = f*p[1]; lp.type = 'lowpass'; lp.frequency.value = 700;
+        g.gain.setValueAtTime(0.0001, s); g.gain.exponentialRampToValueAtTime(p[2], s + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, s + 1.7*B);
+        o.connect(lp).connect(g); send(g); o.start(s); o.stop(s + 1.8*B);
+      });
+    }
+    function bell(at, v){
+      var src = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), g = ctx.createGain();
+      src.buffer = noise; hp.type = 'bandpass'; hp.frequency.value = 9000; hp.Q.value = 1.4;
+      g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(0.05*v, at + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, at + 0.11);
+      src.connect(hp).connect(g); send(g); src.start(at); src.stop(at + 0.13);
+    }
+    function pump(){
+      var horizon = ctx.currentTime + LOOK;
+      while(true){
+        var tS = iS < song.length ? loopAt + song[iS][0]*B : Infinity;
+        var tB = iB < bars.length ? loopAt + bars[iB][0]*B : Infinity;
+        var tR = iR < bells.length ? loopAt + bells[iR][0]*B : Infinity;
+        var next = Math.min(tS, tB, tR);
+        if(next === Infinity){ loopAt += LEN*B; iS = iB = iR = 0; continue; }
+        if(next > horizon) break;
+        if(next === tS){ box(tS, hz(song[iS][1]), song[iS][2]); iS++; }
+        else if(next === tB){ bass(tB, hz(bars[iB][1])); iB++; }
+        else { bell(tR, bells[iR][1]); iR++; }
+      }
+    }
+    function fade(to, sec){ var n = ctx.currentTime; out.gain.cancelScheduledValues(n); out.gain.setValueAtTime(out.gain.value, n); out.gain.linearRampToValueAtTime(to, n + sec); }
+    function start(){
+      if(playing || !setup()) return;
+      playing = true;
+      if(ctx.state === 'suspended') ctx.resume();
+      loopAt = ctx.currentTime + 0.15; iS = iB = iR = 0;
+      fade(0.55, 1.5); pump(); timer = setInterval(pump, 120);
+      ui(true);
+    }
+    function stop(soft){
+      if(!playing) return;
+      playing = false; clearInterval(timer); fade(0, soft ? 0.6 : 0.25);
+      ui(false);
+    }
+    function ui(on){
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.setAttribute('aria-label', on ? 'Выключить музыку' : 'Включить новогоднюю музыку');
+      btn.classList.remove('nudge');
+    }
+    function save(v){ try{ localStorage.setItem('dm-music', v); }catch(e){} }
+    btn.addEventListener('click', function(){ if(playing){ stop(); save('off'); } else { start(); save('on'); } });
+    /* браузеры не дают включать звук без действия человека: если музыку включали раньше, она стартует с первого касания */
+    var pref = ''; try{ pref = localStorage.getItem('dm-music') || ''; }catch(e){}
+    if(pref === 'on'){
+      var first = function(e){ if(e.target.closest && e.target.closest('#music')) return; document.removeEventListener('pointerdown', first, true); start(); };
+      document.addEventListener('pointerdown', first, true);
+    } else if(!pref){ btn.classList.add('nudge'); }
+    var wasOn = false;
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden){ wasOn = playing; if(playing) stop(true); }
+      else if(wasOn){ start(); }
+    });
+    return {start:start, stop:stop};
+  })();
+
   /* удар: поднимается только рука с посохом */
   var imgCuff = $('dmCuff'), imgStaff = $('dmStaff'), strikeT0 = 0, fired = false;
   var RAISE = 260, HOLD = 60, SLAM = 80, REBOUND = 200, HIT = RAISE + HOLD + SLAM;
@@ -1274,8 +1446,19 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
     fired = false; strikeT0 = performance.now(); smileUntil = strikeT0 + HIT + 1300;
   });
 
-  function loop(now){ pose(now); strikeStep(now); render3D(); requestAnimationFrame(loop); }
-  requestAnimationFrame(loop);
+  /* анимация Деда Мороза идёт, только пока первый экран виден */
+  var heroOn = true, running = false;
+  function loop(now){
+    if(!heroOn || document.hidden){ running = false; return; }
+    pose(now); strikeStep(now); render3D();
+    requestAnimationFrame(loop);
+  }
+  function wake(){ if(!running && heroOn && !document.hidden){ running = true; requestAnimationFrame(loop); } }
+  if(window.IntersectionObserver){
+    new IntersectionObserver(function(es){ heroOn = es[0].isIntersecting; if(heroOn){ dirty = true; wake(); } }, {rootMargin:'80px'}).observe(hero);
+  }
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden){ dirty = true; wake(); } });
+  wake();
 })();
 </script>
 </body>
