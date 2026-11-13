@@ -151,6 +151,15 @@ dialog .btn{background:var(--ink);color:#fff;border-color:var(--ink);min-height:
 dialog .btn.ghost{background:transparent;color:var(--ink);border-color:rgba(27,42,94,.35)}
 footer{position:relative;z-index:1;text-align:center;padding:0 16px 28px;color:var(--muted);font-size:.85rem}
 footer a{color:var(--lamp)}
+
+/* ПК: конверт и письмо крупно, во всю рабочую область экрана */
+@media (min-width:1061px){
+  main{padding:28px clamp(24px,4vw,80px) 56px}
+  .env{width:min(56vw,760px)}
+  .sheet,.voice,.video,.acts{width:min(100%,1180px)}
+  .view{gap:28px}
+  h1{font-size:clamp(3rem,4.2vw,4.8rem)}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition-duration:.01s !important}}
 </style>
 </head>
