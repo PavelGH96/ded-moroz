@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Студия видео · Дед Мороз заходил</title>
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<style>
+@font-face{font-family:"Great Vibes";src:url(letter/GreatVibes-Regular.ttf)}
+@font-face{font-family:"Cormorant SC";src:url(letter/CormorantSC-SemiBold.ttf);font-weight:600}
+:root{--bg:#0f241b;--panel:#163326;--line:rgba(255,247,232,.14);--text:#fff7e8;--muted:#b9c9b6;--gold:#f6c55f;--red:#d93a2b}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 360px;height:100vh}
+.stage{display:flex;flex-direction:column;min-width:0;padding:16px;gap:12px}
+.stage header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.stage h1{margin:0;font-size:18px}
+.stage h1 span{color:var(--gold)}
+.view{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:#08140f;border:1px solid var(--line);border-radius:10px;position:relative;overflow:hidden}
+.view canvas{max-width:100%;max-height:100%;display:block;cursor:grab;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+.view canvas:active{cursor:grabbing}
+.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);text-align:center;padding:20px;pointer-events:none}
+.empty b{color:var(--text);font-size:16px}
+.bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bar input[type=range]{flex:1;min-width:160px}
+.time{font-variant-numeric:tabular-nums;color:var(--muted);min-width:90px}
+aside{background:var(--panel);border-left:1px solid var(--line);overflow:auto;padding:14px 16px 24px}
+aside h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:18px 0 8px}
+aside h2:first-child{margin-top:4px}
+.row{display:grid;grid-template-columns:110px 1fr 42px;align-items:center;gap:8px;margin:6px 0}
+.row label{color:var(--muted)}
+.row output{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px}
+.row input[type=range]{width:100%}
+.full{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.full label{color:var(--muted)}
+input[type=text],select{width:100%;background:#0d2219;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit}
+input[type=file]{width:100%;color:var(--muted);font-size:13px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:#0d2219;color:var(--text);font:600 14px/1 inherit;cursor:pointer}
+.btn:hover{border-color:var(--gold)}
+.btn.main{background:linear-gradient(180deg,#e8483a,#b82a1e);border-color:#c7301f;color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.seg{display:flex;gap:4px;background:#0d2219;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{flex:1;border:0;background:none;color:var(--muted);border-radius:999px;padding:6px 8px;font:600 13px inherit;cursor:pointer}
+.seg button.on{background:var(--gold);color:#2a1a05}
+.masters{display:flex;flex-direction:column;gap:6px}
+.master{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.master.on{border-color:var(--gold);background:rgba(246,197,95,.08)}
+.master span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.master button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:16px}
+.hint{color:var(--muted);font-size:12px;margin:4px 0}
+.check{display:flex;align-items:center;gap:8px;margin:6px 0;color:var(--muted)}
+.status{color:var(--gold);min-height:1.4em}
+.progress{height:6px;border-radius:6px;background:rgba(255,255,255,.1);overflow:hidden;flex:1;min-width:120px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#e2b45a,#ffe08a)}
+@media (max-width:900px){.app{grid-template-columns:1fr;height:auto}.view{height:60vh}aside{border-left:0;border-top:1px solid var(--line)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="stage">
+    <header>
+      <h1>Студия видео · <span>Дед Мороз заходил</span></h1>
+      <div class="seg" id="fmt" role="group" aria-label="Формат">
+        <button type="button" data-v="16:9" class="on">16:9 гориз.</button>
+        <button type="button" data-v="9:16">9:16 верт.</button>
+      </div>
+      <div class="seg" id="drag" role="group" aria-label="Что перетаскивать">
+        <button type="button" data-v="dm" class="on">Двигаю Деда Мороза</button>
+        <button type="button" data-v="light">Двигаю свет</button>
+      </div>
+    </header>
+    <div class="view" id="view">
+      <canvas id="out"></canvas>
+      <div class="empty" id="empty"><b>Добавьте мастер-ролик и фото комнаты</b>Мастер-ролик: Дед Мороз на зелёном фоне со звуком. Фото: снимок, который прислали родители.<br>Потом перетащите Деда Мороза к кровати, колёсиком мыши поменяйте размер.</div>
+    </div>
+    <div class="bar">
+      <button type="button" class="btn" id="play">▶ Просмотр</button>
+      <input type="range" id="seek" min="0" max="1000" value="300" aria-label="Кадр">
+      <span class="time" id="time">0:00 / 0:00</span>
+    </div>
+    <div class="bar">
+      <button type="button" class="btn main" id="export">Сохранить видео</button>
+      <div class="progress"><i id="prog"></i></div>
+      <span class="status" id="status"></span>
+    </div>
+  </section>
+
+  <aside>
+    <h2>1. Мастер-ролик</h2>
+    <div class="masters" id="masters"></div>
+    <div class="full"><input type="file" id="masterFile" accept="video/*"><span class="hint">Ролики сохраняются в этом браузере, загружать каждый раз не нужно.</span></div>
+
+    <h2>2. Фото комнаты</h2>
+    <div class="full"><input type="file" id="photoFile" accept="image/*"></div>
+    <div class="row"><label for="zoom">Приближение</label><input type="range" id="zoom" min="0" max="15" step="0.5" value="6"><output></output></div>
+    <div class="row"><label for="pan">Сдвиг фото</label><input type="range" id="pan" min="-50" max="50" value="0"><output></output></div>
+
+    <h2>3. Дед Мороз</h2>
+    <label class="check"><input type="checkbox" id="flip"> Отразить (смотрит в другую сторону)</label>
+    <div class="row"><label for="size">Рост</label><input type="range" id="size" min="20" max="120" value="72"><output></output></div>
+    <button type="button" class="btn" id="auto" style="width:100%;margin:6px 0">Подогнать цвет под фото</button>
+    <div class="row"><label for="bright">Яркость</label><input type="range" id="bright" min="-60" max="40" value="0"><output></output></div>
+    <div class="row"><label for="contrast">Контраст</label><input type="range" id="contrast" min="-40" max="40" value="0"><output></output></div>
+    <div class="row"><label for="temp">Теплота</label><input type="range" id="temp" min="-50" max="50" value="0"><output></output></div>
+    <div class="row"><label for="sat">Насыщенность</label><input type="range" id="sat" min="-60" max="30" value="0"><output></output></div>
+    <div class="row"><label for="soft">Мягкость</label><input type="range" id="soft" min="0" max="3" step="0.5" value="0.5"><output></output></div>
+
+    <h2>4. Зелёный фон</h2>
+    <div class="row"><label for="keySim">Порог</label><input type="range" id="keySim" min="5" max="60" value="30"><output></output></div>
+    <div class="row"><label for="keySmooth">Края</label><input type="range" id="keySmooth" min="1" max="30" value="10"><output></output></div>
+    <div class="row"><label for="spill">Убрать зелень</label><input type="range" id="spill" min="0" max="100" value="80"><output></output></div>
+
+    <h2>5. Атмосфера</h2>
+    <div class="row"><label for="shadow">Тень</label><input type="range" id="shadow" min="0" max="100" value="55"><output></output></div>
+    <div class="row"><label for="glow">Отсвет</label><input type="range" id="glow" min="0" max="100" value="45"><output></output></div>
+    <div class="full"><label for="glowColor">Цвет света</label>
+      <select id="glowColor"><option value="255,150,60">Тёплый: ночник, свеча</option><option value="255,210,150">Мягкий жёлтый: лампа</option><option value="140,180,255">Холодный: окно, луна</option></select></div>
+    <div class="row"><label for="grain">Зерно</label><input type="range" id="grain" min="0" max="100" value="35"><output></output></div>
+    <div class="row"><label for="snow">Снежинки</label><input type="range" id="snow" min="0" max="100" value="35"><output></output></div>
+
+    <h2>6. Титры и музыка</h2>
+    <div class="full"><label for="title">Титр в начале</label><input type="text" id="title" value="31 декабря · Дед Мороз заходил"></div>
+    <div class="full"><label for="musicFile">Фоновая музыка (необязательно)</label><input type="file" id="musicFile" accept="audio/*"></div>
+    <div class="row"><label for="musicVol">Громкость</label><input type="range" id="musicVol" min="0" max="100" value="18"><output></output></div>
+    <p class="hint">Видео: 1,5 с титр и появление в искрах, затем мастер-ролик, в конце Дед Мороз растворяется в снежинках. Сохраняется в реальном времени: не сворачивайте вкладку, пока идёт запись.</p>
+  </aside>
+</div>
+
+<video id="mv" playsinline preload="auto" crossorigin="anonymous" hidden></video>
+<audio id="music" preload="auto" loop hidden></audio>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var INTRO = 1.5, OUTRO = 1.2;
+  var out = $('out'), ctx = out.getContext('2d');
+  var mv = $('mv'), music = $('music');
+  var photo = null, masterUrl = null, masterId = null;
+  var st = { fmt:'16:9', drag:'dm', x:.72, y:.93, light:{x:.8, y:.62} };
+  var P = {}; /* значения ползунков */
+  var running = false, recording = false, t0 = 0, tNow = 0, ready = false;
+
+  /* ---------- ползунки ---------- */
+  document.querySelectorAll('aside input[type=range]').forEach(function(r){
+    var o = r.parentNode.querySelector('output');
+    function upd(){ P[r.id] = parseFloat(r.value); if(o) o.textContent = r.value; if(!running) drawStill(); }
+    r.addEventListener('input', upd); upd();
+  });
+  ['flip','glowColor','title'].forEach(function(id){ $(id).addEventListener('input', function(){ if(!running) drawStill(); }); });
+  function segs(id, key, cb){ $(id).querySelectorAll('button').forEach(function(b){ b.addEventListener('click', function(){
+    $(id).querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === b); }); st[key] = b.dataset.v; if(cb) cb(); if(!running) drawStill(); }); }); }
+  segs('fmt', 'fmt', size); segs('drag', 'drag');
+
+  function size(){ if(st.fmt === '16:9'){ out.width = 1920; out.height = 1080; } else { out.width = 1080; out.height = 1920; } }
+  size();
+
+  /* ---------- WebGL: хромакей и цвет Деда Мороза ---------- */
+  var gc = document.createElement('canvas'), gl = gc.getContext('webgl', {premultipliedAlpha:false, preserveDrawingBuffer:true});
+  var prog, tex, uLoc = {};
+  (function initGL(){
+    var vs = 'attribute vec2 p;varying vec2 uv;uniform float flip;void main(){float u=p.x*0.5+0.5;uv=vec2(flip>0.5?1.0-u:u,0.5-p.y*0.5);gl_Position=vec4(p,0.0,1.0);}';
+    var fs = [
+      'precision mediump float;varying vec2 uv;uniform sampler2D t;uniform vec3 key;uniform float sim,smooth,spill,bright,contrast,temp,sat,alpha;',
+      'vec2 rgb2uv(vec3 c){return vec2(c.r*-0.169+c.g*-0.331+c.b*0.5+0.5,c.r*0.5+c.g*-0.419+c.b*-0.081+0.5);}',
+      'void main(){vec4 c=texture2D(t,uv);',
+      'float d=distance(rgb2uv(c.rgb),rgb2uv(key));float a=smoothstep(sim,sim+smooth,d);',
+      'float g=c.g-max(c.r,c.b);if(g>0.0){c.g-=g*spill;}',
+      'vec3 col=c.rgb;col=(col-0.5)*(1.0+contrast)+0.5;col*=1.0+bright;',
+      'col.r*=1.0+temp*0.18;col.b*=1.0-temp*0.18;col.g*=1.0+temp*0.03;',
+      'float l=dot(col,vec3(0.299,0.587,0.114));col=mix(vec3(l),col,1.0+sat);',
+      'gl_FragColor=vec4(clamp(col,0.0,1.0),a*alpha);}'
+    ].join('');
+    function sh(type, src){ var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; }
+    prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(prog); gl.useProgram(prog);
+    var b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+    [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(function(k){ gl.texParameteri(gl.TEXTURE_2D, k, gl.CLAMP_TO_EDGE); });
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    ['t','key','sim','smooth','spill','bright','contrast','temp','sat','alpha','flip'].forEach(function(n){ uLoc[n] = gl.getUniformLocation(prog, n); });
+  })();
+  var keyColor = [0, 0.69, 0.25];
+  var fc = document.createElement('canvas'), fcx = fc.getContext('2d', {willReadFrequently:false});
+  function renderDM(alpha){
+    if(!mv.videoWidth) return null;
+    if(gc.width !== mv.videoWidth || gc.height !== mv.videoHeight){ gc.width = mv.videoWidth; gc.height = mv.videoHeight; }
+    gl.viewport(0, 0, gc.width, gc.height);
+    gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    /* кадр сначала копируется в обычный холст: так цветокоррекция одинаково работает и на паузе, и при воспроизведении */
+    if(fc.width !== gc.width || fc.height !== gc.height){ fc.width = gc.width; fc.height = gc.height; }
+    fcx.drawImage(mv, 0, 0, fc.width, fc.height);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, fc);
+    gl.uniform3fv(uLoc.key, keyColor);
+    gl.uniform1f(uLoc.sim, P.keySim/300); gl.uniform1f(uLoc.smooth, P.keySmooth/300); gl.uniform1f(uLoc.spill, P.spill/100);
+    gl.uniform1f(uLoc.bright, P.bright/100); gl.uniform1f(uLoc.contrast, P.contrast/100); gl.uniform1f(uLoc.temp, P.temp/50); gl.uniform1f(uLoc.sat, P.sat/100);
+    gl.uniform1f(uLoc.alpha, alpha); gl.uniform1f(uLoc.flip, $('flip').checked ? 1 : 0);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    return gc;
+  }
+  /* цвет фона определяется по углу первого кадра */
+  function sampleKey(){
+    try{ var c = document.createElement('canvas'); c.width = 8; c.height = 8; var x = c.getContext('2d'); x.drawImage(mv, 0, 0, 40, 40, 0, 0, 8, 8);
+      var d = x.getImageData(0,0,8,8).data, r=0,g=0,b=0; for(var i=0;i<d.length;i+=4){ r+=d[i]; g+=d[i+1]; b+=d[i+2]; } var n = d.length/4;
+      if(g/n > r/n + 30) keyColor = [r/n/255, g/n/255, b/n/255]; }catch(e){}
+  }
+  /* контур Деда Мороза в кадре (без прозрачных полей ролика) */
+  var bbox = null;
+  function measure(){
+    var c = renderDM(1); if(!c) return;
+    var w = 120, h = Math.round(120*c.height/c.width), s = document.createElement('canvas'); s.width = w; s.height = h;
+    var x = s.getContext('2d'); x.drawImage(c, 0, 0, w, h); var d = x.getImageData(0,0,w,h).data;
+    var x0=w, x1=0, y0=h, y1=0;
+    for(var yy=0; yy<h; yy++) for(var xx=0; xx<w; xx++){ if(d[(yy*w+xx)*4+3] > 120){ if(xx<x0)x0=xx; if(xx>x1)x1=xx; if(yy<y0)y0=yy; if(yy>y1)y1=yy; } }
+    bbox = x1 > x0 ? {x0:x0/w, x1:(x1+1)/w, y0:y0/h, y1:(y1+1)/h} : {x0:0,x1:1,y0:0,y1:1};
+  }
+
+  /* ---------- зерно ---------- */
+  var grainC = document.createElement('canvas'); grainC.width = grainC.height = 256;
+  (function(){ var x = grainC.getContext('2d'), im = x.createImageData(256,256);
+    for(var i=0;i<im.data.length;i+=4){ var v = 128 + (Math.random()-.5)*255; im.data[i]=im.data[i+1]=im.data[i+2]=v; im.data[i+3]=255; } x.putImageData(im,0,0); })();
+
+  /* ---------- частицы ---------- */
+  var parts = [], flakes = [];
+  function seedFlakes(){ flakes = []; for(var i=0;i<140;i++) flakes.push({x:Math.random(), y:Math.random(), r:Math.random()*2.4+.6, v:Math.random()*.03+.015, w:Math.random()*6.28, a:Math.random()*.5+.35}); }
+  seedFlakes();
+  function burst(cx, cy, w, h, mode){
+    for(var i=0;i<(mode==='in'?140:180);i++){
+      var x = cx + (Math.random()-.5)*w, y = cy - Math.random()*h;
+      parts.push({x:x, y:y, vx:(Math.random()-.5)*(mode==='in'?2.4:1.2), vy:mode==='in'?(Math.random()-.5)*2.4:-(Math.random()*2.6+.6), life:1, fade:Math.random()*.015+.012,
+        r:Math.random()*2.6+1, c:mode==='in' ? ['#ffe39a','#fff6d8','#ffd27a','#ffffff'][i%4] : ['#ffffff','#e8f2ff','#fff6d8'][i%3], star:i%5===0});
+    }
+  }
+
+  /* ---------- кадр ---------- */
+  function drawPhoto(t, dur){
+    var W = out.width, H = out.height;
+    ctx.fillStyle = '#000'; ctx.fillRect(0,0,W,H);
+    if(!photo) return;
+    var k = dur ? Math.min(1, t/dur) : .5, z = 1 + P.zoom/100*k;
+    var s = Math.max(W/photo.width, H/photo.height)*z, pw = photo.width*s, ph = photo.height*s;
+    var px = (W-pw)/2 + (P.pan/100)*(pw-W)/2, py = (H-ph)/2;
+    ctx.drawImage(photo, px, py, pw, ph);
+  }
+  function dmRect(){
+    var W = out.width, H = out.height, h = H*P.size/100;
+    var bw = (bbox.x1-bbox.x0), bh = (bbox.y1-bbox.y0);
+    var full = h/bh, fw = full*gc.width/gc.height;
+    var flip = $('flip').checked, bx0 = flip ? 1-bbox.x1 : bbox.x0;
+    var feetX = st.x*W, feetY = st.y*H;
+    var x = feetX - (bx0 + bw/2)*fw, y = feetY - bbox.y1*full;
+    return {x:x, y:y, w:fw, h:full, cx:feetX, top:feetY-h, foot:feetY, bw:bw*fw};
+  }
+  function frame(t, dur, live){
+    var W = out.width, H = out.height;
+    drawPhoto(t, dur);
+    var mDur = dur ? dur - INTRO - OUTRO : 0;
+    var a = 1;
+    if(dur){ if(t < INTRO) a = Math.max(0, (t - INTRO + .9)/.9); else if(t > INTRO + mDur) a = Math.max(0, 1 - (t - INTRO - mDur)/OUTRO); }
+    var flick = 1 + Math.sin(t*9.1)*.025 + Math.sin(t*23.7)*.015 + (Math.random()-.5)*.02;
+    if(masterUrl && bbox && mv.videoWidth){
+      var r = dmRect();
+      /* тень */
+      if(P.shadow > 0 && a > 0){
+        ctx.save(); ctx.globalAlpha = P.shadow/100*.75*a; ctx.filter = 'blur(' + Math.round(r.bw*.06) + 'px)';
+        ctx.fillStyle = '#000'; ctx.beginPath(); ctx.ellipse(r.cx, r.foot, r.bw*.62, r.bw*.11, 0, 0, Math.PI*2); ctx.fill(); ctx.restore();
+      }
+      var c = renderDM(a*Math.min(1, flick));
+      if(c && a > 0){ ctx.save(); if(P.soft > 0) ctx.filter = 'blur(' + P.soft + 'px)'; ctx.drawImage(c, r.x, r.y, r.w, r.h); ctx.restore(); }
+    }
+    /* отсвет */
+    if(P.glow > 0){
+      var col = $('glowColor').value, lx = st.light.x*W, ly = st.light.y*H, rad = Math.max(W,H)*.42;
+      var g = ctx.createRadialGradient(lx, ly, 0, lx, ly, rad);
+      g.addColorStop(0, 'rgba(' + col + ',' + (P.glow/100*.38*flick) + ')'); g.addColorStop(.35, 'rgba(' + col + ',' + (P.glow/100*.12*flick) + ')'); g.addColorStop(1, 'rgba(' + col + ',0)');
+      ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = g; ctx.fillRect(0,0,W,H); ctx.restore();
+      if(st.drag === 'light' && !recording){ ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,.7)'; ctx.setLineDash([6,6]); ctx.beginPath(); ctx.arc(lx, ly, 26, 0, 7); ctx.stroke(); ctx.restore(); }
+    }
+    /* снежинки */
+    if(P.snow > 0){
+      var n = Math.round(flakes.length*P.snow/100);
+      ctx.save(); ctx.fillStyle = '#fff';
+      for(var i=0;i<n;i++){ var f = flakes[i]; var y = (f.y + t*f.v) % 1, x = f.x + Math.sin(f.w + t*.8)*.01;
+        ctx.globalAlpha = f.a*.8; ctx.beginPath(); ctx.arc(x*W, y*H, f.r*W/1920*1.4, 0, 7); ctx.fill(); }
+      ctx.restore();
+    }
+    /* искры появления и снежинки ухода */
+    if(live){
+      ctx.save();
+      for(var j=parts.length-1;j>=0;j--){ var p = parts[j]; p.x += p.vx; p.y += p.vy; p.vy += .01; p.life -= p.fade;
+        if(p.life <= 0){ parts.splice(j,1); continue; }
+        ctx.globalAlpha = Math.min(1, p.life*1.3); ctx.fillStyle = p.c;
+        if(p.star){ var rr = p.r*3; ctx.beginPath(); for(var q=0;q<8;q++){ var ra = q%2 ? rr*.3 : rr, aa = q*Math.PI/4; ctx.lineTo(p.x + Math.cos(aa)*ra, p.y + Math.sin(aa)*ra); } ctx.fill(); }
+        else { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill(); } }
+      ctx.restore();
+    }
+    /* титр */
+    var title = $('title').value.trim();
+    if(dur && title && t < 3.2){
+      var ta = t < .6 ? t/.6 : t > 2.4 ? Math.max(0, 1-(t-2.4)/.8) : 1;
+      ctx.save(); ctx.globalAlpha = ta; ctx.textAlign = 'center'; ctx.fillStyle = '#fff7e8';
+      ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = 24;
+      var fsz = Math.round(Math.min(W, H*1.6)*.06); ctx.font = fsz + 'px "Great Vibes", cursive';
+      var parts2 = title.split('·');
+      if(parts2.length > 1){ ctx.font = '600 ' + Math.round(fsz*.42) + 'px "Cormorant SC", serif'; ctx.fillStyle = '#f6c55f'; ctx.fillText(parts2[0].trim().toUpperCase(), W/2, H*.14);
+        ctx.font = fsz + 'px "Great Vibes", cursive'; ctx.fillStyle = '#fff7e8'; ctx.fillText(parts2.slice(1).join('·').trim(), W/2, H*.14 + fsz*1.05); }
+      else ctx.fillText(title, W/2, H*.16);
+      ctx.restore();
+    }
+    /* зерно */
+    if(P.grain > 0){
+      ctx.save(); ctx.globalAlpha = P.grain/100*.16; ctx.globalCompositeOperation = 'overlay';
+      var ox = Math.random()*256, oy = Math.random()*256;
+      ctx.translate(-ox, -oy); ctx.fillStyle = ctx.createPattern(grainC, 'repeat'); ctx.fillRect(0, 0, W+256, H+256); ctx.restore();
+    }
+    /* лёгкая виньетка */
+    var v = ctx.createRadialGradient(W/2, H/2, Math.min(W,H)*.35, W/2, H/2, Math.max(W,H)*.75);
+    v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.35)'); ctx.fillStyle = v; ctx.fillRect(0,0,W,H);
+  }
+  function totalDur(){ return mv.duration ? INTRO + mv.duration + OUTRO : 0; }
+  function fmtT(s){ s = Math.max(0, s||0); return Math.floor(s/60) + ':' + String(Math.floor(s%60)).padStart(2,'0'); }
+  function drawStill(){
+    if(!ready) return;
+    $('empty').hidden = !!(photo || masterUrl);
+    var D = totalDur();
+    frame(INTRO + (mv.currentTime || 0), D, false);
+    $('time').textContent = fmtT(INTRO + (mv.currentTime||0)) + ' / ' + fmtT(D);
+  }
+
+  /* ---------- загрузка фото ---------- */
+  $('photoFile').addEventListener('change', function(e){
+    var f = e.target.files[0]; if(!f) return;
+    var img = new Image(); img.onload = function(){ photo = img; drawStill(); }; img.src = URL.createObjectURL(f);
+  });
+
+  /* ---------- мастер-ролики в памяти браузера ---------- */
+  var db = null;
+  function openDB(){ return new Promise(function(ok, no){ var r = indexedDB.open('dm-studio', 1);
+    r.onupgradeneeded = function(){ r.result.createObjectStore('masters', {keyPath:'id', autoIncrement:true}); };
+    r.onsuccess = function(){ db = r.result; ok(); }; r.onerror = function(){ no(r.error); }; }); }
+  function tx(mode){ return db.transaction('masters', mode).objectStore('masters'); }
+  function listMasters(){
+    if(!db) return;
+    var req = tx('readonly').getAll(); req.onsuccess = function(){
+      var box = $('masters'); box.innerHTML = '';
+      if(!req.result.length){ box.innerHTML = '<p class="hint">Пока нет сохранённых роликов.</p>'; return; }
+      req.result.forEach(function(m){
+        var d = document.createElement('div'); d.className = 'master' + (m.id === masterId ? ' on' : '');
+        d.innerHTML = '<span></span><button type="button" title="Удалить из браузера">×</button>'; d.querySelector('span').textContent = m.name;
+        d.addEventListener('click', function(e){ if(e.target.tagName === 'BUTTON') return; useMaster(m); });
+        d.querySelector('button').addEventListener('click', function(){ if(confirm('Удалить ролик «' + m.name + '» из браузера?')){ tx('readwrite').delete(m.id).onsuccess = listMasters; } });
+        box.appendChild(d);
+      });
+      if(!masterId && req.result[0]) useMaster(req.result[0]);
+    };
+  }
+  function useMaster(m){
+    masterId = m.id; if(masterUrl) URL.revokeObjectURL(masterUrl); masterUrl = URL.createObjectURL(m.blob);
+    mv.src = masterUrl; mv.muted = true;
+    mv.onloadeddata = function(){ mv.currentTime = Math.min(mv.duration*.3, 3); };
+    mv.onseeked = function(){ if(!bbox || mv.dataset.measured !== String(masterId)){ sampleKey(); measure(); mv.dataset.measured = masterId; } if(!running) drawStill(); };
+    listMasters();
+  }
+  $('masterFile').addEventListener('change', function(e){
+    var f = e.target.files[0]; if(!f) return;
+    var rec = {name:f.name.replace(/\.[^.]+$/, ''), blob:f};
+    if(db){ var r = tx('readwrite').add(rec); r.onsuccess = function(){ rec.id = r.result; masterId = null; useMaster(rec); }; }
+    else { rec.id = Date.now(); useMaster(rec); }
+    e.target.value = '';
+  });
+  openDB().then(listMasters, function(){ $('masters').innerHTML = '<p class="hint">Браузер не даёт сохранять ролики, придётся загружать каждый раз.</p>'; });
+
+  /* ---------- музыка ---------- */
+  $('musicFile').addEventListener('change', function(e){ var f = e.target.files[0]; if(f) music.src = URL.createObjectURL(f); });
+
+  /* ---------- перетаскивание и размер ---------- */
+  function pos(e){ var r = out.getBoundingClientRect(); return {x:(e.clientX - r.left)/r.width, y:(e.clientY - r.top)/r.height}; }
+  var dragging = false;
+  out.addEventListener('pointerdown', function(e){ dragging = true; out.setPointerCapture(e.pointerId); move(e); });
+  out.addEventListener('pointermove', function(e){ if(dragging) move(e); });
+  out.addEventListener('pointerup', function(){ dragging = false; });
+  function move(e){ var p = pos(e);
+    if(st.drag === 'light'){ st.light = p; }
+    else if(bbox){ var r = dmRect(), W = out.width, H = out.height; st.x = p.x; st.y = Math.min(1.02, p.y + (r.foot - r.top)/H*.5); }
+    if(!running) drawStill(); }
+  out.addEventListener('wheel', function(e){ e.preventDefault(); var s = $('size'); s.value = Math.max(20, Math.min(120, parseFloat(s.value) - Math.sign(e.deltaY)*2)); s.dispatchEvent(new Event('input')); }, {passive:false});
+
+  /* ---------- подгонка цвета под фото ---------- */
+  $('auto').addEventListener('click', function(){
+    if(!photo || !mv.videoWidth) return;
+    var c = document.createElement('canvas'); c.width = 64; c.height = 36; var x = c.getContext('2d'); x.drawImage(photo, 0, 0, 64, 36);
+    var d = x.getImageData(0,0,64,36).data, R=0,G=0,B=0,n=0; for(var i=0;i<d.length;i+=4){ R+=d[i]; G+=d[i+1]; B+=d[i+2]; n++; } R/=n; G/=n; B/=n;
+    ['bright','contrast','temp','sat'].forEach(function(id){ P[id] = 0; });
+    var g2 = renderDM(1), s = document.createElement('canvas'); s.width = 64; s.height = 110; var y = s.getContext('2d'); y.drawImage(g2, 0, 0, 64, 110);
+    var e = y.getImageData(0,0,64,110).data, r=0,g=0,b=0,m=0; for(var j=0;j<e.length;j+=4){ if(e[j+3] > 200){ r+=e[j]; g+=e[j+1]; b+=e[j+2]; m++; } } if(!m) return; r/=m; g/=m; b/=m;
+    var lp = .299*R+.587*G+.114*B, ld = .299*r+.587*g+.114*b;
+    var bright = Math.max(-60, Math.min(20, Math.round(((lp+30)/(ld+1) - 1)*70)));
+    var warmP = (R - B)/(lp+1), warmD = (r - b)/(ld+1), temp = Math.max(-50, Math.min(50, Math.round((warmP - warmD)*60)));
+    var set = {bright:bright, temp:temp, contrast: lp < 70 ? -10 : 0, sat: lp < 70 ? -20 : -5};
+    Object.keys(set).forEach(function(id){ var el = $(id); el.value = set[id]; el.dispatchEvent(new Event('input')); });
+  });
+
+  /* ---------- просмотр и запись ---------- */
+  var actx = null, dest = null, mvNode = null, musicNode = null, musicGain = null;
+  function audioGraph(){
+    if(actx) return;
+    actx = new (window.AudioContext || window.webkitAudioContext)(); dest = actx.createMediaStreamDestination();
+    mvNode = actx.createMediaElementSource(mv); mvNode.connect(dest); mvNode.connect(actx.destination);
+    musicNode = actx.createMediaElementSource(music); musicGain = actx.createGain(); musicNode.connect(musicGain); musicGain.connect(dest); musicGain.connect(actx.destination);
+  }
+  var outroFired = false, introFired = false, rec = null, chunks = [];
+  function start(record){
+    if(!masterUrl){ $('status').textContent = 'Сначала добавьте мастер-ролик.'; return; }
+    if(!photo){ $('status').textContent = 'Добавьте фото комнаты.'; return; }
+    audioGraph(); actx.resume();
+    mv.muted = false; mv.pause(); mv.currentTime = 0;
+    musicGain.gain.value = P.musicVol/100;
+    if(music.src){ music.currentTime = 0; music.play().catch(function(){}); }
+    parts = []; introFired = outroFired = false; running = true; recording = record;
+    $('play').textContent = '■ Стоп'; $('export').disabled = true;
+    if(record){
+      var stream = out.captureStream(30); dest.stream.getAudioTracks().forEach(function(tr){ stream.addTrack(tr); });
+      var types = ['video/mp4;codecs=avc1.640028,mp4a.40.2', 'video/mp4;codecs=avc1.4d0028,mp4a.40.2', 'video/webm;codecs=vp9,opus', 'video/webm', 'video/mp4'];
+      var type = types.filter(function(t){ return window.MediaRecorder && MediaRecorder.isTypeSupported(t); })[0];
+      if(!type){ $('status').textContent = 'Этот браузер не умеет сохранять видео. Откройте страницу в Chrome.'; stop(); return; }
+      chunks = []; rec = new MediaRecorder(stream, {mimeType:type, videoBitsPerSecond:12e6, audioBitsPerSecond:192e3});
+      rec.ondataavailable = function(e){ if(e.data.size) chunks.push(e.data); };
+      rec.onstop = function(){
+        var blob = new Blob(chunks, {type:type.split(';')[0]}), ext = type.indexOf('mp4') > -1 ? 'mp4' : 'webm';
+        var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ded-moroz-video.' + ext; document.body.appendChild(a); a.click(); a.remove();
+        $('status').textContent = 'Готово: ded-moroz-video.' + ext + ' (' + (blob.size/1048576).toFixed(1) + ' МБ)' + (ext === 'webm' ? '. Формат WebM: Telegram его показывает; для MP4 откройте студию в свежем Chrome.' : '');
+      };
+      rec.start(1000);
+      $('status').textContent = 'Идёт запись… не сворачивайте вкладку';
+    } else $('status').textContent = '';
+    t0 = performance.now();
+    requestAnimationFrame(loop);
+  }
+  function stop(){
+    running = false; mv.pause(); music.pause(); mv.muted = true;
+    if(rec && rec.state !== 'inactive') rec.stop(); rec = null; recording = false;
+    $('play').textContent = '▶ Просмотр'; $('export').disabled = false; $('prog').style.width = '0';
+    drawStill();
+  }
+  function loop(){
+    if(!running) return;
+    var D = totalDur(), t = (performance.now() - t0)/1000, W = out.width, H = out.height;
+    if(t >= INTRO && mv.paused && !mv.ended && t < INTRO + mv.duration) mv.play().catch(function(){});
+    if(t >= INTRO && !mv.paused) t = INTRO + mv.currentTime;  /* сверяем с роликом, чтобы звук не уезжал */
+    if(t >= INTRO + mv.duration) t = Math.max(t, INTRO + mv.duration);
+    var r = bbox && mv.videoWidth ? dmRect() : null;
+    if(!introFired && t > INTRO - .9 && r){ introFired = true; burst(r.cx, r.foot, r.bw*1.3, r.foot - r.top, 'in'); }
+    if(!outroFired && t > INTRO + mv.duration && r){ outroFired = true; burst(r.cx, r.foot, r.bw*1.1, r.foot - r.top, 'out'); }
+    if(music.src && musicGain){ var fadeOut = Math.max(0, Math.min(1, (D - t)/1.2)); musicGain.gain.value = P.musicVol/100*fadeOut; }
+    frame(t, D, true);
+    $('time').textContent = fmtT(t) + ' / ' + fmtT(D); $('prog').style.width = Math.min(100, t/D*100) + '%';
+    if(mv.ended || t >= INTRO + mv.duration){ if(!loop.endAt) loop.endAt = performance.now(); }
+    if(loop.endAt && performance.now() - loop.endAt > OUTRO*1000 + 300){ loop.endAt = 0; stop(); return; }
+    requestAnimationFrame(loop);
+  }
+  $('play').addEventListener('click', function(){ running ? stop() : start(false); });
+  $('export').addEventListener('click', function(){ if(!running) start(true); });
+  $('seek').addEventListener('input', function(){ if(running || !mv.duration) return; mv.currentTime = mv.duration*this.value/1000; });
+  ready = true;
+  document.fonts && document.fonts.load('40px "Great Vibes"').then(drawStill);
+  drawStill();
+})();
+</script>
+</body>
+</html>
