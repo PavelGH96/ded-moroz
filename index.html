@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Дед Мороз заходил</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:wght@800&family=Onest:wght@400;500;700&family=Marck+Script&display=swap" rel="stylesheet">
+<style>
+/* План: одна ночная тема. Детская комната в темноте, единственный тёплый свет это ночник (акцент).
+   Смелое место одно: живое письмо на бумаге в первом экране. Всё остальное тихое. */
+:root{
+  color-scheme: dark;
+  --night:#0d1836;
+  --night-2:#152450;
+  --night-3:#1e3166;
+  --frost:#eef3fb;
+  --muted:#a8b5d4;
+  --lamp:#ffc46b;
+  --lamp-ink:#3a2500;
+  --seal:#c5392f;
+  --paper:#f7edd8;
+  --paper-ink:#3b2c1c;
+  --line:rgba(238,243,251,.14);
+  --ice:#b4cbff;
+  --display:"Shantell Sans", "Comic Sans MS", "Segoe Print", sans-serif;
+  --display-w:800;
+  --body:"Onest", "Segoe UI", Roboto, Arial, sans-serif;
+  --h1:clamp(1.8rem,3.5vw,2.7rem);
+  --h2:clamp(1.5rem,3vw,2.2rem);
+  --hand:"Marck Script", "Segoe Script", cursive;
+  --r:14px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--night);color:var(--frost);font-family:var(--body);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+img,svg{max-width:100%}
+a{color:var(--lamp)}
+h1,h2,h3{font-family:var(--display);font-weight:var(--display-w);line-height:1.2;margin:0;text-wrap:balance}
+h1{font-size:var(--h1);line-height:1.24}
+h2{font-size:var(--h2)}
+h1,h2{position:relative}
+.snowcap{position:absolute;pointer-events:none;z-index:1;opacity:0;transition:opacity .5s}
+.caps-on .snowcap{opacity:1}
+h3{font-size:1.35rem}
+p{margin:0}
+.wrap{width:min(1120px,100% - 32px);margin-inline:auto}
+section{padding:72px 0}
+.lead{color:var(--muted);max-width:60ch}
+.eyebrow{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--lamp)}
+h1,h2{text-transform:uppercase;letter-spacing:.03em;line-height:1.28;color:transparent;background:repeating-linear-gradient(-58deg,#e8f0ff 0 3.5px,#7f9fe0 3.5px 6px);-webkit-background-clip:text;background-clip:text}
+.hero h1 em{font-style:normal;background:repeating-linear-gradient(-58deg,#ffe0a0 0 3.5px,#e29a3a 3.5px 6px);-webkit-background-clip:text;background-clip:text}
+:focus-visible{outline:3px solid var(--lamp);outline-offset:3px;border-radius:6px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 1rem var(--body);padding:14px 24px;border-radius:999px;border:1px solid transparent;cursor:pointer;text-decoration:none;transition:transform .15s, box-shadow .15s}
+.btn-main{background:var(--lamp);color:var(--lamp-ink);box-shadow:0 0 0 0 rgba(255,196,107,.5)}
+.btn-main:hover{transform:translateY(-1px);box-shadow:0 0 32px -4px rgba(255,196,107,.6)}
+.btn-ghost{background:transparent;color:var(--frost);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--frost)}
+
+/* шапка */
+header{position:sticky;top:0;z-index:20;background:rgba(13,24,54,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:var(--display-w);font-size:1.25rem;color:var(--frost);text-decoration:none;display:flex;align-items:center;gap:10px}
+.star{width:20px;height:20px;fill:var(--lamp);filter:drop-shadow(0 0 5px rgba(255,196,107,.8));animation:starpulse 3.2s ease-in-out infinite;flex:none}
+nav{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+nav a{color:var(--muted);text-decoration:none;font-size:.95rem}
+nav a:hover{color:var(--frost)}
+nav .btn{padding:9px 18px;font-size:.92rem;color:var(--lamp-ink)}
+
+/* новогоднее */
+.garland{position:absolute;left:0;right:0;top:100%;height:46px;pointer-events:none;overflow:hidden}
+.garland svg{display:block}
+.gl-wire{fill:none;stroke:#46578c;stroke-width:1.6}
+.gl-bulb .glow{opacity:.55;animation:twk 2.6s ease-in-out infinite}
+.gl-bulb .glass{animation:twkg 2.6s ease-in-out infinite}
+.gl-bulb.p1 .glow,.gl-bulb.p1 .glass{animation-delay:-.9s}
+.gl-bulb.p2 .glow,.gl-bulb.p2 .glass{animation-delay:-1.7s}
+@keyframes twk{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes twkg{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes starpulse{0%,100%{filter:drop-shadow(0 0 3px rgba(255,196,107,.6))}50%{filter:drop-shadow(0 0 9px rgba(255,214,140,1))}}
+.ny-chip{display:inline-flex;align-items:center;gap:8px;color:var(--frost);text-decoration:none;font-size:.88rem;padding:6px 12px;border:1px solid var(--line);border-radius:999px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ny-chip:hover{border-color:var(--lamp)}
+.ny-chip .star{width:14px;height:14px}
+nav .ny-chip{color:var(--frost)}
+.ny{padding:56px 0 24px}
+.ny-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;align-items:center}
+.ny-left{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.ny-left .note{max-width:46ch}
+.baubles{--d:clamp(78px,15vw,138px);list-style:none;margin:0;padding:0;padding-top:4px;display:flex;justify-content:center;gap:clamp(8px,2.2vw,28px);position:relative;min-height:calc(var(--d) + 130px)}
+.baubles::before{content:"";position:absolute;left:-3%;right:-3%;top:0;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#5b6fa6 10%,#5b6fa6 90%,transparent)}
+.b{position:relative;display:flex;flex-direction:column;align-items:center;transform-origin:50% 0;animation:sway 5.6s ease-in-out infinite}
+.b:nth-child(2){animation-duration:6.4s;animation-delay:-1.4s}
+.b:nth-child(3){animation-duration:5.1s;animation-delay:-2.6s}
+.b:nth-child(4){animation-duration:6s;animation-delay:-.6s}
+@keyframes sway{0%,100%{transform:rotate(-2.4deg)}50%{transform:rotate(2.4deg)}}
+.b .string{width:1.5px;height:var(--len);background:#8a9cc9}
+.b .cap{width:clamp(16px,2.6vw,24px);height:clamp(10px,1.6vw,14px);margin-bottom:-3px;position:relative;z-index:1;border-radius:4px 4px 2px 2px;background:linear-gradient(#ffeaa9,#c9892b)}
+.b .cap::before{content:"";position:absolute;left:50%;top:-5px;width:8px;height:8px;margin-left:-4px;border:1.5px solid #e9b85a;border-bottom:0;border-radius:6px 6px 0 0}
+.ball{position:relative;width:var(--d);height:var(--d);border-radius:50%;display:grid;place-content:center;text-align:center;background:radial-gradient(circle at 32% 26%,var(--c1),var(--c2) 52%,var(--c3));box-shadow:inset -10px -14px 22px rgba(0,0,0,.28),inset 6px 8px 14px rgba(255,255,255,.16),0 22px 34px -14px var(--glow)}
+.ball::before{content:"";position:absolute;left:17%;top:11%;width:27%;height:15%;border-radius:50%;background:rgba(255,255,255,.55);filter:blur(1.5px);transform:rotate(-32deg)}
+.ball b{font:var(--display-w) clamp(1.5rem,4.2vw,2.5rem)/1 var(--display);font-variant-numeric:tabular-nums;color:var(--ink,#fff);text-shadow:0 1px 6px rgba(0,0,0,.3)}
+.ball small{margin-top:4px;font-size:clamp(.62rem,1.4vw,.78rem);letter-spacing:.02em;color:var(--ink,#fff);opacity:.9}
+.b-red{--c1:#f27a6e;--c2:#c5392f;--c3:#7a1912;--glow:rgba(226,88,76,.7)}
+.b-gold{--c1:#fff0b8;--c2:#f0b24a;--c3:#a8671a;--glow:rgba(255,196,107,.7);--ink:#3a2500}
+.b-blue{--c1:#9cc8ff;--c2:#3e6fd2;--c3:#1f3a85;--glow:rgba(110,160,255,.7)}
+.b-green{--c1:#8fe2a8;--c2:#2c9558;--c3:#115a35;--glow:rgba(110,220,150,.6)}
+.tick{animation:tick .4s ease-out}
+@keyframes tick{0%{transform:scale(.9)}100%{transform:scale(1)}}
+.forest{position:relative;height:96px;margin-top:40px;overflow:hidden;pointer-events:none}
+.forest svg{display:block;position:absolute;left:0;bottom:0}
+.forest .glow{opacity:.5;animation:twk 2.8s ease-in-out infinite}
+.forest .p1{animation-delay:-1s}
+.forest .p2{animation-delay:-1.9s}
+@media (max-width:900px){.ny-grid{grid-template-columns:1fr}.ny-left{align-items:center;text-align:center}}
+@media (max-width:1060px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-art{min-height:0;flex-direction:column;align-items:center;gap:0}
+  .dm-stage{width:230px;height:500px}
+  .dm-hint{left:50%;top:-6px}
+  .hero-letter{flex:none;width:100%;max-width:420px;margin:4px 0 0;transform:rotate(1deg)}
+}
+@media (max-width:640px){.ny-chip{display:none}.bar{flex-wrap:nowrap;gap:10px}.logo{font-size:1.02rem;gap:8px;min-width:0}nav .btn{padding:8px 14px;font-size:.88rem;white-space:nowrap}}
+@media (prefers-reduced-motion:reduce){.gl-bulb .glow,.gl-bulb .glass,.b,.tick,.star,.forest .glow{animation:none}.gl-bulb .glow,.forest .glow{opacity:.8}}
+
+/* первый экран */
+.hero{position:relative;overflow:hidden;padding:88px 0 80px;background:radial-gradient(900px 500px at 78% 40%, rgba(255,196,107,.13), transparent 60%), linear-gradient(rgba(52,84,170,.28), rgba(52,84,170,0))}
+#snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+main,footer{position:relative;z-index:1}
+
+.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:40px;align-items:center}
+.hero h1 em{font-style:normal;color:var(--lamp)}
+.hero .lead{margin-top:20px;font-size:1.1rem}
+.try{margin-top:28px;display:flex;flex-direction:column;gap:8px;max-width:420px}
+.try label{font-size:.9rem;color:var(--muted)}
+.try input{font:500 1.1rem var(--body);padding:14px 16px;border-radius:var(--r);border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--frost)}
+.cta-row{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}
+.facts{margin-top:28px;display:flex;gap:10px 24px;flex-wrap:wrap;padding:0;list-style:none;color:var(--muted);font-size:.93rem}
+.facts li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--lamp);margin-right:8px;vertical-align:middle}
+
+/* письмо */
+.letter{position:relative;background:var(--paper);color:var(--paper-ink);padding:34px 32px 44px;border-radius:4px;transform:rotate(1.6deg);box-shadow:0 30px 70px -20px rgba(0,0,0,.7), 0 0 90px -20px rgba(255,196,107,.35);background-image:repeating-linear-gradient(transparent 0 33px, rgba(59,44,28,.09) 33px 34px)}
+.letter .from{font:500 .72rem var(--body);letter-spacing:.16em;text-transform:uppercase;opacity:.65;margin-bottom:10px}
+.letter-body{font-family:var(--hand);font-size:1.42rem;line-height:34px;white-space:pre-line;overflow-wrap:anywhere}
+.letter-body b{font-weight:400;color:var(--seal)}
+.seal{position:absolute;right:22px;bottom:-22px;width:74px;height:74px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #e2584c, var(--seal) 60%, #8f2019);display:grid;place-items:center;color:#ffe9d6;font:400 .95rem var(--display);transform:rotate(-12deg);box-shadow:0 6px 14px rgba(0,0,0,.4)}
+
+/* Дед Мороз */
+#fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
+.hero-art{position:relative;min-height:640px;display:flex;align-items:flex-end;justify-content:center;gap:14px}
+.dm-stage{position:relative;flex:none;width:300px;height:640px;perspective:900px}
+.dm{all:unset;position:absolute;inset:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.dm:focus-visible{outline:3px solid var(--lamp);outline-offset:6px;border-radius:20px}
+.dm-follow,.dm-strike{position:absolute;inset:0;display:block;transform-origin:50% 100%;will-change:transform}
+.dm-strike img{position:absolute;left:0;bottom:0;width:100%;height:100%;object-fit:contain;object-position:bottom;filter:drop-shadow(0 18px 30px rgba(0,0,0,.45));user-select:none;-webkit-user-drag:none}
+.dm-3d{position:absolute;left:-25%;width:150%;top:-6%;height:109%;pointer-events:none;filter:drop-shadow(0 18px 30px rgba(0,0,0,.45))}
+.dm-strike.is3d img{opacity:0}
+#dmCuff,#dmStaff{filter:none;transform-origin:27% 32%;will-change:transform}
+.dm-tip{position:absolute;left:21.8%;bottom:0;width:1px;height:1px}
+.dm-shadow{position:absolute;left:8%;right:8%;bottom:-10px;height:26px;border-radius:50%;background:radial-gradient(closest-side, rgba(0,0,0,.55), transparent);will-change:transform}
+.dm-hint{position:absolute;left:50%;top:-8px;transform:translate(-50%,-100%);background:rgba(13,24,54,.85);border:1px solid var(--line);color:var(--frost);font-size:.82rem;padding:7px 12px;border-radius:999px;white-space:nowrap;pointer-events:none;transition:opacity .4s}
+.dm-hint::after{content:"";position:absolute;left:50%;bottom:-6px;width:10px;height:10px;background:inherit;border-top:1px solid var(--line);border-right:1px solid var(--line);transform:translateX(-50%) rotate(135deg)}
+.dm-hint.gone{opacity:0}
+.hero-letter{position:relative;flex:1 1 0;min-width:0;max-width:300px;margin-bottom:56px;z-index:2;padding:24px 20px 38px;transform:rotate(2deg)}
+.hero-letter .letter-body{font-size:1.12rem;line-height:30px}
+.hero-letter{background-image:repeating-linear-gradient(transparent 0 29px, rgba(59,44,28,.09) 29px 30px)}
+.hero-letter .seal{width:62px;height:62px;bottom:-18px}
+
+/* продукты */
+.cards{margin-top:36px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+.card{background:var(--night-2);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:flex;flex-direction:column;gap:14px}
+.card.hit{background:var(--night-3);border-color:var(--lamp);position:relative}
+.tag{position:absolute;top:-13px;left:24px;background:var(--lamp);color:var(--lamp-ink);font:700 .78rem var(--body);padding:4px 12px;border-radius:999px}
+.price{font-family:var(--display);font-weight:var(--display-w);font-size:2.1rem;font-variant-numeric:tabular-nums}
+.price s{font:400 1rem var(--body);color:var(--muted);margin-left:8px}
+.card ul{margin:0;padding-left:20px;color:var(--muted);display:flex;flex-direction:column;gap:6px;flex:1}
+.card .btn{margin-top:6px}
+
+/* шаги */
+.steps{margin-top:36px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:8px}
+.steps li::before{content:counter(s);font-family:var(--display);font-weight:var(--display-w);font-size:2.4rem;color:var(--lamp);line-height:1}
+.steps p{color:var(--muted);font-size:.97rem}
+
+/* кадр */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.frame{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:#070d20;position:relative}
+.frame svg{display:block;width:100%;height:auto}
+.frame figcaption{position:absolute;left:12px;bottom:12px;background:rgba(7,13,32,.8);padding:6px 12px;border-radius:8px;font-size:.82rem;color:var(--muted)}
+figure{margin:0}
+.checks{margin:20px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+.checks li{padding-left:26px;position:relative}
+.checks li::before{content:"";position:absolute;left:0;top:.55em;width:12px;height:6px;border-left:2px solid var(--lamp);border-bottom:2px solid var(--lamp);transform:rotate(-45deg)}
+
+/* анкета */
+.order{background:rgba(52,84,170,.16);border-block:1px solid var(--line)}
+.order-grid{margin-top:36px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
+.form{background:var(--night);border:1px solid var(--line);border-radius:var(--r);padding:28px}
+.progress{display:flex;gap:6px;margin-bottom:22px}
+.progress span{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.progress span.on{background:var(--lamp)}
+.step-title{font-size:.85rem;color:var(--muted);margin-bottom:6px}
+fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:16px}
+legend{font-family:var(--display);font-weight:var(--display-w);font-size:1.4rem;padding:0;margin-bottom:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:.92rem;color:var(--muted)}
+.field input[type=text],.field input[type=number],.field textarea{font:400 1rem var(--body);padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--frost);width:100%}
+.field textarea{min-height:72px;resize:vertical}
+.field small{color:var(--muted);font-size:.82rem}
+.err{color:#ff9d94;font-size:.88rem;min-height:1.2em}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+.opt:has(input:checked){border-color:var(--lamp);background:rgba(255,196,107,.08)}
+.opt input{margin-top:5px;accent-color:var(--lamp)}
+.opt b{display:block}
+.opt span{color:var(--muted);font-size:.9rem}
+.opt .p{margin-left:auto;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.flabel{font-size:.92rem;color:var(--muted)}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg-opt{position:relative;cursor:pointer}
+.seg-opt input{position:absolute;opacity:0;width:1px;height:1px}
+.seg-opt span{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;color:var(--frost)}
+.seg-opt input:checked + span{background:var(--lamp);color:var(--lamp-ink);border-color:var(--lamp);font-weight:700}
+.seg-opt input:focus-visible + span{outline:3px solid var(--lamp);outline-offset:3px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.done-lead{color:var(--frost)}
+#e-send{color:#ff9d94}
+.btn[aria-busy="true"]{opacity:.7;cursor:progress}
+.consent a{color:var(--lamp)}
+.consent{display:flex;gap:10px;font-size:.88rem;color:var(--muted);align-items:flex-start}
+.consent input{margin-top:4px;accent-color:var(--lamp)}
+.nav-row{display:flex;justify-content:space-between;gap:12px;margin-top:22px;flex-wrap:wrap}
+.thumb{max-height:160px;border-radius:10px;border:1px solid var(--line)}
+.summary{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:14px;white-space:pre-wrap;font-size:.93rem;overflow-wrap:anywhere}
+.note{border-left:3px solid var(--lamp);padding:8px 12px;color:var(--muted);font-size:.9rem;background:rgba(255,196,107,.06);border-radius:0 8px 8px 0}
+.side .letter{transform:rotate(-1deg)}
+.side .letter-body{font-size:1.25rem}
+.side p{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+
+/* обещания */
+.promises{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:36px}
+.promises div{border-top:1px solid var(--line);padding-top:18px}
+.promises p{color:var(--muted);margin-top:8px;font-size:.97rem}
+
+/* b2b */
+.b2b{background:linear-gradient(120deg,var(--night-3),var(--night-2));border:1px solid var(--line);border-radius:var(--r);padding:36px;display:flex;gap:28px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.b2b div{flex:1 1 420px;display:flex;flex-direction:column;gap:10px}
+.b2b p{color:var(--muted)}
+
+/* вопросы */
+.faq{margin-top:28px;max-width:780px;display:flex;flex-direction:column}
+details{border-bottom:1px solid var(--line);padding:16px 0}
+summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::after{content:"+";color:var(--lamp);font-size:1.3rem;line-height:1}
+details[open] summary::after{content:"−"}
+summary::-webkit-details-marker{display:none}
+details p{color:var(--muted);margin-top:10px;max-width:65ch}
+
+footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gradient(rgba(23,50,96,.35),transparent 140px);color:var(--muted);font-size:.9rem}
+.foot{display:flex;gap:24px 48px;flex-wrap:wrap;justify-content:space-between}
+.foot div{display:flex;flex-direction:column;gap:6px}
+.foot a{color:var(--muted)}
+
+@media (max-width:900px){
+  .hero-grid,.split,.order-grid{grid-template-columns:1fr}
+  .cards,.promises{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  nav a:not(.btn){display:none}
+  section{padding:56px 0}
+  .letter{transform:none}
+  .hero-art{min-height:0;display:flex;flex-direction:column;align-items:center}
+  .dm-stage{position:relative;width:230px;height:500px}
+  .hero-letter{position:relative;right:auto;bottom:auto;width:100%;max-width:420px;margin-top:4px;transform:rotate(1deg)}
+}
+@media (max-width:480px){.steps{grid-template-columns:1fr}.letter{padding:28px 20px 40px}.form{padding:20px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}.snowcap{transition:none}}
+</style>
+</head>
+<body>
+
+<canvas id="snow" aria-hidden="true"></canvas>
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l3.1 6.9 7.4.8-5.5 5 1.6 7.4L12 17.8l-6.6 3.8L7 14.2 1.5 9.2l7.4-.8z"/></svg>Дед Мороз заходил</a>
+    <nav>
+      <a href="#how">Как это работает</a>
+      <a href="#prices">Цены</a>
+      <a href="#faq">Вопросы</a>
+      <a class="ny-chip" href="#newyear" aria-label="Время до Нового года"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l3.1 6.9 7.4.8-5.5 5 1.6 7.4L12 17.8l-6.6 3.8L7 14.2 1.5 9.2l7.4-.8z"/></svg><span id="nyChip">до Нового года</span></a>
+      <a class="btn btn-main" href="#order">Заказать</a>
+    </nav>
+    <div class="garland" id="garland" aria-hidden="true"></div>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Письмо и видео к Новому году</p>
+      <h1>Утром ребёнок узнает, что ночью к нему приходил <em>Дед Мороз</em></h1>
+      <p class="lead">Именное письмо и короткое видео: Дед Мороз в комнате вашего ребёнка, пока тот спит. Называет по имени, хвалит за настоящие дела и обещает вернуться с подарком.</p>
+      <div class="try">
+        <label for="heroName">Впишите имя ребёнка и посмотрите на письмо</label>
+        <input id="heroName" type="text" maxlength="24" placeholder="Например, Миша" autocomplete="off">
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-main" href="#order">Собрать поздравление</a>
+        <a class="btn btn-ghost" href="#prices">Что входит и сколько стоит</a>
+      </div>
+      <ul class="facts">
+        <li>Письмо готово за час</li>
+        <li>Видео за 24 часа</li>
+        <li>Правки до 30 декабря</li>
+      </ul>
+    </div>
+    <div class="hero-art">
+      <div class="dm-stage">
+        <div class="dm-shadow" id="dmShadow" aria-hidden="true"></div>
+        <button type="button" class="dm" id="dm" aria-label="Дед Мороз. Нажмите, и он стукнет посохом">
+          <span class="dm-follow" id="dmFollow">
+            <span class="dm-strike" id="dmStrike">
+              <img src="ded-body.webp" alt="" width="496" height="1080" draggable="false">
+              <img src="ded-cuff.webp" id="dmCuff" alt="" width="496" height="1080" draggable="false">
+              <img src="ded-staff.webp" id="dmStaff" alt="" width="496" height="1080" draggable="false">
+              <span class="dm-tip" id="dmTip"></span>
+            </span>
+          </span>
+        </button>
+        <span class="dm-hint" id="dmHint">Нажмите на Деда Мороза</span>
+      </div>
+      <div class="letter hero-letter" aria-live="polite">
+        <div class="from">Великий Устюг · канун Нового года</div>
+        <div class="letter-body" data-letter></div>
+        <div class="seal">Д. М.</div>
+      </div>
+    </div>
+  </div>
+  <canvas id="fx" aria-hidden="true"></canvas>
+</section>
+
+<section class="ny" id="newyear">
+  <div class="wrap ny-grid">
+    <div class="ny-left">
+      <h2>До Нового года осталось</h2>
+      <p class="lead" id="nyLead">До 1 января по московскому времени.</p>
+      <p class="note" id="nyDeadline">Заказы на этот Новый год принимаем до 28 декабря.</p>
+      <a class="btn btn-main" href="#order">Заказать письмо и видео</a>
+    </div>
+    <div class="timer-wrap">
+      <ol class="baubles" role="timer" aria-label="Обратный отсчёт до Нового года">
+        <li class="b b-red" style="--len:34px"><span class="string"></span><span class="cap"></span><span class="ball"><b id="nyD">00</b><small id="nyDl">дней</small></span></li>
+        <li class="b b-gold" style="--len:78px"><span class="string"></span><span class="cap"></span><span class="ball"><b id="nyH">00</b><small id="nyHl">часов</small></span></li>
+        <li class="b b-blue" style="--len:52px"><span class="string"></span><span class="cap"></span><span class="ball"><b id="nyM">00</b><small id="nyMl">минут</small></span></li>
+        <li class="b b-green" style="--len:92px"><span class="string"></span><span class="cap"></span><span class="ball"><b id="nyS">00</b><small id="nySl">секунд</small></span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="prices">
+  <div class="wrap">
+    <h2>Три формата</h2>
+    <div class="cards">
+      <article class="card">
+        <h3>Письмо</h3>
+        <div class="price">390 ₽</div>
+        <ul>
+          <li>Имя, возраст и 3 личных факта о ребёнке</li>
+          <li>PDF для печати на А4</li>
+          <li>Готово за час</li>
+        </ul>
+        <a class="btn btn-ghost" href="#order" data-pick="letter">Выбрать письмо</a>
+      </article>
+      <article class="card hit">
+        <span class="tag">Берут чаще всего</span>
+        <h3>Письмо и видео</h3>
+        <div class="price">1490 ₽ <s>1880 ₽</s></div>
+        <ul>
+          <li>Всё из письма</li>
+          <li>Видео 40–60 секунд в комнате ребёнка</li>
+          <li>Дед Мороз говорит то же, что написал в письме</li>
+          <li>Одна бесплатная правка</li>
+        </ul>
+        <a class="btn btn-main" href="#order" data-pick="both">Выбрать комплект</a>
+      </article>
+      <article class="card">
+        <h3>Видео</h3>
+        <div class="price">1490 ₽</div>
+        <ul>
+          <li>Дед Мороз у кровати спящего ребёнка</li>
+          <li>Обращение по имени и похвала</li>
+          <li>Файл MP4 для телефона и телевизора</li>
+        </ul>
+        <a class="btn btn-ghost" href="#order" data-pick="video">Выбрать видео</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="how" style="padding-top:0">
+  <div class="wrap">
+    <h2>От анкеты до утра с чудом</h2>
+    <ol class="steps">
+      <li><h3>Анкета</h3><p>Имя, возраст, за что похвалить и о каком подарке мечтает. Пять минут.</p></li>
+      <li><h3>Фото комнаты</h3><p>Для видео нужен один снимок спящего ребёнка или его кровати. Лицо в кадре не обязательно.</p></li>
+      <li><h3>Мы готовим</h3><p>Письмо приходит в течение часа, видео в течение суток. Присылаем в Telegram или на почту.</p></li>
+      <li><h3>Утро</h3><p>Письмо кладёте под ёлку, а видео показываете как запись, которую «случайно сняла камера».</p></li>
+    </ol>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap split">
+    <figure class="frame">
+      <svg viewBox="0 0 640 400" role="img" aria-label="Схема кадра: тёмная детская, окно с луной, кровать и силуэт Деда Мороза рядом">
+        <rect width="640" height="400" fill="#0a1230"/>
+        <rect x="60" y="50" width="150" height="170" rx="6" fill="#16264f" stroke="#2a3d78" stroke-width="6"/>
+        <line x1="135" y1="50" x2="135" y2="220" stroke="#2a3d78" stroke-width="5"/>
+        <line x1="60" y1="135" x2="210" y2="135" stroke="#2a3d78" stroke-width="5"/>
+        <circle cx="170" cy="92" r="20" fill="#f3e9c6"/>
+        <rect x="250" y="270" width="340" height="80" rx="14" fill="#1e3166"/>
+        <rect x="250" y="240" width="340" height="50" rx="20" fill="#2a4180"/>
+        <ellipse cx="530" cy="250" rx="46" ry="20" fill="#eef3fb" opacity=".9"/>
+        <circle cx="528" cy="238" r="16" fill="#e7c9ac"/>
+        <circle cx="610" cy="210" r="9" fill="#ffc46b"/>
+        <circle cx="610" cy="210" r="60" fill="#ffc46b" opacity=".12"/>
+        <rect x="330" y="150" width="84" height="150" rx="34" fill="#c5392f"/>
+        <rect x="330" y="278" width="84" height="22" rx="8" fill="#f3f0ea"/>
+        <rect x="364" y="150" width="16" height="150" fill="#f3f0ea"/>
+        <circle cx="372" cy="128" r="26" fill="#e7c9ac"/>
+        <ellipse cx="372" cy="150" rx="28" ry="24" fill="#f3f0ea"/>
+        <rect x="342" y="92" width="60" height="26" rx="12" fill="#c5392f"/>
+        <rect x="338" y="110" width="68" height="12" rx="6" fill="#f3f0ea"/>
+        <rect x="426" y="120" width="6" height="190" rx="3" fill="#cfd8ea"/>
+        <circle cx="429" cy="116" r="9" fill="#cfe4ff"/>
+      </svg>
+      <figcaption>Схема кадра. Сюда встанет ваш пример видео</figcaption>
+    </figure>
+    <div>
+      <h2>Дед Мороз не в своём тереме, а в вашей детской</h2>
+      <ul class="checks">
+        <li>Ребёнок узнаёт свою кровать, своё одеяло и свои игрушки. Поэтому верит.</li>
+        <li>В тексте только настоящие факты: как зовут кота, чему научился за год, что просил в подарок.</li>
+        <li>Письмо и видео говорят об одном и том же, поэтому складываются в одну историю.</li>
+        <li>Фото ребёнка используем только для заказа и удаляем через 7 дней после выдачи.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="order" id="order">
+  <div class="wrap">
+    <h2>Соберите поздравление</h2>
+    <p class="lead" style="margin-top:12px">Письмо справа меняется по мере того, как вы заполняете анкету.</p>
+    <div class="order-grid">
+      <form class="form" id="form" novalidate>
+        <div class="progress" id="progress" aria-hidden="true"></div>
+        <div class="step-title" id="stepTitle"></div>
+
+        <fieldset data-step="format">
+          <legend>Что готовим?</legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="product" id="p-both" value="both"><div><b>Письмо и видео</b><span>Одна история в двух форматах</span></div><span class="p">1490 ₽</span></label>
+            <label class="opt"><input type="radio" name="product" id="p-letter" value="letter"><div><b>Только письмо</b><span>PDF для печати</span></div><span class="p">390 ₽</span></label>
+            <label class="opt"><input type="radio" name="product" id="p-video" value="video"><div><b>Только видео</b><span>40–60 секунд, MP4</span></div><span class="p">1490 ₽</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset data-step="child" hidden>
+          <legend>Расскажите о ребёнке</legend>
+          <div class="field"><label for="f-name">Имя, как его зовут дома</label><input type="text" id="f-name" maxlength="24" placeholder="Миша"><div class="err" id="e-name"></div></div>
+          <div class="field"><span class="flabel" id="g-label">Кто получит письмо</span><div class="seg" role="radiogroup" aria-labelledby="g-label"><label class="seg-opt"><input type="radio" name="gender" id="g-m" value="m"><span>Мальчик</span></label><label class="seg-opt"><input type="radio" name="gender" id="g-f" value="f"><span>Девочка</span></label></div><small>Чтобы Дед Мороз написал «старался» или «старалась».</small><div class="err" id="e-gender"></div></div>
+          <div class="field"><label for="f-age">Возраст, лет</label><input type="number" id="f-age" min="1" max="14" placeholder="5"></div>
+          <div class="field"><label for="f-praise">За что похвалить</label><textarea id="f-praise" maxlength="140" placeholder="научился кататься на самокате и сам убираешь игрушки"></textarea><small>Продолжите фразу «в этом году ты…»</small></div>
+          <div class="field"><label for="f-wish">Над чем постараться в новом году</label><input type="text" id="f-wish" maxlength="100" placeholder="чистить зубы без напоминаний"></div>
+          <div class="field"><label for="f-gift">О каком подарке мечтает</label><input type="text" id="f-gift" maxlength="80" placeholder="пожарная машина"></div>
+        </fieldset>
+
+        <fieldset data-step="photo" hidden>
+          <legend>Фото для видео</legend>
+          <div class="field">
+            <label for="f-photo">Снимок спящего ребёнка или его кровати</label>
+            <input type="file" id="f-photo" accept="image/*">
+            <small>Горизонтальный кадр, свет ночника, с расстояния 2–3 метра. Можно без лица: со спины или под одеялом.</small>
+          </div>
+          <img class="thumb" id="thumb" alt="Выбранное фото" hidden>
+          <div class="note">Можно пропустить этот шаг и прислать фото позже в переписке.</div>
+        </fieldset>
+
+        <fieldset data-step="contact" hidden>
+          <legend>Куда прислать</legend>
+          <div class="field"><label for="f-parent">Как к вам обращаться</label><input type="text" id="f-parent" maxlength="40" placeholder="Анна"></div>
+          <div class="field"><label for="f-contact">Telegram, телефон или почта</label><input type="text" id="f-contact" maxlength="60" placeholder="@username"><div class="err" id="e-contact"></div></div>
+          <div class="hp" aria-hidden="true"><label for="f-website">Сайт</label><input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off"></div>
+          <label class="consent" for="f-consent"><input type="checkbox" id="f-consent"><span>Я родитель или законный представитель ребёнка и даю <a href="#docs">согласие на обработку персональных данных</a> для выполнения заказа.</span></label>
+          <div class="err" id="e-consent"></div>
+          <div class="err" id="e-send" role="alert"></div>
+          <button type="button" class="btn btn-ghost" id="copyFallback" hidden>Скопировать заявку</button>
+        </fieldset>
+
+        <fieldset data-step="done" hidden>
+          <legend id="doneTitle">Заявка принята</legend>
+          <p class="done-lead" id="doneLead">Мы напишем вам в течение часа по указанному контакту и пришлём ссылку на оплату.</p>
+          <div class="summary" id="summary"></div>
+          <button type="button" class="btn btn-ghost" id="copy">Скопировать заявку</button>
+          <button type="button" class="btn btn-ghost" id="again">Заказать ещё одно письмо</button>
+          <div class="err" id="copyMsg" style="color:var(--lamp)"></div>
+        </fieldset>
+
+        <div class="nav-row">
+          <button type="button" class="btn btn-ghost" id="back">Назад</button>
+          <button type="button" class="btn btn-main" id="next">Дальше</button>
+        </div>
+      </form>
+
+      <aside class="side">
+        <p>Так письмо увидит ребёнок</p>
+        <div class="letter">
+          <div class="from">Великий Устюг · канун Нового года</div>
+          <div class="letter-body" data-letter></div>
+          <div class="seal">Д. М.</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Три обещания</h2>
+    <div class="promises">
+      <div><h3>Успеем к празднику</h3><p>Принимаем заказы до 28 декабря включительно. Всё, что заказано в срок, будет готово до боя курантов.</p></div>
+      <div><h3>Исправим, если не то</h3><p>Опечатка в имени или не та игрушка? Одна правка бесплатно, вносим до 30 декабря.</p></div>
+      <div><h3>Бережно с фото</h3><p>Снимок ребёнка видит только монтажёр. Через 7 дней после выдачи заказа фото удаляется.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="b2b">
+      <div>
+        <p class="eyebrow">Магазинам и компаниям</p>
+        <h3>Подарок покупателю или сотруднику с детьми</h3>
+        <p>Выдаём промокоды на письмо или комплект: вы дарите код, родитель сам заполняет анкету. Подходит как подарок к покупке детских товаров и для корпоративных поздравлений. От 20 кодов цена ниже.</p>
+      </div>
+      <a class="btn btn-ghost" href="#contacts">Обсудить условия</a>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="padding-top:0">
+  <div class="wrap">
+    <h2>Что обычно спрашивают</h2>
+    <div class="faq">
+      <details><summary>Как быстро придёт заказ?</summary><p>Письмо в течение часа после оплаты, видео в течение 24 часов. В последнюю неделю декабря сроки те же, но заказы принимаем только до 28 числа.</p></details>
+      <details><summary>Обязательно ли показывать лицо ребёнка?</summary><p>Нет. Подойдёт кадр со спины, под одеялом или просто кровать в детской. Главное, чтобы ребёнок узнал свою комнату.</p></details>
+      <details><summary>Как сделано видео?</summary><p>Образ и голос Деда Мороза записаны с актёром. В кадр с вашей комнатой он попадает при монтаже с помощью компьютерной графики. Домой к вам никто не приходит.</p></details>
+      <details><summary>Как показать это ребёнку?</summary><p>Письмо распечатайте и положите под ёлку, на подоконник или в морозилку. Видео покажите утром на телефоне: «Смотри, что ночью записала камера».</p></details>
+      <details><summary>У меня двое детей. Как заказать?</summary><p>Для каждого ребёнка делаем своё письмо и своё видео. На второй заказ действует скидка 20%, напишите об этом в заявке.</p></details>
+      <details><summary>Как оплатить?</summary><p>После заявки пришлём ссылку на оплату картой или через СБП. Чек приходит на почту или в Telegram.</p></details>
+      <details><summary>Можно ли вернуть деньги?</summary><p>Да, если мы ещё не начали работу или не уложились в срок. Если результат не понравился, сначала бесплатно переделаем.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="forest" id="forest" aria-hidden="true"></div>
+
+<footer id="contacts">
+  <div class="wrap foot">
+    <div><b style="color:var(--frost)">Дед Мороз заходил</b><span>Письма и видео от Деда Мороза для детей</span><span>Заказы на этот Новый год до 28 декабря</span></div>
+    <div><b style="color:var(--frost)">Связаться</b><span>Telegram: укажите ваш контакт</span><span>Почта: укажите вашу почту</span></div>
+    <div id="docs"><b style="color:var(--frost)">Документы</b><span>Публичная оферта</span><span>Политика конфиденциальности</span><span>Согласие на обработку персональных данных</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  var PRICES = {both:1490, letter:390, video:1490};
+  var NAMES = {both:'Письмо и видео', letter:'Только письмо', video:'Только видео'};
+  var $ = function(id){ return document.getElementById(id); };
+  var ORDER_URL = 'https://tribgnfjiiwmiktzjeyy.supabase.co/functions/v1/dm-order';
+  var state = {product:'both', name:'', age:'', gender:'', praise:'', wish:'', gift:'', parent:'', contact:'', consent:false, step:0, sentId:0};
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function years(n){
+    n = parseInt(n,10); if(!n) return '';
+    var a = n%10, b = n%100;
+    var w = (a===1 && b!==11) ? 'год' : (a>=2 && a<=4 && (b<12 || b>14)) ? 'года' : 'лет';
+    return n + ' ' + w;
+  }
+  /* тот же текст, что в PDF и в Telegram (supabase/functions/dm-order/letter.js) */
+  function letterHtml(){
+    var girl = state.gender === 'f';
+    var name = state.name.trim() || (girl ? 'моя юная подруга' : 'мой юный друг');
+    var praise = state.praise.trim() || (girl ? 'очень старалась и радовала маму с папой' : 'очень старался и радовал маму с папой');
+    var out = 'Здравствуй, <b>' + esc(name) + '</b>!\n';
+    out += 'Этой ночью я заглянул к тебе. Ты крепко спишь, и я не стал тебя будить.\n';
+    if(years(state.age)) out += 'Тебе уже <b>' + years(state.age) + '</b>' + (girl ? ', совсем большая девочка.' : ', совсем большой человек.') + '\n';
+    out += 'Мне рассказали, что в этом году ты <b>' + esc(praise) + '</b>. Я тобой горжусь.\n';
+    if(state.wish.trim()) out += 'В новом году постарайся <b>' + esc(state.wish.trim()) + '</b>. У тебя получится.\n';
+    out += state.gift.trim() ? 'А про подарок я помню: <b>' + esc(state.gift.trim()) + '</b>. Жди под ёлкой.\n' : 'А подарок уже лежит в моих санях. Жди под ёлкой.\n';
+    out += 'Твой Дед Мороз';
+    return out;
+  }
+  function renderLetter(){
+    var h = letterHtml();
+    document.querySelectorAll('[data-letter]').forEach(function(el){ el.innerHTML = h; });
+  }
+
+  function stepsList(){
+    return state.product === 'letter' ? ['format','child','contact','done'] : ['format','child','photo','contact','done'];
+  }
+  function renderStep(){
+    var list = stepsList();
+    if(state.step > list.length-1) state.step = list.length-1;
+    var cur = list[state.step];
+    document.querySelectorAll('fieldset[data-step]').forEach(function(f){ f.hidden = f.dataset.step !== cur; });
+    $('progress').innerHTML = list.map(function(_, i){ return '<span class="' + (i<=state.step ? 'on' : '') + '"></span>'; }).join('');
+    $('stepTitle').textContent = 'Шаг ' + (state.step+1) + ' из ' + list.length + ' · ' + NAMES[state.product] + ', ' + PRICES[state.product] + ' ₽';
+    $('back').style.visibility = state.step === 0 ? 'hidden' : 'visible';
+    $('next').hidden = cur === 'done';
+    $('next').textContent = cur === 'contact' ? 'Отправить заявку' : 'Дальше';
+    $('back').hidden = cur === 'done';
+    if(cur === 'done') $('summary').textContent = summaryText();
+  }
+  function summaryText(){
+    var t = [
+      'Заказ: ' + NAMES[state.product] + ', ' + PRICES[state.product] + ' ₽',
+      (state.sentId ? 'Заявка №' + state.sentId + '\n' : '') + 'Ребёнок: ' + state.name.trim() + (years(state.age) ? ', ' + years(state.age) : '') + (state.gender ? ', ' + (state.gender === 'f' ? 'девочка' : 'мальчик') : ''),
+      'Похвалить: ' + (state.praise.trim() || 'не указано'),
+      'Постараться: ' + (state.wish.trim() || 'не указано'),
+      'Подарок: ' + (state.gift.trim() || 'не указано')
+    ];
+    if(state.product !== 'letter') t.push('Фото: ' + ($('f-photo').files.length ? 'отправлено' : 'пришлю позже'));
+    t.push('Родитель: ' + (state.parent.trim() || 'не указано'));
+    t.push('Контакт: ' + state.contact.trim());
+    return t.join('\n');
+  }
+  function validate(cur){
+    var ok = true;
+    if(cur === 'child'){
+      var bad = !state.name.trim();
+      $('e-name').textContent = bad ? 'Впишите имя: без него Дед Мороз не сможет обратиться к ребёнку.' : '';
+      var noG = !state.gender;
+      $('e-gender').textContent = noG ? 'Выберите, мальчик или девочка: от этого зависит текст письма.' : '';
+      if(bad){ ok = false; $('f-name').focus(); } else if(noG){ ok = false; $('g-m').focus(); }
+    }
+    if(cur === 'contact'){
+      var noC = !state.contact.trim();
+      $('e-contact').textContent = noC ? 'Укажите, куда прислать готовый заказ.' : '';
+      $('e-consent').textContent = !state.consent ? 'Без согласия мы не можем принять заказ.' : '';
+      if(noC || !state.consent) ok = false;
+    }
+    return ok;
+  }
+
+  function sync(){
+    $('heroName').value = state.name; $('f-name').value = state.name;
+    $('f-age').value = state.age; $('f-praise').value = state.praise; $('f-wish').value = state.wish; $('f-gift').value = state.gift;
+    $('f-parent').value = state.parent; $('f-contact').value = state.contact; $('f-consent').checked = !!state.consent;
+    var r = $('p-' + state.product); if(r) r.checked = true;
+    $('g-m').checked = state.gender === 'm'; $('g-f').checked = state.gender === 'f';
+  }
+  function bind(id, key){
+    $(id).addEventListener('input', function(e){
+      state[key] = e.target.value;
+      if(key === 'name'){ var other = id === 'heroName' ? 'f-name' : 'heroName'; $(other).value = state.name; }
+      renderLetter();
+    });
+  }
+
+  var sending = false;
+  function send(){
+    if(sending) return;
+    var btn = $('next'), msg = $('e-send');
+    msg.textContent = '';
+    var fd = new FormData();
+    fd.append('product', state.product); fd.append('name', state.name.trim()); fd.append('age', state.age);
+    fd.append('gender', state.gender); fd.append('praise', state.praise.trim()); fd.append('wish', state.wish.trim());
+    fd.append('gift', state.gift.trim()); fd.append('parent', state.parent.trim()); fd.append('contact', state.contact.trim());
+    fd.append('consent', state.consent ? '1' : ''); fd.append('website', $('f-website').value);
+    var photo = $('f-photo').files[0];
+    if(photo && state.product !== 'letter'){
+      if(photo.size > 10*1024*1024){ msg.textContent = 'Фото больше 10 МБ. Вернитесь на шаг назад и выберите другое или пришлите его позже в переписке.'; return; }
+      fd.append('photo', photo, photo.name);
+    }
+    sending = true; btn.setAttribute('aria-busy', 'true'); btn.textContent = 'Отправляем…';
+    var ctrl = window.AbortController ? new AbortController() : null, timer = setTimeout(function(){ if(ctrl) ctrl.abort(); }, 45000);
+    fetch(ORDER_URL, {method:'POST', body:fd, signal: ctrl ? ctrl.signal : undefined})
+      .then(function(r){ return r.json().catch(function(){ return {ok:false, error:'Сервер ответил с ошибкой (' + r.status + ').'}; }); })
+      .then(function(j){
+        if(!j || !j.ok) throw new Error((j && j.error) || 'Не получилось отправить заявку.');
+        state.sentId = j.id || 0;
+        $('doneTitle').textContent = state.sentId ? 'Заявка №' + state.sentId + ' принята' : 'Заявка принята';
+        state.step = stepsList().length - 1; renderStep();
+        try{ $('order').scrollIntoView({behavior: still ? 'auto' : 'smooth', block:'start'}); }catch(e){}
+      })
+      .catch(function(err){
+        var t = err && err.name === 'AbortError' ? 'Сервер долго не отвечает.' : (err && err.message) || 'Не получилось отправить заявку.';
+        if(/Failed to fetch|NetworkError|Load failed/i.test(t)) t = 'Нет связи с сервером.';
+        msg.textContent = t + ' Попробуйте ещё раз. Если не выходит, скопируйте заявку кнопкой ниже и пришлите нам.';
+        $('copyFallback').hidden = false;
+      })
+      .then(function(){ clearTimeout(timer); sending = false; btn.removeAttribute('aria-busy'); renderStep(); });
+  }
+
+  function start(saved){
+    if(saved && typeof saved === 'object') for(var k in state) if(k in saved) state[k] = saved[k];
+    sync(); renderLetter(); renderStep();
+    bind('heroName','name'); bind('f-name','name'); bind('f-age','age'); bind('f-praise','praise'); bind('f-wish','wish'); bind('f-gift','gift'); bind('f-parent','parent'); bind('f-contact','contact');
+    $('f-consent').addEventListener('change', function(e){ state.consent = e.target.checked; });
+    document.querySelectorAll('input[name=product]').forEach(function(r){
+      r.addEventListener('change', function(){ state.product = r.value; renderStep(); });
+    });
+    document.querySelectorAll('[data-pick]').forEach(function(a){
+      a.addEventListener('click', function(){ state.product = a.dataset.pick; state.step = 0; sync(); renderStep(); });
+    });
+    document.querySelectorAll('input[name=gender]').forEach(function(r){
+      r.addEventListener('change', function(){ state.gender = r.value; $('e-gender').textContent = ''; renderLetter(); });
+    });
+    $('next').addEventListener('click', function(){
+      var cur = stepsList()[state.step];
+      if(!validate(cur)) return;
+      if(cur === 'contact'){ send(); return; }
+      state.step++; renderStep();
+    });
+    $('again').addEventListener('click', function(){
+      state.name = ''; state.age = ''; state.gender = ''; state.praise = ''; state.wish = ''; state.gift = ''; state.sentId = 0; state.step = 1;
+      $('f-photo').value = ''; $('thumb').hidden = true;
+      sync(); renderLetter(); renderStep(); $('f-name').focus();
+    });
+    $('back').addEventListener('click', function(){ if(state.step>0){ state.step--; renderStep(); } });
+    $('form').addEventListener('submit', function(e){ e.preventDefault(); });
+    $('f-photo').addEventListener('change', function(e){
+      var f = e.target.files[0], img = $('thumb');
+      if(f){ img.src = URL.createObjectURL(f); img.hidden = false; } else { img.hidden = true; }
+    });
+    function copyOrder(msg){
+      var text = summaryText() + '\n\nТекст письма:\n' + letterHtml().replace(/<\/?b>/g, '');
+      try{
+        navigator.clipboard.writeText(text).then(function(){ msg.textContent = 'Скопировано. Вставьте текст в сообщение.'; }, function(){ msg.textContent = 'Не получилось скопировать. Выделите текст заявки вручную.'; });
+      }catch(err){ msg.textContent = 'Не получилось скопировать. Выделите текст заявки вручную.'; }
+    }
+    $('copy').addEventListener('click', function(){ copyOrder($('copyMsg')); });
+    $('copyFallback').addEventListener('click', function(){ copyOrder($('e-send')); });
+    var hot = window.claude && window.claude.hot;
+    if(hot && hot.snapshot) hot.snapshot(function(){ return state; });
+  }
+  var hot = window.claude && window.claude.hot;
+  if(hot && hot.ready) hot.ready(start); else start((hot && hot.data) || {});
+
+  /* снег: три слоя глубины, ветер с порывами, размытые ближние хлопья и редкие кристаллы */
+  var cv = $('snow'), ctx = cv.getContext('2d'), flakes = [], still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var VW = 0, VH = 0, lastT = 0;
+  function sprite(size, draw){ var c = document.createElement('canvas'); c.width = c.height = size; draw(c.getContext('2d'), size); return c; }
+  function soft(core){ return sprite(64, function(g, n){
+    var gr = g.createRadialGradient(n/2, n/2, 0, n/2, n/2, n/2);
+    gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(core, 'rgba(244,248,255,.85)'); gr.addColorStop(1, 'rgba(230,240,255,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, n, n); }); }
+  var SPR = { sharp: soft(0.45), mid: soft(0.22), blur: soft(0.04),
+    crystal: sprite(96, function(g, n){
+      g.translate(n/2, n/2); g.strokeStyle = 'rgba(255,255,255,.95)'; g.lineCap = 'round'; g.shadowColor = 'rgba(200,225,255,.9)'; g.shadowBlur = 4;
+      for(var i=0;i<6;i++){
+        g.save(); g.rotate(i*Math.PI/3); g.lineWidth = 3.2;
+        g.beginPath(); g.moveTo(0, 0); g.lineTo(0, -40); g.stroke(); g.lineWidth = 2.4;
+        [[-16, 9], [-27, 7]].forEach(function(b){ g.beginPath(); g.moveTo(0, b[0]); g.lineTo(-b[1], b[0]-b[1]); g.moveTo(0, b[0]); g.lineTo(b[1], b[0]-b[1]); g.stroke(); });
+        g.restore();
+      }
+    }) };
+  function make(layer, anywhere){
+    var f = {layer:layer, x:Math.random()*(VW+200)-100, y:anywhere ? Math.random()*VH : -20 - Math.random()*60, ph:Math.random()*6.28, tw:Math.random()*6.28};
+    if(layer === 0){ f.r = 0.7 + Math.random()*0.9; f.v = 14 + Math.random()*14; f.a = 0.35 + Math.random()*0.3; f.s = SPR.sharp; f.sw = 6; }
+    else if(layer === 1){ f.r = 1.5 + Math.random()*1.5; f.v = 30 + Math.random()*24; f.a = 0.6 + Math.random()*0.3; f.s = SPR.mid; f.sw = 14; }
+    else if(layer === 2){ f.r = 5 + Math.random()*7; f.v = 60 + Math.random()*40; f.a = 0.14 + Math.random()*0.16; f.s = SPR.blur; f.sw = 26; }
+    else { f.r = 5 + Math.random()*5; f.v = 38 + Math.random()*22; f.a = 0.55 + Math.random()*0.3; f.s = SPR.crystal; f.sw = 22; f.rot = Math.random()*6.28; f.vr = (Math.random()-.5)*1.2; }
+    f.depth = [0.35, 0.7, 1.25, 0.9][layer];
+    return f;
+  }
+  function size(){
+    var d = Math.min(window.devicePixelRatio || 1, 2);
+    VW = window.innerWidth; VH = window.innerHeight;
+    cv.width = VW*d; cv.height = VH*d; ctx.setTransform(d,0,0,d,0,0);
+    var k = VW*VH/100000, plan = [Math.round(k*11), Math.round(k*5), Math.round(k*0.9), Math.round(k*0.7)];
+    flakes = [];
+    plan.forEach(function(n, layer){ for(var i=0;i<n;i++) flakes.push(make(layer, true)); });
+    draw(0);
+  }
+  function draw(t){
+    ctx.clearRect(0, 0, VW, VH);
+    for(var i=0;i<flakes.length;i++){
+      var f = flakes[i], a = f.a*(0.82 + 0.18*Math.sin(f.tw + t*0.0021)), d = f.r*2*(f.s === SPR.sharp ? 2.2 : f.s === SPR.mid ? 2.6 : f.s === SPR.blur ? 2 : 1);
+      ctx.globalAlpha = a;
+      if(f.s === SPR.crystal){
+        ctx.save(); ctx.translate(f.x, f.y); ctx.rotate(f.rot); ctx.scale(1, 0.55 + 0.45*Math.abs(Math.cos(f.ph + t*0.0011)));
+        ctx.drawImage(f.s, -f.r, -f.r, f.r*2, f.r*2); ctx.restore();
+      } else ctx.drawImage(f.s, f.x - d/2, f.y - d/2, d, d);
+    }
+    ctx.globalAlpha = 1;
+  }
+  function tick(now){
+    var dt = Math.min((now - lastT)/1000 || 0.016, 0.05); lastT = now;
+    var wind = 16*Math.sin(now*0.00021) + 9*Math.sin(now*0.00057 + 1.3) + 22*Math.pow(Math.max(0, Math.sin(now*0.00013 + 2)), 6);
+    for(var i=0;i<flakes.length;i++){
+      var f = flakes[i];
+      f.ph += dt*(0.9 + f.depth*0.5);
+      f.y += f.v*dt*(1 + 0.12*Math.sin(f.ph*1.7));
+      f.x += (wind*f.depth + Math.sin(f.ph)*f.sw)*dt;
+      if(f.vr) f.rot += f.vr*dt;
+      if(f.y > VH + 20 || f.x < -120 || f.x > VW + 120){ var nf = make(f.layer, false); if(f.y <= VH + 20){ nf.y = Math.random()*VH; nf.x = f.x < 0 ? VW + 60 : -60; } flakes[i] = nf; }
+    }
+    draw(now); fireStep(now, dt); requestAnimationFrame(tick);
+  }
+  size(); window.addEventListener('resize', size);
+  if(!still) requestAnimationFrame(tick);
+
+  /* новогоднее: гирлянда, лес, таймер по Москве */
+  var NS = 'http://www.w3.org/2000/svg', GCOL = [['#ff6b5e','g0'], ['#ffd27a','g1'], ['#8fd3ff','g2'], ['#9dffb0','g3']];
+  function el(tag, at, par){ var e = document.createElementNS(NS, tag); for(var k in at) e.setAttribute(k, at[k]); if(par) par.appendChild(e); return e; }
+  function glowDefs(svg, pre){
+    var d = el('defs', {}, svg);
+    GCOL.forEach(function(c){ var g = el('radialGradient', {id: pre + c[1]}, d); el('stop', {offset:'0', 'stop-color':c[0], 'stop-opacity':'.95'}, g); el('stop', {offset:'1', 'stop-color':c[0], 'stop-opacity':'0'}, g); });
+  }
+  function buildGarland(){
+    var host = $('garland'); if(!host) return;
+    var W = Math.max(320, window.innerWidth), n = Math.max(2, Math.round(W/170)), seg = W/n, sag = 12, top = 4;
+    host.innerHTML = '';
+    var svg = el('svg', {width:W, height:46, viewBox:'0 0 ' + W + ' 46'}, host); glowDefs(svg, 'gl-');
+    var d = 'M0,' + top; for(var i=0;i<n;i++){ d += ' Q' + (i*seg + seg/2).toFixed(1) + ',' + (top + sag*2) + ' ' + ((i+1)*seg).toFixed(1) + ',' + top; }
+    el('path', {d:d, 'class':'gl-wire'}, svg);
+    var k = 0, per = 4;
+    for(var s2=0;s2<n;s2++) for(var j=0;j<per;j++){
+      var t = (j + 0.5)/per, x0 = s2*seg, x1 = x0 + seg, xm = x0 + seg/2;
+      var x = (1-t)*(1-t)*x0 + 2*(1-t)*t*xm + t*t*x1, y = (1-t)*(1-t)*top + 2*(1-t)*t*(top + sag*2) + t*t*top;
+      var c = GCOL[k % 4], g = el('g', {'class':'gl-bulb p' + (k % 3), transform:'translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ')'}, svg);
+      el('rect', {x:-2.2, y:-1, width:4.4, height:5.5, rx:1, fill:'#2a3558'}, g);
+      el('circle', {cx:0, cy:10, r:15, fill:'url(#gl-' + c[1] + ')', 'class':'glow'}, g);
+      el('ellipse', {cx:0, cy:10, rx:3.6, ry:5.4, fill:c[0], 'class':'glass'}, g);
+      el('ellipse', {cx:-1.1, cy:8, rx:.9, ry:1.6, fill:'#fff', opacity:'.6'}, g);
+      k++;
+    }
+  }
+  function buildForest(){
+    var host = $('forest'); if(!host) return;
+    var W = Math.max(320, host.clientWidth || window.innerWidth), H = 96, r = rng(2027);
+    host.innerHTML = '';
+    var svg = el('svg', {width:W, height:H, viewBox:'0 0 ' + W + ' ' + H}, host); glowDefs(svg, 'fr-');
+    function tree(cx, h, fill, lights){
+      var w = h*0.6, base = H, tiers = 3, g = el('g', {}, svg), li = 0;
+      for(var i=0;i<tiers;i++){
+        var y1 = base - h*(i*0.27), y0 = y1 - h*(0.42), half = (w/2)*(1 - i*0.27);
+        el('path', {d:'M' + (cx - half) + ',' + y1 + ' L' + cx + ',' + y0 + ' L' + (cx + half) + ',' + y1 + ' Z', fill:fill}, g);
+        if(lights){ [[-0.55,0.85],[0.1,0.5],[0.6,0.9]].slice(0, i === 2 ? 1 : 3).forEach(function(p){
+          var c = GCOL[(li++ + Math.floor(cx)) % 4], bx = cx + p[0]*half*0.8, by = y1 - (y1 - y0)*(1 - p[1])*0.55 - 3;
+          var b = el('g', {'class':'p' + (li % 3)}, svg); el('circle', {cx:bx, cy:by, r:9, fill:'url(#fr-' + c[1] + ')', 'class':'glow'}, b); el('circle', {cx:bx, cy:by, r:1.8, fill:c[0]}, b); }); }
+      }
+      el('path', {d:'M' + (cx - 5) + ',' + (base - h*0.82) + ' q5,-5 10,0 q-5,3 -10,0 Z', fill:'#e6eefc', opacity:'.9'}, g);
+    }
+    var x = -10; while(x < W + 20){ tree(x, 34 + r()*30, '#15325f', false); x += 22 + r()*30; }
+    x = 12; while(x < W + 20){ var lit = r() < 0.34; tree(x, 46 + r()*40, '#1c4078', lit); x += 30 + r()*46; }
+  }
+  buildGarland(); buildForest();
+  var gTimer = 0; window.addEventListener('resize', function(){ clearTimeout(gTimer); gTimer = setTimeout(function(){ buildGarland(); buildForest(); }, 160); });
+
+  var MSK = 3*3600*1000;
+  function plural(n, f){ var a = n % 10, b = n % 100; return (a === 1 && b !== 11) ? f[0] : (a >= 2 && a <= 4 && (b < 12 || b > 14)) ? f[1] : f[2]; }
+  function p2(n){ return n < 10 ? '0' + n : '' + n; }
+  var ny = {d:$('nyD'), h:$('nyH'), m:$('nyM'), s:$('nyS'), dl:$('nyDl'), hl:$('nyHl'), ml:$('nyMl'), sl:$('nySl'), chip:$('nyChip'), lead:$('nyLead'), dead:$('nyDeadline')}, lastS = -1;
+  function setTxt(e, v){ if(e && e.textContent !== v){ e.textContent = v; return true; } return false; }
+  function nyTick(){
+    var now = Date.now(), m = new Date(now + MSK), y = m.getUTCFullYear();
+    var greet = m.getUTCMonth() === 0 && m.getUTCDate() === 1;
+    var target = Date.UTC(greet ? y : y + 1, 0, 1) - MSK, diff = greet ? 0 : Math.max(0, target - now);
+    var D = Math.floor(diff/86400000), Hh = Math.floor(diff/3600000) % 24, Mm = Math.floor(diff/60000) % 60, Ss = Math.floor(diff/1000) % 60;
+    setTxt(ny.d, D < 10 ? p2(D) : '' + D); setTxt(ny.h, p2(Hh)); setTxt(ny.m, p2(Mm));
+    if(setTxt(ny.s, p2(Ss)) && !still){ ny.s.classList.remove('tick'); void ny.s.offsetWidth; ny.s.classList.add('tick'); }
+    setTxt(ny.dl, plural(D, ['день','дня','дней'])); setTxt(ny.hl, plural(Hh, ['час','часа','часов'])); setTxt(ny.ml, plural(Mm, ['минута','минуты','минут'])); setTxt(ny.sl, plural(Ss, ['секунда','секунды','секунд']));
+    setTxt(ny.chip, greet ? 'С Новым годом!' : D + ' д ' + p2(Hh) + ':' + p2(Mm) + ':' + p2(Ss));
+    setTxt(ny.lead, greet ? 'С Новым годом! Принимаем заказы на следующий праздник с ноября.' : 'До 1 января ' + (y + 1) + ' года по московскому времени.');
+    var end = Date.UTC(y, 11, 28, 23, 59, 59) - MSK, left = Math.ceil((end - now)/86400000);
+    if(!greet && left > 0 && m.getUTCMonth() >= 10) setTxt(ny.dead, 'Заказы на этот Новый год принимаем до 28 декабря. Осталось ' + left + ' ' + plural(left, ['день','дня','дней']) + '.');
+    else if(!greet && m.getUTCMonth() === 11 && left <= 0) setTxt(ny.dead, 'Приём заказов на этот Новый год закрыт. Заказы на следующий откроем в ноябре.');
+    setTimeout(nyTick, 1000 - (Date.now() % 1000) + 5);
+  }
+  nyTick();
+
+  /* салют на фоне */
+  var shells = [], embers = [], glows = [];
+  var PAL = [['#ffd27a','#fff1c9'], ['#ff6b5e','#ffd0c9'], ['#8fd3ff','#e6f6ff'], ['#9dffb0','#eafff0'], ['#ff9df0','#ffe6fb'], ['#ffffff','#ffd27a']];
+  function fireworks(){
+    if(still || shells.length > 8) return;
+    var now = performance.now(), n = 4 + Math.floor(Math.random()*2);
+    for(var i=0;i<n;i++){
+      var tx = VW*(0.08 + 0.84*((i + Math.random()*0.8)/n)), ty = VH*(0.12 + Math.random()*0.3);
+      shells.push({t0: now + i*150 + Math.random()*120, dur: 420 + Math.random()*180, x0: tx + (Math.random()-.5)*120, tx: tx, ty: ty, pal: PAL[Math.floor(Math.random()*PAL.length)], big: Math.random() < 0.4});
+    }
+  }
+  function explode(sh){
+    var n = sh.big ? 96 : 64, sp = sh.big ? 310 : 235, i, a, v;
+    glows.push({x: sh.tx, y: sh.ty, life: 0, max: 0.35, r: sh.big ? 190 : 140, c: sh.pal[0]});
+    for(i=0;i<n;i++){
+      a = i/n*6.283 + Math.random()*0.08; v = sp*(0.82 + Math.random()*0.28);
+      embers.push({x: sh.tx, y: sh.ty, vx: Math.cos(a)*v, vy: Math.sin(a)*v, life: 0, max: 1.2 + Math.random()*0.6, c: sh.pal[0], w: 2.6});
+    }
+    for(i=0;i<n*0.4;i++){
+      a = Math.random()*6.283; v = sp*(0.25 + Math.random()*0.3);
+      embers.push({x: sh.tx, y: sh.ty, vx: Math.cos(a)*v, vy: Math.sin(a)*v, life: 0, max: 0.9 + Math.random()*0.5, c: sh.pal[1], w: 1.5});
+    }
+  }
+  function fireStep(now, dt){
+    if(!shells.length && !embers.length && !glows.length) return;
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
+    shells = shells.filter(function(sh){
+      var u = (now - sh.t0)/sh.dur; if(u < 0) return true;
+      if(u >= 1){ explode(sh); return false; }
+      var e = 1 - Math.pow(1-u, 2.2), x = sh.x0 + (sh.tx - sh.x0)*e, y = VH + (sh.ty - VH)*e;
+      var e2 = 1 - Math.pow(1-Math.max(0, u-0.06), 2.2), x2 = sh.x0 + (sh.tx - sh.x0)*e2, y2 = VH + (sh.ty - VH)*e2;
+      ctx.strokeStyle = sh.pal[1]; ctx.globalAlpha = 0.8*(1-u*0.5); ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x, y); ctx.stroke();
+      return true;
+    });
+    glows = glows.filter(function(g){
+      g.life += dt; var q = 1 - g.life/g.max; if(q <= 0) return false;
+      var gr = ctx.createRadialGradient(g.x, g.y, 0, g.x, g.y, g.r);
+      gr.addColorStop(0, g.c); gr.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.globalAlpha = 0.35*q; ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(g.x, g.y, g.r, 0, 6.283); ctx.fill();
+      return true;
+    });
+    var drag = Math.pow(0.045, dt);
+    embers = embers.filter(function(p){
+      p.life += dt; var q = 1 - p.life/p.max; if(q <= 0) return false;
+      p.vx *= drag; p.vy = p.vy*drag + 70*dt; p.x += p.vx*dt; p.y += p.vy*dt;
+      var flick = q < 0.35 ? (Math.random() < 0.6 ? 1 : 0.2) : 1;
+      ctx.globalAlpha = Math.min(1, q*1.8)*flick; ctx.strokeStyle = p.c; ctx.lineWidth = p.w;
+      ctx.beginPath(); ctx.moveTo(p.x - p.vx*0.06, p.y - p.vy*0.06); ctx.lineTo(p.x, p.y); ctx.stroke();
+      return true;
+    });
+    ctx.restore();
+  }
+
+  /* снежные шапки: пухлые сугробы на верхушках букв */
+  function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  var heads = Array.prototype.slice.call(document.querySelectorAll('h1, h2'));
+  heads.forEach(function(h){
+    var w = document.createTreeWalker(h, NodeFilter.SHOW_TEXT), nodes = [];
+    while(w.nextNode()) nodes.push(w.currentNode);
+    nodes.forEach(function(n){
+      var frag = document.createDocumentFragment();
+      n.nodeValue.split(/(\s+)/).forEach(function(p){
+        if(!p) return;
+        if(/^\s+$/.test(p)) frag.appendChild(document.createTextNode(p));
+        else { var sp = document.createElement('span'); sp.className = 'sw'; sp.textContent = p; frag.appendChild(sp); }
+      });
+      n.parentNode.replaceChild(frag, n);
+    });
+    var c = document.createElement('canvas'); c.className = 'snowcap'; c.setAttribute('aria-hidden', 'true'); h.appendChild(c);
+  });
+  function paintCap(h, hi){
+    var c = h.querySelector('.snowcap'), hr = h.getBoundingClientRect();
+    if(!hr.width || !hr.height) return;
+    var fs = parseFloat(getComputedStyle(h).fontSize), d = Math.min(window.devicePixelRatio || 1, 2), pad = Math.ceil(fs*0.5);
+    var W = Math.ceil(hr.width + pad*2), H = Math.ceil(hr.height + pad*2), w = Math.round(W*d), hh = Math.round(H*d);
+    c.width = w; c.height = hh; c.style.width = W + 'px'; c.style.height = H + 'px'; c.style.left = -pad + 'px'; c.style.top = -pad + 'px';
+    var m = document.createElement('canvas'); m.width = w; m.height = hh;
+    var g = m.getContext('2d', {willReadFrequently:true}); g.scale(d, d); g.fillStyle = '#000'; g.textBaseline = 'alphabetic';
+    h.querySelectorAll('.sw').forEach(function(sp){
+      var r = sp.getBoundingClientRect(), cs = getComputedStyle(sp);
+      g.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+      var txt = cs.textTransform === 'uppercase' ? sp.textContent.toUpperCase() : sp.textContent;
+      var mt = g.measureText(txt), asc = mt.fontBoundingBoxAscent, desc = mt.fontBoundingBoxDescent;
+      g.fillText(txt, r.left - hr.left + pad, r.top - hr.top + pad + (r.height - (asc + desc))/2 + asc);
+    });
+    var px = g.getImageData(0, 0, w, hh).data, em = fs*d, L = 0.42*em, maxStep = Math.max(2, Math.round(d*1.5));
+    /* верхние кромки, над которыми открытое небо */
+    var segs = [], open = [];
+    for(var x = 0; x < w; x++){
+      var inG = false, lastEnd = -1e9, tops = [];
+      for(var y = 0; y < hh; y++){
+        var on = px[(y*w + x)*4 + 3] > 110;
+        if(on && !inG){ if(y - lastEnd > L) tops.push(y); inG = true; }
+        else if(!on && inG){ inG = false; lastEnd = y; }
+      }
+      var next = [];
+      tops.forEach(function(ty){
+        var sgm = null;
+        for(var i = 0; i < open.length; i++){ var o = open[i]; if(o && Math.abs(o.pts[o.pts.length-1] - ty) <= maxStep + 1){ sgm = o; open[i] = null; break; } }
+        if(!sgm){ sgm = {x0:x, pts:[]}; segs.push(sgm); }
+        sgm.pts.push(ty); next.push(sgm);
+      });
+      open = next;
+    }
+    /* пологие участки: на крутых боках снег не держится */
+    var runs = [], k = Math.max(2, Math.round(em*0.03));
+    segs.forEach(function(sg){
+      var n = sg.pts.length, st = -1;
+      for(var i = 0; i <= n; i++){
+        var flat = false;
+        if(i < n){ var i0 = Math.max(0, i-k), i1 = Math.min(n-1, i+k); flat = Math.abs(sg.pts[i1] - sg.pts[i0])/((i1 - i0) || 1) < 0.85; }
+        if(flat && st < 0) st = i;
+        if(!flat && st >= 0){ runs.push({x0: sg.x0 + st, pts: sg.pts.slice(st, i)}); st = -1; }
+      }
+    });
+    var rnd = rng(1337 + hi*97 + Math.round(fs)), blobs = [], drips = [], R0 = 0.098*em;
+    runs.forEach(function(run){
+      var n = run.pts.length; if(n < em*0.03) return;
+      function yAt(i){ return run.pts[Math.max(0, Math.min(n-1, Math.round(i)))]; }
+      if(n < R0*1.7){ var r1 = Math.max(n*0.66, em*0.045); blobs.push([run.x0 + n/2, yAt(n/2) - r1*0.45, r1]); return; }
+      var i = -R0*0.2, first = true;
+      while(i < n + R0*0.2){
+        var u = Math.max(0, Math.min(1, i/n)), edge = 0.72 + 0.28*Math.sin(Math.PI*u);
+        var r = R0*(0.78 + 0.5*rnd())*edge;
+        blobs.push([run.x0 + i, yAt(i) - r*0.58 + (first ? r*0.12 : 0), r]);
+        first = false; i += r*(0.62 + 0.3*rnd());
+      }
+      if(n > em*0.28 && rnd() < 0.55){ var di = n*(0.15 + 0.7*rnd()), dr = em*(0.04 + 0.012*rnd()); blobs.push([run.x0 + di, yAt(di) + dr*0.5, dr]); blobs.push([run.x0 + di, yAt(di) + dr*1.7, dr*0.72]); }
+    });
+    var ctx2 = c.getContext('2d'); ctx2.clearRect(0, 0, w, hh);
+    function shape(dy, kr){
+      ctx2.beginPath();
+      blobs.forEach(function(b){ ctx2.moveTo(b[0] + b[2]*kr, b[1] + dy); ctx2.arc(b[0], b[1] + dy, b[2]*kr, 0, 6.2832); });
+      drips.forEach(function(q){ var rw = q[3]*kr; ctx2.moveTo(q[0] + rw, q[1] - R0*0.3 + dy); ctx2.arc(q[0], q[1] + q[2] + dy, rw, 0, Math.PI); ctx2.lineTo(q[0] - rw, q[1] - R0*0.3 + dy); ctx2.closePath(); });
+    }
+    ctx2.save(); ctx2.shadowColor = 'rgba(6,14,40,.5)'; ctx2.shadowBlur = em*0.05; ctx2.shadowOffsetY = em*0.03;
+    ctx2.fillStyle = '#a9c2ec'; shape(0, 1); ctx2.fill(); ctx2.restore();
+    ctx2.fillStyle = '#dfeafc'; shape(-em*0.018, 0.96); ctx2.fill();
+    ctx2.fillStyle = '#ffffff'; shape(-em*0.04, 0.88); ctx2.fill();
+  }
+  var capTimer = 0, capsShown = false;
+  function paintCaps(){ heads.forEach(paintCap); }
+  function revealCaps(){ paintCaps(); if(!capsShown){ capsShown = true; document.documentElement.classList.add('caps-on'); } }
+  function queueCaps(){ clearTimeout(capTimer); capTimer = setTimeout(function(){ capsShown ? paintCaps() : revealCaps(); }, 120); }
+  window.addEventListener('resize', queueCaps); window.addEventListener('load', queueCaps);
+  if(window.ResizeObserver){ var capRO = new ResizeObserver(queueCaps); heads.forEach(function(h){ capRO.observe(h); }); }
+  if(document.fonts){
+    document.fonts.addEventListener('loadingdone', queueCaps);
+    var need = ['800 1em "Shantell Sans"'].map(function(f){ return document.fonts.load(f, 'Утром'); });
+    Promise.all(need).then(queueCaps, queueCaps);
+    document.fonts.ready.then(queueCaps);
+  }
+  setTimeout(revealCaps, 3500);
+
+
+  /* Дед Мороз: следит за курсором и стучит посохом */
+  var dm = $('dm'), follow = $('dmFollow'), strike = $('dmStrike'), tip = $('dmTip'), shadow = $('dmShadow'), hint = $('dmHint');
+  var fx = $('fx'), fctx = fx.getContext('2d'), hero = document.querySelector('.hero');
+  var parts = [], rings = [], flashes = [], looping = false;
+  var cur = {x:0, y:0}, target = {x:0, y:0}, lastMove = 0, t0 = performance.now();
+
+  function fxSize(){
+    var r = hero.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
+    fx.width = r.width*d; fx.height = r.height*d; fctx.setTransform(d,0,0,d,0,0);
+  }
+  fxSize(); window.addEventListener('resize', fxSize);
+
+  function clamp(v){ return Math.max(-1, Math.min(1, v)); }
+  function aim(cx, cy){
+    var r = dm.getBoundingClientRect();
+    var mx = r.left + r.width/2, my = r.top + r.height*0.22;
+    target.x = clamp((cx - mx) / (window.innerWidth*0.5));
+    target.y = clamp((cy - my) / (window.innerHeight*0.6));
+    lastMove = performance.now();
+  }
+  window.addEventListener('mousemove', function(e){ aim(e.clientX, e.clientY); }, {passive:true});
+  window.addEventListener('touchmove', function(e){ var t = e.touches[0]; if(t) aim(t.clientX, t.clientY); }, {passive:true});
+
+  function pose(now){
+    var idle = now - lastMove > 2500;
+    var tx = idle ? Math.sin(now/2600)*0.25 : target.x;
+    var ty = idle ? 0 : target.y;
+    var k = still ? 1 : 0.07;
+    cur.x += (tx - cur.x)*k; cur.y += (ty - cur.y)*k;
+    var breathe = still ? 0 : Math.sin((now - t0)/900)*0.006;
+    follow.style.transform =
+      'translateX(' + (cur.x*8).toFixed(2) + 'px) ' +
+      (dm3 ? '' : 'rotateY(' + (cur.x*(cur.x < 0 ? 7 : 16)).toFixed(2) + 'deg) ' + 'rotateX(' + (-cur.y*5).toFixed(2) + 'deg) ') +
+      'rotateZ(' + (cur.x*(dm3 ? 0.8 : 1.6)).toFixed(2) + 'deg) ' +
+      'scale(' + (1 - breathe*0.3).toFixed(4) + ',' + (1 + breathe).toFixed(4) + ')';
+    shadow.style.transform = 'translateX(' + (cur.x*-10).toFixed(2) + 'px) scaleX(' + (1 + Math.abs(cur.x)*0.08).toFixed(3) + ')';
+  }
+
+  function tipPoint(){
+    var h = hero.getBoundingClientRect(), t = tip.getBoundingClientRect();
+    if(dm3){
+      var v = dm3.tip.clone().applyMatrix4(dm3.group.matrixWorld).project(dm3.cam), c = dm3.canvas.getBoundingClientRect();
+      return {x: c.left + (v.x*0.5 + 0.5)*c.width - h.left, y: t.top - h.top};
+    }
+    return {x: t.left - h.left, y: t.top - h.top};
+  }
+
+  /* объёмный Дед Мороз: рельеф по карте глубины */
+  var dm3 = null, smile = 0, smileUntil = 0;
+  (function init3D(){
+    if(!window.THREE) return;
+    var img = strike.querySelector('img'), canvas = document.createElement('canvas'), renderer;
+    canvas.className = 'dm-3d';
+    try{ renderer = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true, premultipliedAlpha:true}); }catch(e){ return; }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setClearColor(0x000000, 0);
+    var scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(22, 1, 0.1, 50);
+    cam.position.set(0, 0.03, 5.607);
+    var PW = 2*496/1080, STR = 0.30, left = 4, failed = false;
+    var loader = new THREE.TextureLoader();
+    function fail(){ failed = true; }
+    function done(){ if(--left === 0 && !failed) build(); }
+    function tex(src, pre){
+      var t = loader.load(src, done, undefined, fail);
+      t.premultiplyAlpha = !!pre; t.minFilter = THREE.LinearFilter; t.generateMipmaps = false; return t;
+    }
+    var tBody = tex('ded-body.webp', 1), tCuff = tex('ded-cuff.webp', 1), tStaff = tex('ded-staff.webp', 1), dep = tex('ded-moroz-depth.png', 0);
+    function build(){
+      var shared = {uLight:{value:new THREE.Vector3(-0.3,0.4,1)}, uFlash:{value:0}};
+      var geo = new THREE.PlaneGeometry(PW, 2, 124, 270), group = new THREE.Group();
+      function layer(map, ch, zoff, order){
+        var mat = new THREE.ShaderMaterial({
+          transparent:true, premultipliedAlpha:true, depthTest:false, depthWrite:false,
+          uniforms:{uMap:{value:map}, uDepth:{value:dep}, uCh:{value:ch}, uStr:{value:STR}, uZ:{value:zoff},
+            uMove:{value:new THREE.Vector3(0,0,0)}, uPivot:{value:new THREE.Vector2((0.27-0.5)*PW, 0.36)},
+            uTexel:{value:new THREE.Vector2(1/372, 1/810)}, uSmile:{value:0}, uLight:shared.uLight, uFlash:shared.uFlash},
+          vertexShader:'uniform sampler2D uDepth;uniform vec2 uCh;uniform float uStr;uniform float uZ;uniform vec3 uMove;uniform vec2 uPivot;varying vec2 vUv;void main(){vUv=uv;float d=dot(texture2D(uDepth,uv).rg,uCh);vec3 p=position;p.z+=(pow(d,0.85)-0.45)*uStr+uZ;vec2 q=p.xy-uPivot;float c=cos(uMove.z),s=sin(uMove.z);p.xy=uPivot+vec2(c*q.x-s*q.y,s*q.x+c*q.y)+uMove.xy;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);}',
+          fragmentShader:'uniform sampler2D uMap;uniform sampler2D uDepth;uniform vec2 uCh;uniform vec2 uTexel;uniform vec3 uLight;uniform float uFlash;uniform float uSmile;varying vec2 vUv;float dp(vec2 u){return dot(texture2D(uDepth,u).rg,uCh);}vec2 pull(vec2 p,vec2 at,vec2 mv,float sg){vec2 d=p-at;return mv*exp(-dot(d,d)/(2.0*sg*sg));}void main(){vec2 uv=vUv;if(uSmile>0.001){vec2 p=vec2(vUv.x*496.0,(1.0-vUv.y)*1080.0);vec2 m=vec2(0.0);m+=pull(p,vec2(277.0,181.0),vec2(-2.6,-6.2),8.0);m+=pull(p,vec2(302.0,189.0),vec2(5.2,-4.4),8.0);m+=pull(p,vec2(290.0,189.0),vec2(-0.9,2.6),5.0);m+=pull(p,vec2(269.0,160.0),vec2(1.0,-3.4),11.0);m+=pull(p,vec2(317.0,175.0),vec2(1.4,-3.2),11.0);m+=pull(p,vec2(288.0,140.0),vec2(0.6,-1.9),5.0);m+=pull(p,vec2(322.0,155.0),vec2(0.6,-1.9),5.0);uv-=vec2(m.x/496.0,-m.y/1080.0)*uSmile;}vec4 c=texture2D(uMap,uv);if(c.a<0.02)discard;float dx=dp(vUv+vec2(uTexel.x*2.0,0.0))-dp(vUv-vec2(uTexel.x*2.0,0.0));float dy=dp(vUv+vec2(0.0,uTexel.y*2.0))-dp(vUv-vec2(0.0,uTexel.y*2.0));vec3 n=normalize(vec3(-dx*5.0,-dy*5.0,1.0));vec3 L=normalize(uLight);float l=dot(n,L)-L.z;vec3 rgb=c.rgb*(1.0+0.6*l);vec2 fp=(vUv-vec2(0.218,0.0))*vec2(1.0,2.2);float f=uFlash*exp(-length(fp)*3.2);rgb+=c.rgb*vec3(1.0,0.8,0.45)*f*1.1;gl_FragColor=vec4(rgb,c.a);}'
+        });
+        var mesh = new THREE.Mesh(geo, mat); mesh.renderOrder = order; group.add(mesh); return mat;
+      }
+      var mBody = layer(tBody, new THREE.Vector2(0,1), 0, 1);
+      var mCuff = layer(tCuff, new THREE.Vector2(1,0), 0.004, 2);
+      var mStaff = layer(tStaff, new THREE.Vector2(1,0), 0.008, 3);
+      scene.add(group);
+      function fit(){
+        var w = canvas.clientWidth, h = canvas.clientHeight; if(!w || !h) return;
+        renderer.setSize(w, h, false); cam.aspect = w/h; cam.updateProjectionMatrix();
+      }
+      strike.insertBefore(canvas, strike.firstChild); fit(); window.addEventListener('resize', fit);
+      strike.classList.add('is3d');
+      dm3 = {group:group, cam:cam, canvas:canvas, u:shared, body:mBody, cuff:mCuff, staff:mStaff, renderer:renderer, scene:scene,
+             tip:new THREE.Vector3((0.218-0.5)*PW, -1, (Math.pow(0.9,0.85)-0.45)*STR)};
+    }
+  })();
+  function render3D(){
+    if(!dm3) return;
+    dm3.group.rotation.y = cur.x*(cur.x < 0 ? 0.16 : 0.45); dm3.group.rotation.x = cur.y*0.09;
+    dm3.u.uLight.value.set(-0.25 + cur.x*0.9, 0.45 - cur.y*0.3, 1);
+    dm3.u.uFlash.value *= 0.93;
+    smile += ((performance.now() < smileUntil ? 1 : 0) - smile) * (performance.now() < smileUntil ? 0.14 : 0.06);
+    dm3.body.uniforms.uSmile.value = smile;
+    dm3.renderer.render(dm3.scene, dm3.cam);
+  }
+
+  function burst(){
+    var p = tipPoint(), i, a, s;
+    var many = still ? 0.4 : 1;
+    flashes.push({x:p.x, y:p.y, life:0, max:16});
+    if(dm3) dm3.u.uFlash.value = 1;
+    fireworks();
+    rings.push({x:p.x, y:p.y, life:0, max:34, r:150});
+    rings.push({x:p.x, y:p.y, life:-6, max:40, r:220});
+    for(i=0;i<34*many;i++){
+      a = -Math.PI*(0.08 + Math.random()*0.84); s = 3 + Math.random()*7;
+      parts.push({k:'spark', x:p.x, y:p.y-2, vx:Math.cos(a)*s, vy:Math.sin(a)*s, g:0.22, life:0, max:36 + Math.random()*34,
+        c: ['#ffd27a','#fff3d6','#bfe3ff','#ffb347'][i%4], w:1 + Math.random()*1.4});
+    }
+    for(i=0;i<8*many;i++){
+      a = -Math.PI*(0.15 + Math.random()*0.7); s = 2 + Math.random()*4;
+      parts.push({k:'star', x:p.x, y:p.y-4, vx:Math.cos(a)*s, vy:Math.sin(a)*s, g:0.05, drag:0.96, life:0, max:60 + Math.random()*40,
+        size:5 + Math.random()*6, rot:Math.random()*6.28, vr:(Math.random()-.5)*0.2});
+    }
+    for(i=0;i<60*many;i++){
+      a = -Math.PI*(0.05 + Math.random()*0.9); s = 1 + Math.random()*5.5;
+      parts.push({k:'snow', x:p.x + (Math.random()-.5)*20, y:p.y-4, vx:Math.cos(a)*s, vy:Math.sin(a)*s - 1, g:0.035, drag:0.975, life:0,
+        max:160 + Math.random()*120, r:1 + Math.random()*2.6, w:Math.random()*6.28});
+    }
+    if(!looping){ looping = true; requestAnimationFrame(fxTick); }
+  }
+
+  function star(x, y, size, rot, alpha){
+    fctx.save(); fctx.translate(x, y); fctx.rotate(rot); fctx.globalAlpha = alpha;
+    fctx.fillStyle = '#fff6dc'; fctx.shadowColor = '#ffd27a'; fctx.shadowBlur = 12;
+    fctx.beginPath();
+    for(var i=0;i<8;i++){ var r = i%2 ? size*0.22 : size; var an = i*Math.PI/4; fctx.lineTo(Math.cos(an)*r, Math.sin(an)*r); }
+    fctx.closePath(); fctx.fill(); fctx.restore();
+  }
+
+  function fxTick(){
+    var r = hero.getBoundingClientRect();
+    fctx.clearRect(0,0,r.width,r.height);
+    fctx.globalCompositeOperation = 'lighter';
+    flashes = flashes.filter(function(f){
+      f.life++; var q = 1 - f.life/f.max, rad = 30 + f.life*7;
+      var g = fctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, rad);
+      g.addColorStop(0, 'rgba(255,230,170,' + (0.75*q) + ')'); g.addColorStop(1, 'rgba(255,200,110,0)');
+      fctx.fillStyle = g; fctx.beginPath(); fctx.arc(f.x, f.y, rad, 0, 6.28); fctx.fill();
+      return f.life < f.max;
+    });
+    rings = rings.filter(function(o){
+      o.life++; if(o.life < 0) return true;
+      var q = o.life/o.max, e = 1 - Math.pow(1-q, 3);
+      fctx.strokeStyle = 'rgba(200,230,255,' + (0.6*(1-q)) + ')'; fctx.lineWidth = 2.5*(1-q) + 0.5;
+      fctx.beginPath(); fctx.ellipse(o.x, o.y, o.r*e, o.r*e*0.18, 0, 0, 6.28); fctx.stroke();
+      return o.life < o.max;
+    });
+    parts = parts.filter(function(p){
+      p.life++; var q = 1 - p.life/p.max;
+      if(p.drag){ p.vx *= p.drag; p.vy *= p.drag; }
+      p.vy += p.g;
+      if(p.k === 'spark'){
+        var px = p.x, py = p.y; p.x += p.vx; p.y += p.vy; p.vx *= 0.985;
+        fctx.strokeStyle = p.c; fctx.globalAlpha = Math.max(0, q); fctx.lineWidth = p.w; fctx.lineCap = 'round';
+        fctx.beginPath(); fctx.moveTo(px - p.vx*1.5, py - p.vy*1.5); fctx.lineTo(p.x, p.y); fctx.stroke();
+      } else if(p.k === 'star'){
+        p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+        star(p.x, p.y, p.size*(0.6 + 0.4*Math.sin(p.life*0.3)), p.rot, Math.max(0, q));
+      } else {
+        p.w += 0.05; p.x += p.vx + Math.sin(p.w)*0.4; p.y += Math.min(p.vy, 1.1);
+        fctx.globalAlpha = Math.max(0, Math.min(1, q*1.6)) * 0.9; fctx.fillStyle = '#f4f8ff';
+        fctx.beginPath(); fctx.arc(p.x, p.y, p.r, 0, 6.28); fctx.fill();
+      }
+      fctx.globalAlpha = 1;
+      return p.life < p.max && p.y < r.height + 10;
+    });
+    fctx.globalCompositeOperation = 'source-over';
+    if(parts.length || rings.length || flashes.length) requestAnimationFrame(fxTick);
+    else { looping = false; fctx.clearRect(0,0,r.width,r.height); }
+  }
+
+  var audio = null;
+  function chime(){
+    try{
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      var now = audio.currentTime, o, g;
+      o = audio.createOscillator(); g = audio.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(110, now); o.frequency.exponentialRampToValueAtTime(45, now + 0.25);
+      g.gain.setValueAtTime(0.18, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      o.connect(g).connect(audio.destination); o.start(now); o.stop(now + 0.32);
+      [1568, 2093, 2637, 3136].forEach(function(f, i){
+        var oo = audio.createOscillator(), gg = audio.createGain(), st = now + 0.04 + i*0.06;
+        oo.type = 'triangle'; oo.frequency.value = f;
+        gg.gain.setValueAtTime(0.0001, st); gg.gain.exponentialRampToValueAtTime(0.035, st + 0.01); gg.gain.exponentialRampToValueAtTime(0.0001, st + 0.9);
+        oo.connect(gg).connect(audio.destination); oo.start(st); oo.stop(st + 0.95);
+      });
+    }catch(err){}
+  }
+
+  /* удар: поднимается только рука с посохом */
+  var imgCuff = $('dmCuff'), imgStaff = $('dmStaff'), strikeT0 = 0, fired = false;
+  var RAISE = 260, HOLD = 60, SLAM = 80, REBOUND = 200, HIT = RAISE + HOLD + SLAM;
+  function setLift(v){
+    if(dm3){
+      dm3.staff.uniforms.uMove.value.set(0, v*0.075, -v*0.028);
+      dm3.cuff.uniforms.uMove.value.set(0, v*0.052, -v*0.012);
+    } else {
+      imgStaff.style.transform = 'translateY(' + (-v*3.75).toFixed(3) + '%) rotate(' + (v*1.6).toFixed(3) + 'deg)';
+      imgCuff.style.transform = 'translateY(' + (-v*2.6).toFixed(3) + '%) rotate(' + (v*0.7).toFixed(3) + 'deg)';
+    }
+  }
+  function strikeStep(now){
+    if(!strikeT0) return;
+    var t = now - strikeT0, v, u;
+    if(t < RAISE){ u = t/RAISE; v = 1 - Math.pow(1-u, 3); }
+    else if(t < RAISE + HOLD){ v = 1; }
+    else if(t < HIT){ u = (t - RAISE - HOLD)/SLAM; v = 1 - u*u; }
+    else if(t < HIT + REBOUND){ u = (t - HIT)/REBOUND; v = 0.16*Math.sin(Math.PI*u)*(1-u); }
+    else { v = 0; strikeT0 = 0; }
+    if(t >= HIT && !fired){ fired = true; burst(); chime(); }
+    setLift(v);
+  }
+  dm.addEventListener('click', function(){
+    hint.classList.add('gone');
+    if(strikeT0) return;
+    if(still){ smileUntil = performance.now() + 1500; burst(); chime(); return; }
+    fired = false; strikeT0 = performance.now(); smileUntil = strikeT0 + HIT + 1300;
+  });
+
+  function loop(now){ pose(now); strikeStep(now); render3D(); requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
