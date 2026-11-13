@@ -128,6 +128,15 @@ nav .ny-chip{color:var(--frost)}
 @media (max-width:640px){.ny-chip{display:none}.bar{flex-wrap:nowrap;gap:10px}.logo{font-size:1.02rem;gap:8px;min-width:0}nav .btn{padding:8px 14px;font-size:.88rem;white-space:nowrap}}
 @media (prefers-reduced-motion:reduce){.gl-bulb .glow,.gl-bulb .glass,.b,.tick,.star,.forest .glow{animation:none}.gl-bulb .glow,.forest .glow{opacity:.8}}
 
+/* образец письма */
+.sample{padding-top:0}
+.sample-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center}
+.sample-pic{margin:0;transform:rotate(-1.2deg)}
+.sample-pic img{display:block;width:100%;height:auto;border-radius:3px;box-shadow:0 30px 70px -24px rgba(0,0,0,.8),0 0 90px -30px rgba(255,196,107,.35)}
+.sample-text{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.sample-text .checks{margin:0}
+@media (max-width:900px){.sample-grid{grid-template-columns:1fr;gap:28px}.sample-pic{max-width:440px;margin:0 auto}}
+
 /* музыка */
 .music{position:fixed;right:16px;bottom:16px;z-index:40;display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 16px 0 14px;border-radius:999px;border:1px solid rgba(255,196,107,.45);background:rgba(13,24,54,.9);color:var(--frost);font:500 .9rem var(--body);cursor:pointer;box-shadow:0 8px 24px -10px rgba(0,0,0,.7);-webkit-tap-highlight-color:transparent;transition:border-color .2s,background .2s}
 .music:hover{border-color:var(--lamp)}
@@ -162,10 +171,13 @@ main,footer{position:relative;z-index:1}
 .facts li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--lamp);margin-right:8px;vertical-align:middle}
 
 /* письмо */
-.letter{position:relative;background:var(--paper);color:var(--paper-ink);padding:34px 32px 44px;border-radius:4px;transform:rotate(1.6deg);box-shadow:0 30px 70px -20px rgba(0,0,0,.7), 0 0 90px -20px rgba(255,196,107,.35);background-image:repeating-linear-gradient(transparent 0 33px, rgba(59,44,28,.09) 33px 34px)}
+.letter{position:relative;background:var(--paper);color:var(--paper-ink);padding:34px 32px 44px;border-radius:4px;transform:rotate(1.6deg);box-shadow:0 30px 70px -20px rgba(0,0,0,.7), 0 0 90px -20px rgba(255,196,107,.35);background-image:radial-gradient(ellipse 80% 70% at 50% 40%, #fdf8ec, #f3e6c9 70%, #e8d6af)}
 .letter .from{font:500 .72rem var(--body);letter-spacing:.16em;text-transform:uppercase;opacity:.65;margin-bottom:10px}
 .letter-body{font-family:var(--hand);font-size:1.42rem;line-height:34px;white-space:pre-line;overflow-wrap:anywhere}
 .letter-body b{font-weight:400;color:var(--seal)}
+.letter-body .greet{font-size:1.12em}
+.letter-body .sign{display:block;text-align:right;margin-top:4px}
+.hero-letter .letter-body{max-height:330px;overflow:hidden;-webkit-mask-image:linear-gradient(#000 78%,transparent);mask-image:linear-gradient(#000 78%,transparent)}
 .seal{position:absolute;right:22px;bottom:-22px;width:74px;height:74px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #e2584c, var(--seal) 60%, #8f2019);display:grid;place-items:center;color:#ffe9d6;font:400 .95rem var(--display);transform:rotate(-12deg);box-shadow:0 6px 14px rgba(0,0,0,.4)}
 
 /* Дед Мороз */
@@ -187,7 +199,6 @@ main,footer{position:relative;z-index:1}
 .dm-hint.gone{opacity:0}
 .hero-letter{position:relative;flex:1 1 0;min-width:0;max-width:300px;margin-bottom:56px;z-index:2;padding:24px 20px 38px;transform:rotate(2deg)}
 .hero-letter .letter-body{font-size:1.12rem;line-height:30px}
-.hero-letter{background-image:repeating-linear-gradient(transparent 0 29px, rgba(59,44,28,.09) 29px 30px)}
 .hero-letter .seal{width:62px;height:62px;bottom:-18px}
 
 /* продукты */
@@ -428,6 +439,26 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
   </div>
 </section>
 
+<section class="sample" id="sample">
+  <div class="wrap sample-grid">
+    <figure class="sample-pic">
+      <img src="letter/sample.jpg" width="860" height="1217" alt="Образец письма от Деда Мороза для девочки Маши: шапка резиденции с гербом, рукописный текст, портрет Деда Мороза в золотом медальоне, подпись и сургучная печать" loading="lazy" decoding="async">
+    </figure>
+    <div class="sample-text">
+      <h2>Так выглядит письмо</h2>
+      <p class="lead">Это образец для девочки Маши, 5 лет. Ваше письмо будет таким же, только с именем, делами и мечтой вашего ребёнка.</p>
+      <ul class="checks">
+        <li>Бланк резиденции Деда Мороза с золотым гербом и рамкой</li>
+        <li>Тёплый текст от первого лица: про ночной визит, похвалу за настоящие дела и подарок под ёлкой</li>
+        <li>Портрет Деда Мороза, его подпись и сургучная печать</li>
+        <li>Номер письма, как у настоящей почты</li>
+        <li>PDF в качестве для печати на листе A4</li>
+      </ul>
+      <a class="btn btn-main" href="#order">Собрать такое письмо</a>
+    </div>
+  </div>
+</section>
+
 <section id="how" style="padding-top:0">
   <div class="wrap">
     <h2>От анкеты до утра с чудом</h2>
@@ -628,17 +659,23 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
     return n + ' ' + w;
   }
   /* тот же текст, что в PDF и в Telegram (supabase/functions/dm-order/letter.js) */
+  /* тот же текст, что в PDF и в Telegram (supabase/functions/dm-order/letter.js) */
   function letterHtml(){
-    var girl = state.gender === 'f';
-    var name = state.name.trim() || (girl ? 'моя юная подруга' : 'мой юный друг');
-    var praise = state.praise.trim() || (girl ? 'очень старалась и радовала маму с папой' : 'очень старался и радовал маму с папой');
-    var out = 'Здравствуй, <b>' + esc(name) + '</b>!\n';
-    out += 'Этой ночью я заглянул к тебе. Ты крепко спишь, и я не стал тебя будить.\n';
-    if(years(state.age)) out += 'Тебе уже <b>' + years(state.age) + '</b>' + (girl ? ', совсем большая девочка.' : ', совсем большой человек.') + '\n';
-    out += 'Мне рассказали, что в этом году ты <b>' + esc(praise) + '</b>. Я тобой горжусь.\n';
-    if(state.wish.trim()) out += 'В новом году постарайся <b>' + esc(state.wish.trim()) + '</b>. У тебя получится.\n';
-    out += state.gift.trim() ? 'А про подарок я помню: <b>' + esc(state.gift.trim()) + '</b>. Жди под ёлкой.\n' : 'А подарок уже лежит в моих санях. Жди под ёлкой.\n';
-    out += 'Твой Дед Мороз';
+    var girl = state.gender === 'f', g = function(f, m){ return girl ? f : m; };
+    var clean = function(v){ return String(v || '').replace(/\s+/g, ' ').trim().replace(/[.!…]+$/, ''); };
+    var name = clean(state.name); if(name) name = name[0].toUpperCase() + name.slice(1);
+    var praise = clean(state.praise) || g('очень старалась и радовала родных', 'очень старался и радовал родных');
+    var wish = clean(state.wish), gift = clean(state.gift), n = parseInt(state.age, 10), age = years(n);
+    var b = function(v){ return '<b>' + esc(v) + '</b>'; };
+    var out = '<span class="greet">' + (name ? 'Здравствуй, ' + g('дорогая', 'дорогой') + ' ' + b(name) + '!' : g('Здравствуй, моя юная подруга!', 'Здравствуй, мой юный друг!')) + '</span>\n';
+    out += 'Пишу тебе из Великого Устюга. За окном метёт метель, а в моей мастерской помощники заворачивают последние подарки и спорят, у кого бантик красивее.\n';
+    out += 'Этой ночью я заглянул к тебе. Ты так сладко ' + g('спала', 'спал') + ', что я не стал тебя будить и ушёл на цыпочках, чтобы не скрипнула ни одна половица.\n';
+    var big = n <= 7 ? g('совсем большая девочка', 'совсем большой мальчик') : g('совсем взрослая', 'совсем взрослый');
+    out += (age ? 'Тебе уже ' + b(age) + ' — ' + big + '! ' : '') + 'Мои помощники-снегири весь год присматривали за тобой и рассказали, что ты ' + b(praise) + '. Я очень тобой горжусь!\n';
+    if(wish) out += 'В новом году у меня к тебе маленькая просьба: постарайся ' + b(wish) + '. Я верю, что у тебя обязательно получится.\n';
+    out += gift ? 'А про твоё желание я помню: ' + b(gift) + '. Загляни утром под ёлку!\n' : 'А твой подарок уже ждёт тебя под ёлкой.\n';
+    out += 'Расти ' + g('доброй', 'добрым') + ', береги родных и всегда верь в чудеса.';
+    out += '<span class="sign">С любовью, твой Дед Мороз</span>';
     return out;
   }
   function renderLetter(){

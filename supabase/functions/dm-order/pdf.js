@@ -1,177 +1,156 @@
-// PDF-письмо от Деда Мороза, A4. Библиотеки передаются снаружи, поэтому код работает и в Deno, и в Node.
+// PDF-письмо от Деда Мороза, A4. Фон (бумага, рамка, герб, портрет, подпись, печать) — готовая картинка
+// letter/bg-a4.jpg, сюда накладывается только текст под конкретного ребёнка.
+// Библиотеки передаются снаружи, поэтому код работает и в Deno, и в Node.
 import { buildLetter } from "./letter.js";
 
-const C = {
-  paper: [0.988, 0.962, 0.905],
-  paperEdge: [0.955, 0.91, 0.82],
-  frost: [0.42, 0.56, 0.8],
-  frostPale: [0.74, 0.82, 0.94],
-  ink: [0.12, 0.2, 0.43],
-  red: [0.69, 0.14, 0.11],
-  rule: [0.62, 0.72, 0.88],
-  muted: [0.42, 0.45, 0.55],
-  wax: [0.73, 0.17, 0.13],
-  waxDark: [0.5, 0.09, 0.07],
-  waxText: [1, 0.9, 0.82],
-};
+const W = 595.28, H = 841.89, K = W / 794; // пункты PDF на 1 px макета фона (794×1123)
+const px = (x) => x * K, py = (y) => H - y * K;
 
-function rng(seed) {
-  return () => {
-    seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+const INK = [0.106, 0.165, 0.369];      // тёмно-синие чернила
+const INK_SOFT = [0.30, 0.34, 0.50];
+const GOLD = [0.54, 0.39, 0.13];
 
-function ruDate(year) {
-  return `31 декабря ${year} года`;
-}
+const MONTHS = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
 
 export async function makeLetterPdf(lib, fonts, data, opts = {}) {
-  const { PDFDocument, rgb, degrees, fontkit, setCharacterSpacing, pushGraphicsState, popGraphicsState } = lib;
+  const { PDFDocument, rgb, fontkit } = lib;
   const col = (a) => rgb(a[0], a[1], a[2]);
   const doc = await PDFDocument.create();
   doc.registerFontkit(fontkit);
-  doc.setTitle("Письмо от Деда Мороза");
+  const name = String(data.name || "").trim();
+  doc.setTitle(name ? `Письмо от Деда Мороза для ${name}` : "Письмо от Деда Мороза");
   doc.setAuthor("Дед Мороз");
   doc.setCreator("Дед Мороз заходил");
-  const script = await doc.embedFont(fonts.script, { subset: true });
-  const sans = await doc.embedFont(fonts.sans, { subset: true });
-  const sansBold = await doc.embedFont(fonts.sansBold, { subset: true });
-  const serifBold = await doc.embedFont(fonts.serifBold, { subset: true });
+  const hand = await doc.embedFont(fonts.hand, { subset: true });
+  const callig = await doc.embedFont(fonts.callig, { subset: true });
+  // pdf-lib не применяет кернинг шрифта, поэтому пары букв выравниваем сами по данным из шрифта
+  const typo = new Map([[hand, kerner(fontkit, fonts.hand, true)], [callig, kerner(fontkit, fonts.callig, false)]]);
+  const textW = (font, str, size) => typo.has(font) ? typo.get(font).width(font, str, size) : font.widthOfTextAtSize(str, size);
+  const drawT = (str, o) => typo.has(o.font) ? typo.get(o.font).draw(page, str, o) : page.drawText(str, o);
+  const serif = await doc.embedFont(fonts.serif, { subset: true });
 
-  const W = 595.28, H = 841.89;
   const page = doc.addPage([W, H]);
-  const year = opts.year || new Date().getFullYear();
-  const r = rng(String(data.name || "").length * 131 + (parseInt(data.age, 10) || 3) * 17 + 7);
-
-  // бумага с чуть потемневшим краем
-  page.drawRectangle({ x: 0, y: 0, width: W, height: H, color: col(C.paperEdge) });
-  page.drawRectangle({ x: 10, y: 10, width: W - 20, height: H - 20, color: col(C.paper) });
-
-  // морозная рамка: двойная линия
-  const inset = 30;
-  page.drawRectangle({ x: inset, y: inset, width: W - inset * 2, height: H - inset * 2, borderColor: col(C.frost), borderWidth: 1.4 });
-  page.drawRectangle({ x: inset + 5, y: inset + 5, width: W - (inset + 5) * 2, height: H - (inset + 5) * 2, borderColor: col(C.frostPale), borderWidth: 0.7 });
-
-  function flake(cx, cy, s, color, w = 0.9) {
-    for (let i = 0; i < 6; i++) {
-      const a = (i * Math.PI) / 3 + Math.PI / 2;
-      const ex = cx + Math.cos(a) * s, ey = cy + Math.sin(a) * s;
-      page.drawLine({ start: { x: cx, y: cy }, end: { x: ex, y: ey }, thickness: w, color, lineCap: 1 });
-      for (const k of [0.45, 0.72]) {
-        const bx = cx + Math.cos(a) * s * k, by = cy + Math.sin(a) * s * k, bl = s * (k < 0.5 ? 0.3 : 0.22);
-        for (const sgn of [-1, 1]) {
-          const b = a + sgn * 0.75;
-          page.drawLine({ start: { x: bx, y: by }, end: { x: bx + Math.cos(b) * bl, y: by + Math.sin(b) * bl }, thickness: w * 0.85, color, lineCap: 1 });
-        }
-      }
-    }
-  }
-  // уголки рамки
-  for (const [x, y] of [[inset, inset], [W - inset, inset], [inset, H - inset], [W - inset, H - inset]]) {
-    page.drawCircle({ x, y, size: 15, color: col(C.paper) });
-    flake(x, y, 12, col(C.frost), 1.1);
-  }
-  // редкие снежинки по полям
-  for (let i = 0; i < 16; i++) {
-    const side = i % 4, t = 0.08 + r() * 0.84, off = 10 + r() * 12;
-    let x, y;
-    if (side === 0) { x = inset + off + 6; y = H * t; }
-    else if (side === 1) { x = W - inset - off - 6; y = H * t; }
-    else if (side === 2) { x = W * t; y = H - inset - off - 4; }
-    else { x = W * t; y = inset + off + 4; }
-    if (side === 2 && x > 120 && x < W - 120) continue;
-    flake(x, y, 3 + r() * 5, col(C.frostPale), 0.7);
+  if (fonts.bg) {
+    const img = await doc.embedJpg(fonts.bg);
+    page.drawImage(img, { x: 0, y: 0, width: W, height: H });
+  } else {
+    page.drawRectangle({ x: 0, y: 0, width: W, height: H, color: rgb(0.98, 0.95, 0.89) });
   }
 
-  // шапка письма
-  const head = "ВЕЛИКИЙ УСТЮГ · ВОТЧИНА ДЕДА МОРОЗА";
-  const hs = 8.6, sp = 1.6;
-  const hw = sans.widthOfTextAtSize(head, hs) + sp * (head.length - 1);
-  page.pushOperators(pushGraphicsState(), setCharacterSpacing(sp));
-  page.drawText(head, { x: (W - hw) / 2, y: H - 86, size: hs, font: sansBold, color: col(C.frost) });
-  page.pushOperators(popGraphicsState());
-  const lineY = H - 100;
-  page.drawLine({ start: { x: W / 2 - 120, y: lineY }, end: { x: W / 2 - 14, y: lineY }, thickness: 0.6, color: col(C.frostPale) });
-  page.drawLine({ start: { x: W / 2 + 14, y: lineY }, end: { x: W / 2 + 120, y: lineY }, thickness: 0.6, color: col(C.frostPale) });
-  flake(W / 2, lineY, 6, col(C.frost), 0.8);
+  // зона текста на фоне: x 104…690 px, y 250…842 px
+  const left = px(104), right = px(690), maxW = right - left;
+  const top = py(252), bottom = py(842);
 
-  const dateStr = ruDate(year);
-  const ds = 17;
-  page.drawText(dateStr, { x: W - 78 - script.widthOfTextAtSize(dateStr, ds), y: H - 140, size: ds, font: script, color: col(C.muted) });
+  // дата
+  const d = opts.date || new Date(Date.UTC(opts.year || new Date().getUTCFullYear(), 11, 31));
+  const dateStr = `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()} года`;
 
-  // текст письма с переносами; вписанное родителями выделено красным
   const letter = buildLetter(data);
-  const left = 78, right = W - 78, maxW = right - left, top = H - 190, bottomLimit = 250;
-  function layout(size) {
-    const lh = size * 1.55, gap = size * 0.35;
+  const greet = letter.greeting.map((r) => r.t).join("");
+
+  function wrap(font, size, runs, indent) {
+    const words = runs.map((r) => r.t).join("").split(/\s+/).filter(Boolean);
     const lines = [];
-    for (const para of letter.paragraphs) {
-      const words = [];
-      for (const run of para) for (const part of run.t.split(/(\s+)/)) if (part) words.push({ t: part, em: !!run.em, space: /^\s+$/.test(part) });
-      let line = [], w = 0;
-      for (const wd of words) {
-        const ww = script.widthOfTextAtSize(wd.space ? " " : wd.t, size);
-        if (wd.space) { if (line.length) { line.push({ t: " ", em: wd.em, w: ww }); w += ww; } continue; }
-        if (w + ww > maxW && line.length) {
-          while (line.length && line[line.length - 1].t === " ") w -= line.pop().w;
-          lines.push({ runs: line, gapAfter: 0 }); line = []; w = 0;
-        }
-        line.push({ t: wd.t, em: wd.em, w: ww }); w += ww;
-      }
-      while (line.length && line[line.length - 1].t === " ") line.pop();
-      if (line.length) lines.push({ runs: line, gapAfter: gap });
+    let line = "", w = 0, first = true;
+    for (const wd of words) {
+      const lim = maxW - (first ? indent : 0);
+      const next = line ? line + " " + wd : wd;
+      if (line && textW(font, next, size) > lim) { lines.push({ text: line, indent: first ? indent : 0 }); line = wd; first = false; }
+      else line = next;
     }
-    const height = lines.reduce((s, l) => s + lh + l.gapAfter, 0);
-    return { lines, lh, height, size };
+    if (line) lines.push({ text: line, indent: first ? indent : 0 });
+    return lines;
   }
-  let lay = layout(22);
-  for (let s = 22; s >= 14 && top - lay.height < bottomLimit; s -= 1) lay = layout(s);
 
-  let y = top;
-  for (const ln of lay.lines) {
-    page.drawLine({ start: { x: left - 4, y: y - lay.size * 0.36 }, end: { x: right + 4, y: y - lay.size * 0.36 }, thickness: 0.45, color: col(C.rule), opacity: 0.55 });
-    let x = left;
-    for (const run of ln.runs) {
-      page.drawText(run.t, { x, y, size: lay.size, font: script, color: col(run.em ? C.red : C.ink) });
-      x += run.w;
+  function layout(size) {
+    const lh = size * 1.6, gap = size * 0.42, indent = size * 1.6;
+    const gSize = Math.min(34, size * 2.05);
+    let gLines = wrap(callig, gSize, [{ t: greet }], 0);
+    const paras = letter.paragraphs.map((p) => wrap(hand, size, p, indent));
+    const dateH = size * 1.2 + 10;
+    const greetH = gLines.length * gSize * 1.05 + size * 0.5;
+    const bodyH = paras.reduce((s, ls) => s + ls.length * lh + gap, 0) - gap;
+    return { size, lh, gap, gSize, gLines, paras, dateH, greetH, total: dateH + greetH + bodyH };
+  }
+  let lay = layout(17);
+  for (let s = 17; s >= 11.5 && lay.total > top - bottom; s -= 0.5) lay = layout(s);
+
+  let y = top - lay.size;
+  drawT(dateStr, { x: right - textW(hand, dateStr, lay.size * 0.95), y, size: lay.size * 0.95, font: hand, color: col(INK_SOFT) });
+  y -= lay.dateH - lay.size + lay.gSize * 0.9;
+  for (const gl of lay.gLines) {
+    drawT(gl.text, { x: left, y, size: lay.gSize, font: callig, color: col(INK) });
+    y -= lay.gSize * 1.05;
+  }
+  y -= lay.size * 0.5 - lay.gSize * 0.05 + lay.size * 0.35;
+  for (const lines of lay.paras) {
+    for (const ln of lines) {
+      drawT(ln.text, { x: left + ln.indent, y, size: lay.size, font: hand, color: col(INK) });
+      y -= lay.lh;
     }
-    y -= lay.lh + ln.gapAfter;
+    y -= lay.gap;
   }
 
-  // подпись
-  const sig = letter.signature, ss = Math.max(lay.size + 6, 24);
-  const sigY = Math.min(y - 22, 214);
-  page.drawText(sig, { x: right - script.widthOfTextAtSize(sig, ss), y: sigY, size: ss, font: script, color: col(C.ink) });
-  // росчерк под подписью
-  const sx = right - script.widthOfTextAtSize(sig, ss);
-  page.drawSvgPath(`M ${sx + 10} 0 C ${sx + 80} -14, ${right - 40} 12, ${right + 6} -6`, { x: 0, y: sigY - 10, borderColor: col(C.ink), borderWidth: 1.1, borderOpacity: 0.8 });
-
-  // сургучная печать
-  const cx = 150, cy = 150, R = 44;
-  let path = "";
-  for (let i = 0; i <= 40; i++) {
-    const a = (i / 40) * Math.PI * 2, rr = R + (r() - 0.5) * 6 + Math.sin(a * 5) * 1.5;
-    path += (i ? " L " : "M ") + (Math.cos(a) * rr).toFixed(2) + " " + (Math.sin(a) * rr).toFixed(2);
+  // номер письма под подписью
+  if (opts.orderId) {
+    const num = `письмо № ${String(opts.orderId).padStart(4, "0")}`;
+    const s = 8.5;
+    page.drawText(num, { x: px(690) - serif.widthOfTextAtSize(num, s), y: py(1046), size: s, font: serif, color: col(GOLD) });
   }
-  page.drawSvgPath(path + " Z", { x: cx + 2, y: cy - 3, color: col(C.waxDark), opacity: 0.35 });
-  page.drawSvgPath(path + " Z", { x: cx, y: cy, color: col(C.wax) });
-  page.drawCircle({ x: cx, y: cy, size: R - 10, borderColor: col(C.waxDark), borderWidth: 1.6, opacity: 0 });
-  page.drawCircle({ x: cx - 12, y: cy + 14, size: 9, color: rgb(1, 1, 1), opacity: 0.12 });
-  const seal = "Д. М.", sls = 21;
-  const slw = serifBold.widthOfTextAtSize(seal, sls);
-  const ang = -12 * Math.PI / 180;
-  page.drawText(seal, {
-    x: cx - (slw / 2) * Math.cos(ang) + (sls * 0.35) * Math.sin(ang),
-    y: cy - (slw / 2) * Math.sin(ang) - (sls * 0.35) * Math.cos(ang),
-    size: sls, font: serifBold, color: col(C.waxText), rotate: degrees(-12),
-  });
-
-  // подпись внизу
-  const foot = "Письмо доставлено почтой Деда Мороза";
-  page.drawText(foot, { x: (W - sans.widthOfTextAtSize(foot, 7.5)) / 2, y: 52, size: 7.5, font: sans, color: col(C.muted), opacity: 0.8 });
 
   return await doc.save();
+}
+
+// Кернинг по парам букв (GPOS шрифта) и дополнительный воздух перед «Я»,
+// у которой в Bad Script длинный завиток влево и он наезжает на точку предыдущего предложения.
+function kerner(fontkit, bytes, handFix) {
+  let fk = null;
+  try { fk = fontkit.create(bytes); } catch { fk = null; }
+  const upm = fk ? fk.unitsPerEm : 1000;
+  const cache = new Map();
+  function pair(a, b) {
+    const k = a + b;
+    if (cache.has(k)) return cache.get(k);
+    let v = 0;
+    if (fk && a !== " " && b !== " ") {
+      try {
+        const r = fk.layout(k, ["kern"]);
+        if (r.glyphs.length === 2) v = r.positions[0].xAdvance - r.glyphs[0].advanceWidth;
+      } catch { v = 0; }
+      // в Bad Script у «Т» и «Г» кернинг задан не для всех строчных букв: добиваем недостающие пары
+      if (handFix && v === 0 && (a === "Т" || a === "Г") && /[а-яё]/.test(b)) v = -220 * upm / 1000;
+    }
+    cache.set(k, v);
+    return v;
+  }
+  const swashBefore = (prev, ch) => (handFix && ch === "Я" && (prev === " " || prev === undefined) ? 0.55 : 0);
+  // делит строку на куски, между которыми нужен сдвиг; возвращает [{text, shift}]
+  function pieces(str, size) {
+    const out = [];
+    let cur = "", shift = 0;
+    for (let i = 0; i < str.length; i++) {
+      const ch = str[i], prev = str[i - 1];
+      let adj = 0;
+      if (i > 0) adj += pair(prev, ch) * size / upm;
+      adj += swashBefore(prev, ch) * size * (i === 0 ? 0 : 1);
+      if (Math.abs(adj) > size * 0.012 && cur) { out.push({ text: cur, shift }); cur = ""; shift = adj; }
+      else if (!cur) shift += adj;
+      cur += ch;
+    }
+    if (cur) out.push({ text: cur, shift });
+    return out;
+  }
+  return {
+    width(font, str, size) {
+      return pieces(str, size).reduce((w, p) => w + p.shift + font.widthOfTextAtSize(p.text, size), 0);
+    },
+    draw(page, str, o) {
+      let x = o.x;
+      for (const p of pieces(str, o.size)) {
+        x += p.shift;
+        page.drawText(p.text, { ...o, x });
+        x += o.font.widthOfTextAtSize(p.text, o.size);
+      }
+    },
+  };
 }

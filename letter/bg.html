@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Фон письма Деда Мороза</title>
+<!--
+  Исходник фона PDF-письма. Не для посетителей сайта.
+  Снимается в letter/bg-a4.jpg скриптом letter/render.py (A4, 794×1123 CSS px, масштаб 2).
+  Текст под конкретного ребёнка накладывает сервер (supabase/functions/dm-order/pdf.js) в пустую зону
+  от y=250 до y=830 px и x=104…690 px.
+-->
+<style>
+@font-face{font-family:"Cormorant SC";src:url(CormorantSC-SemiBold.ttf);font-weight:600}
+@font-face{font-family:"Bad Script";src:url(BadScript-Regular.ttf)}
+@font-face{font-family:"Great Vibes";src:url(GreatVibes-Regular.ttf)}
+:root{
+  --ink:#1b2a5e;
+  --ink-soft:#3d4b7a;
+  --gold-dark:#8a6420;
+  --gold:#c9a24b;
+  --wax:#a3241a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:794px;height:1123px;overflow:hidden;background:#efe3c8}
+.page{position:relative;width:794px;height:1123px;overflow:hidden;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 45%, #fdf8ec 0%, #f8efdb 55%, #ecdcb8 100%);
+}
+.page svg.layer{position:absolute;inset:0;width:100%;height:100%}
+.abs{position:absolute}
+
+/* шапка */
+.title{left:0;right:0;top:174px;text-align:center;font:600 17px/1 "Cormorant SC",serif;letter-spacing:.32em;color:var(--ink);padding-left:.32em}
+.subtitle{left:0;right:0;top:199px;text-align:center;font:600 13px/1 "Cormorant SC",serif;letter-spacing:.42em;color:var(--gold-dark);padding-left:.42em}
+
+/* медальон */
+.medal{left:86px;top:842px;width:150px;height:192px}
+.medal .photo{position:absolute;inset:9px;border-radius:50%;overflow:hidden;
+  background:#2a1418 url(portrait.jpg) center 18%/cover no-repeat;
+  box-shadow:inset 0 0 18px rgba(30,10,5,.55)}
+.medal svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.medal-cap{left:46px;top:1042px;width:230px;white-space:nowrap;text-align:center;font:600 10.5px/1.2 "Cormorant SC",serif;letter-spacing:.22em;color:var(--gold-dark)}
+
+/* подпись */
+.sig-pre{right:118px;top:872px;font:22px/1 "Bad Script",cursive;color:var(--ink)}
+.sig{right:96px;top:896px;font:64px/1 "Great Vibes",cursive;color:var(--ink);letter-spacing:.01em}
+.sig-flourish{right:74px;top:954px;width:250px;height:46px}
+
+/* печать */
+.seal{left:312px;top:920px;width:124px;height:158px}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- бумага: волокна, пятна, виньетка -->
+  <svg class="layer" viewBox="0 0 794 1123" aria-hidden="true">
+    <defs>
+      <filter id="fibers" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9 0.55" numOctaves="3" seed="4" result="n"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.33  0 0 0 0 0.16  0 0 0 0.11 0"/>
+      </filter>
+      <filter id="mottle" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.006" numOctaves="3" seed="11" result="m"/>
+        <feColorMatrix in="m" type="matrix" values="0 0 0 0 0.55  0 0 0 0 0.40  0 0 0 0 0.18  0 0 0 0.55 -0.2"/>
+        <feGaussianBlur stdDeviation="6"/>
+      </filter>
+      <radialGradient id="vig" cx="50%" cy="48%" r="75%">
+        <stop offset="62%" stop-color="#6b4a17" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#6b4a17" stop-opacity=".28"/>
+      </radialGradient>
+      <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#7d5a1a"/><stop offset=".22" stop-color="#e6c877"/>
+        <stop offset=".45" stop-color="#9c7428"/><stop offset=".62" stop-color="#f1d98c"/>
+        <stop offset=".82" stop-color="#a47c2e"/><stop offset="1" stop-color="#7d5a1a"/>
+      </linearGradient>
+      <linearGradient id="goldV" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#7d5a1a"/><stop offset=".3" stop-color="#ead083"/>
+        <stop offset=".55" stop-color="#9c7428"/><stop offset=".8" stop-color="#f0d68a"/><stop offset="1" stop-color="#7d5a1a"/>
+      </linearGradient>
+      <linearGradient id="goldH" gradientUnits="userSpaceOnUse" x1="-180" y1="0" x2="180" y2="0">
+        <stop offset="0" stop-color="#a47c2e" stop-opacity="0"/><stop offset=".25" stop-color="#c9a24b"/>
+        <stop offset=".5" stop-color="#f0d68a"/><stop offset=".75" stop-color="#c9a24b"/><stop offset="1" stop-color="#a47c2e" stop-opacity="0"/>
+      </linearGradient>
+      <symbol id="flake" viewBox="-50 -50 100 100">
+        <g fill="none" stroke-linecap="round">
+          <g id="arm">
+            <line x1="0" y1="0" x2="0" y2="-46"/>
+            <polyline points="-9,-19 0,-28 9,-19"/>
+            <polyline points="-7,-34 0,-40 7,-34"/>
+            <line x1="0" y1="-12" x2="-6" y2="-16"/><line x1="0" y1="-12" x2="6" y2="-16"/>
+          </g>
+          <use href="#arm" transform="rotate(60)"/><use href="#arm" transform="rotate(120)"/>
+          <use href="#arm" transform="rotate(180)"/><use href="#arm" transform="rotate(240)"/><use href="#arm" transform="rotate(300)"/>
+        </g>
+      </symbol>
+      <!-- угловой орнамент: завиток + снежинка, рисуется для левого верхнего угла -->
+      <symbol id="corner" viewBox="0 0 120 120">
+        <g fill="none" stroke="url(#gold)" stroke-linecap="round">
+          <path d="M8 112 V30 Q8 8 30 8 H112" stroke-width="2.4"/>
+          <path d="M16 112 V36 Q16 16 36 16 H112" stroke-width=".9"/>
+          <path d="M30 62 C30 40 40 30 62 30" stroke-width="1.3"/>
+          <path d="M44 30 C34 30 30 36 30 44" stroke-width="1"/>
+          <path d="M62 30 C76 30 82 40 74 46 C68 50 62 44 66 40" stroke-width="1.2"/>
+          <path d="M30 62 C30 76 40 82 46 74 C50 68 44 62 40 66" stroke-width="1.2"/>
+          <circle cx="86" cy="22" r="1.8" fill="url(#gold)" stroke="none"/>
+          <circle cx="22" cy="86" r="1.8" fill="url(#gold)" stroke="none"/>
+          <circle cx="98" cy="22" r="1.2" fill="url(#gold)" stroke="none"/>
+          <circle cx="22" cy="98" r="1.2" fill="url(#gold)" stroke="none"/>
+        </g>
+        <use href="#flake" x="18" y="18" width="34" height="34" stroke="url(#gold)" stroke-width="3.6"/>
+      </symbol>
+    </defs>
+
+    <rect width="794" height="1123" filter="url(#mottle)" opacity=".7"/>
+    <rect width="794" height="1123" filter="url(#fibers)"/>
+    <rect width="794" height="1123" fill="url(#vig)"/>
+
+    <!-- водяной знак: большая снежинка -->
+    <use href="#flake" x="222" y="330" width="350" height="350" stroke="#a8823a" stroke-width=".7" opacity=".05"/>
+
+    <!-- рамка -->
+    <rect x="30" y="30" width="734" height="1063" fill="none" stroke="url(#gold)" stroke-width="2.6"/>
+    <rect x="38" y="38" width="718" height="1047" fill="none" stroke="url(#gold)" stroke-width=".8"/>
+    <use href="#corner" x="22" y="22" width="120" height="120"/>
+    <use href="#corner" x="22" y="22" width="120" height="120" transform="translate(794 0) scale(-1 1)"/>
+    <use href="#corner" x="22" y="22" width="120" height="120" transform="translate(0 1123) scale(1 -1)"/>
+    <use href="#corner" x="22" y="22" width="120" height="120" transform="translate(794 1123) scale(-1 -1)"/>
+    <!-- середины длинных сторон -->
+    <g stroke="url(#goldV)" fill="none" stroke-width="1.1">
+      <path d="M34 520 q10 41 0 82 M34 540 q-0 0 0 0"/>
+      <path d="M760 520 q-10 41 0 82"/>
+    </g>
+    <use href="#flake" x="22" y="549" width="24" height="24" stroke="url(#gold)" stroke-width="4"/>
+    <use href="#flake" x="748" y="549" width="24" height="24" stroke="url(#gold)" stroke-width="4"/>
+
+    <!-- герб резиденции -->
+    <g id="crest" transform="translate(397 106)">
+      <circle r="46" fill="#fbf4e3" stroke="url(#gold)" stroke-width="2.4"/>
+      <circle r="40" fill="none" stroke="url(#gold)" stroke-width=".8"/>
+      <g id="wreath"></g>
+      <text y="9" text-anchor="middle" font-family="Cormorant SC" font-weight="600" font-size="30" fill="url(#gold)" letter-spacing="1">ДМ</text>
+      <use href="#flake" x="-7" y="-33" width="14" height="14" stroke="url(#gold)" stroke-width="6"/>
+    </g>
+
+    <!-- разделитель под заголовком -->
+    <g transform="translate(397 226)" fill="none" stroke-linecap="round">
+      <path d="M-180 0 H-20 M20 0 H180" stroke="url(#goldH)" stroke-width="1.1"/>
+      <path d="M-120 -3.5 H-30 M30 -3.5 H120" stroke="url(#goldH)" stroke-width=".5"/>
+      <circle cx="-26" cy="0" r="1.6" fill="#c9a24b"/><circle cx="26" cy="0" r="1.6" fill="#c9a24b"/>
+      <use href="#flake" x="-10" y="-10" width="20" height="20" stroke="#b08a3a" stroke-width="5"/>
+    </g>
+  </svg>
+
+  <div class="abs title">Резиденция Деда Мороза</div>
+  <div class="abs subtitle">личное письмо</div>
+
+  <!-- медальон с портретом -->
+  <div class="abs medal">
+    <div class="photo"></div>
+    <svg viewBox="0 0 150 192" aria-hidden="true">
+      <defs>
+        <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#7d5a1a"/><stop offset=".25" stop-color="#ecd185"/>
+          <stop offset=".5" stop-color="#9c7428"/><stop offset=".75" stop-color="#f3dc90"/><stop offset="1" stop-color="#7d5a1a"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="75" cy="96" rx="70" ry="91" fill="none" stroke="url(#g2)" stroke-width="5"/>
+      <ellipse cx="75" cy="96" rx="64" ry="85" fill="none" stroke="url(#g2)" stroke-width="1"/>
+      <ellipse cx="75" cy="96" rx="74.5" ry="95.5" fill="none" stroke="#6b4a17" stroke-opacity=".35" stroke-width="1"/>
+      <g fill="url(#g2)">
+        <circle cx="75" cy="3.5" r="4"/><circle cx="75" cy="188.5" r="4"/>
+        <circle cx="4.5" cy="96" r="3"/><circle cx="145.5" cy="96" r="3"/>
+      </g>
+    </svg>
+  </div>
+  <div class="abs medal-cap">Дед Мороз · Великий Устюг</div>
+
+  <!-- подпись -->
+  <div class="abs sig-pre">С любовью,</div>
+  <div class="abs sig">Дед Мороз</div>
+  <svg class="abs sig-flourish" viewBox="60 0 270 50" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M18 22 C80 46 170 44 238 30 C276 22 300 16 312 8 C318 4 316 0 310 3 C290 14 300 30 322 34"
+          fill="none" stroke="#1b2a5e" stroke-width="2.2" stroke-linecap="round" opacity=".9"/>
+    <path d="M60 40 C120 52 190 50 250 38" fill="none" stroke="#1b2a5e" stroke-width="1" stroke-linecap="round" opacity=".55"/>
+  </svg>
+
+  <!-- сургучная печать с лентами -->
+  <svg class="abs seal" viewBox="0 0 118 150" aria-hidden="true">
+    <defs>
+      <linearGradient id="rib" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#6e120c"/><stop offset=".35" stop-color="#c2382a"/>
+        <stop offset=".55" stop-color="#e05a48"/><stop offset=".75" stop-color="#a3241a"/><stop offset="1" stop-color="#6e120c"/>
+      </linearGradient>
+      <radialGradient id="waxg" cx="40%" cy="35%" r="70%">
+        <stop offset="0" stop-color="#d4473a"/><stop offset=".55" stop-color="#a3241a"/><stop offset="1" stop-color="#5e0d08"/>
+      </radialGradient>
+      <filter id="emboss" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="b"/>
+        <feSpecularLighting in="b" surfaceScale="3.5" specularConstant=".7" specularExponent="18" lighting-color="#ffd9c8" result="s">
+          <fePointLight x="20" y="-10" z="60"/>
+        </feSpecularLighting>
+        <feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/>
+        <feComposite in="SourceGraphic" in2="s2" operator="arithmetic" k1="0" k2="1" k3=".55" k4="0"/>
+      </filter>
+      <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="1.5" dy="3" stdDeviation="2.5" flood-color="#3a1505" flood-opacity=".45"/>
+      </filter>
+    </defs>
+    <g filter="url(#shadow)">
+      <path d="M44 66 L26 146 L38 136 L48 148 L60 70 Z" fill="url(#rib)"/>
+      <path d="M74 66 L92 146 L80 136 L70 148 L58 70 Z" fill="url(#rib)"/>
+    </g>
+    <g filter="url(#shadow)">
+      <path id="blob" fill="url(#waxg)" filter="url(#emboss)"/>
+    </g>
+    <circle cx="59" cy="58" r="31" fill="none" stroke="#5e0d08" stroke-opacity=".55" stroke-width="1.6"/>
+    <circle cx="59" cy="58" r="28" fill="none" stroke="#ff9d86" stroke-opacity=".22" stroke-width=".8"/>
+    <text x="59" y="67" text-anchor="middle" font-family="Cormorant SC" font-weight="600" font-size="26" fill="#6e120c" opacity=".9">ДМ</text>
+    <text x="58.3" y="66.2" text-anchor="middle" font-family="Cormorant SC" font-weight="600" font-size="26" fill="#ff8f78" opacity=".35">ДМ</text>
+    <g transform="translate(59 58)" fill="#6e120c" opacity=".7">
+      <circle cy="-23" r="1.4"/><circle cy="23" r="1.4"/><circle cx="-23" r="1.4"/><circle cx="23" r="1.4"/>
+    </g>
+  </svg>
+</div>
+
+<script>
+/* венок из листьев вокруг герба */
+(function(){
+  var ns = 'http://www.w3.org/2000/svg', g = document.getElementById('wreath');
+  for(var side = -1; side <= 1; side += 2){
+    for(var i = 0; i < 12; i++){
+      var a = (62 + i*9.5) * Math.PI/180, r = 52;
+      var x = side * Math.cos(a - Math.PI/2) * r * -1, y = Math.sin(a - Math.PI/2) * r * -1;
+      var e = document.createElementNS(ns, 'ellipse');
+      e.setAttribute('cx', (side*Math.sin(a)*r).toFixed(2)); e.setAttribute('cy', (-Math.cos(a)*r).toFixed(2));
+      e.setAttribute('rx', 2.1); e.setAttribute('ry', 5.6);
+      e.setAttribute('fill', 'url(#gold)');
+      e.setAttribute('transform', 'rotate(' + (side*(62 + i*9.5) + side*24) + ' ' + (side*Math.sin(a)*r).toFixed(2) + ' ' + (-Math.cos(a)*r).toFixed(2) + ')');
+      g.appendChild(e);
+    }
+  }
+  /* неровный край сургуча */
+  var p = '', R = 34, seed = 7;
+  function rnd(){ seed = (seed*9301 + 49297) % 233280; return seed/233280; }
+  for(var k = 0; k <= 48; k++){
+    var t = k/48*Math.PI*2, rr = R + (rnd() - 0.5)*4 + Math.sin(t*6)*1.6 + (k % 7 === 0 ? 3 : 0);
+    p += (k ? ' L ' : 'M ') + (59 + Math.cos(t)*rr).toFixed(2) + ' ' + (58 + Math.sin(t)*rr).toFixed(2);
+  }
+  document.getElementById('blob').setAttribute('d', p + ' Z');
+})();
+</script>
+</body>
+</html>

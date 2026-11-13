@@ -40,27 +40,38 @@ function json(req: Request, status: number, body: unknown) {
 }
 
 // ---------- шрифты для PDF (кэшируются, пока функция «тёплая») ----------
-const FONT_URLS = {
-  script: "https://raw.githubusercontent.com/google/fonts/main/ofl/marckscript/MarckScript-Regular.ttf",
-  sans: "https://raw.githubusercontent.com/google/fonts/main/ofl/ptsans/PT_Sans-Web-Regular.ttf",
-  sansBold: "https://raw.githubusercontent.com/google/fonts/main/ofl/ptsans/PT_Sans-Web-Bold.ttf",
-  serifBold: "https://raw.githubusercontent.com/google/fonts/main/ofl/ptserif/PT_Serif-Web-Bold.ttf",
+// шрифты и фон бланка лежат на сайте (папка letter/), запасной путь для шрифтов — репозиторий Google Fonts
+const SITE = Deno.env.get("SITE_URL") || "https://pavelgh96.github.io/ded-moroz";
+const ASSETS: Record<string, string[]> = {
+  hand: [`${SITE}/letter/BadScript-Regular.ttf`, "https://raw.githubusercontent.com/google/fonts/main/ofl/badscript/BadScript-Regular.ttf"],
+  callig: [`${SITE}/letter/GreatVibes-Regular.ttf`, "https://raw.githubusercontent.com/google/fonts/main/ofl/greatvibes/GreatVibes-Regular.ttf"],
+  serif: [`${SITE}/letter/CormorantSC-SemiBold.ttf`, "https://raw.githubusercontent.com/google/fonts/main/ofl/cormorantsc/CormorantSC-SemiBold.ttf"],
+  bg: [`${SITE}/letter/bg-a4.jpg`],
 };
-let fontsPromise: Promise<Record<string, Uint8Array>> | null = null;
-function loadFonts() {
-  if (!fontsPromise) {
-    fontsPromise = Promise.all(Object.entries(FONT_URLS).map(async ([k, u]) => {
-      const r = await fetch(u);
-      if (!r.ok) throw new Error(`font ${k}: HTTP ${r.status}`);
-      return [k, new Uint8Array(await r.arrayBuffer())] as const;
-    })).then(Object.fromEntries).catch((e) => { fontsPromise = null; throw e; });
+let assetsPromise: Promise<Record<string, Uint8Array | null>> | null = null;
+async function fetchFirst(urls: string[]) {
+  for (const u of urls) {
+    try { const r = await fetch(u); if (r.ok) return new Uint8Array(await r.arrayBuffer()); } catch { /* следующий адрес */ }
   }
-  return fontsPromise;
+  return null;
 }
-async function letterPdf(data: Record<string, unknown>) {
-  const fonts = await loadFonts();
+function loadAssets() {
+  if (!assetsPromise) {
+    assetsPromise = Promise.all(Object.entries(ASSETS).map(async ([k, urls]) => [k, await fetchFirst(urls)] as const))
+      .then((list) => {
+        const a = Object.fromEntries(list);
+        for (const k of ["hand", "callig", "serif"]) if (!a[k]) throw new Error(`не загрузился шрифт ${k}`);
+        if (!a.bg) assetsPromise = null; // без фона письмо соберётся, но в следующий раз попробуем снова
+        return a;
+      })
+      .catch((e) => { assetsPromise = null; throw e; });
+  }
+  return assetsPromise;
+}
+async function letterPdf(data: Record<string, unknown>, orderId: number) {
+  const fonts = await loadAssets();
   const year = new Date(Date.now() + 3 * 3600e3).getUTCFullYear();
-  return await makeLetterPdf({ ...PL, fontkit }, fonts, data, { year });
+  return await makeLetterPdf({ ...PL, fontkit }, fonts, data, { year, orderId });
 }
 
 // ---------- Telegram ----------
@@ -222,7 +233,7 @@ Deno.serve(async (req) => {
   // письмо и уведомление: заявка уже сохранена, поэтому ошибки здесь не теряют заказ
   let pdf: Uint8Array | null = null;
   let tgError: string | null = null;
-  try { pdf = await letterPdf(d); } catch (e) { tgError = "PDF: " + (e as Error).message; console.error(tgError); }
+  try { pdf = await letterPdf(d, order.id); } catch (e) { tgError = "PDF: " + (e as Error).message; console.error(tgError); }
   try {
     await notify(order, d, photo, pdf);
   } catch (e) {
