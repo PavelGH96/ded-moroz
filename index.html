@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0d1836">
-<meta name="description" content="Именное письмо и видео от Деда Мороза: он заходит в комнату вашего ребёнка, пока тот спит. Заказы к Новому году до 28 декабря.">
+<meta name="description" content="Именное письмо и видео от Деда Мороза: он заходит в комнату вашего ребёнка, пока тот спит. Заказы к Новому году до 30 декабря.">
 <title>Дед Мороз заходил</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -315,6 +315,13 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
   .hero-art{flex-direction:row;align-items:flex-end;justify-content:center;gap:18px}
   .hero-letter{flex:1 1 0;width:auto;max-width:320px;margin:0 0 40px}
 }
+
+/* защита материалов от копирования */
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,select,[contenteditable]{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+img,svg,canvas{-webkit-user-drag:none;user-drag:none}
+.sample-pic{position:relative}
+.sample-pic::after{content:"";position:absolute;inset:0}
 </style>
 </head>
 <body>
@@ -352,7 +359,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
       <ul class="facts">
         <li>Письмо готово за час</li>
         <li>Видео за 24 часа</li>
-        <li>Правки до 30 декабря</li>
+        <li>Правки до 31 декабря</li>
       </ul>
     </div>
     <div class="hero-art">
@@ -385,7 +392,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
     <div class="ny-left">
       <h2>До Нового года осталось</h2>
       <p class="lead" id="nyLead">До 1 января по московскому времени.</p>
-      <p class="note" id="nyDeadline">Заказы на этот Новый год принимаем до 28 декабря.</p>
+      <p class="note" id="nyDeadline">Заказы на этот Новый год принимаем до 30 декабря.</p>
       <a class="btn btn-main" href="#order">Заказать письмо и видео</a>
     </div>
     <div class="timer-wrap">
@@ -442,7 +449,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
 <section class="sample" id="sample">
   <div class="wrap sample-grid">
     <figure class="sample-pic">
-      <img src="letter/sample.jpg" width="860" height="1217" alt="Образец письма от Деда Мороза для девочки Маши: шапка резиденции с гербом, рукописный текст, портрет Деда Мороза в золотом медальоне, подпись и сургучная печать" loading="lazy" decoding="async">
+      <img src="letter/sample.jpg" width="860" height="1217" draggable="false" alt="Образец письма от Деда Мороза для девочки Маши: шапка резиденции с гербом, рукописный текст, портрет Деда Мороза в золотом медальоне, подпись и сургучная печать" loading="lazy" decoding="async">
     </figure>
     <div class="sample-text">
       <h2>Так выглядит письмо</h2>
@@ -591,8 +598,8 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
   <div class="wrap">
     <h2>Три обещания</h2>
     <div class="promises">
-      <div><h3>Успеем к празднику</h3><p>Принимаем заказы до 28 декабря включительно. Всё, что заказано в срок, будет готово до боя курантов.</p></div>
-      <div><h3>Исправим, если не то</h3><p>Опечатка в имени или не та игрушка? Одна правка бесплатно, вносим до 30 декабря.</p></div>
+      <div><h3>Успеем к празднику</h3><p>Принимаем заказы до 30 декабря включительно. Всё, что заказано в срок, будет готово до боя курантов.</p></div>
+      <div><h3>Исправим, если не то</h3><p>Опечатка в имени или не та игрушка? Одна правка бесплатно, вносим до 31 декабря.</p></div>
       <div><h3>Бережно с фото</h3><p>Снимок ребёнка видит только монтажёр. Через 7 дней после выдачи заказа фото удаляется.</p></div>
     </div>
   </div>
@@ -615,7 +622,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
   <div class="wrap">
     <h2>Что обычно спрашивают</h2>
     <div class="faq">
-      <details><summary>Как быстро придёт заказ?</summary><p>Письмо в течение часа после оплаты, видео в течение 24 часов. В последнюю неделю декабря сроки те же, но заказы принимаем только до 28 числа.</p></details>
+      <details><summary>Как быстро придёт заказ?</summary><p>Письмо в течение часа после оплаты, видео в течение 24 часов. В последнюю неделю декабря сроки те же, но заказы принимаем только до 30 числа.</p></details>
       <details><summary>Обязательно ли показывать лицо ребёнка?</summary><p>Нет. Подойдёт кадр со спины, под одеялом или просто кровать в детской. Главное, чтобы ребёнок узнал свою комнату.</p></details>
       <details><summary>Как сделано видео?</summary><p>Образ и голос Деда Мороза записаны с актёром. В кадр с вашей комнатой он попадает при монтаже с помощью компьютерной графики. Домой к вам никто не приходит.</p></details>
       <details><summary>Как показать это ребёнку?</summary><p>Письмо распечатайте и положите под ёлку, на подоконник или в морозилку. Видео покажите утром на телефоне: «Смотри, что ночью записала камера».</p></details>
@@ -637,7 +644,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
 
 <footer id="contacts">
   <div class="wrap foot">
-    <div><b style="color:var(--frost)">Дед Мороз заходил</b><span>Письма и видео от Деда Мороза для детей</span><span>Заказы на этот Новый год до 28 декабря</span></div>
+    <div><b style="color:var(--frost)">Дед Мороз заходил</b><span>Письма и видео от Деда Мороза для детей</span><span>Заказы на этот Новый год до 30 декабря</span></div>
     <div><b style="color:var(--frost)">Связаться</b><span>Telegram: укажите ваш контакт</span><span>Почта: укажите вашу почту</span></div>
     <div id="docs"><b style="color:var(--frost)">Документы</b><span>Публичная оферта</span><span>Политика конфиденциальности</span><span>Согласие на обработку персональных данных</span></div>
   </div>
@@ -957,8 +964,8 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
     setTxt(ny.dl, plural(D, ['день','дня','дней'])); setTxt(ny.hl, plural(Hh, ['час','часа','часов'])); setTxt(ny.ml, plural(Mm, ['минута','минуты','минут'])); setTxt(ny.sl, plural(Ss, ['секунда','секунды','секунд']));
     setTxt(ny.chip, greet ? 'С Новым годом!' : D + ' д ' + p2(Hh) + ':' + p2(Mm) + ':' + p2(Ss));
     setTxt(ny.lead, greet ? 'С Новым годом! Принимаем заказы на следующий праздник с ноября.' : 'До 1 января ' + (y + 1) + ' года по московскому времени.');
-    var end = Date.UTC(y, 11, 28, 23, 59, 59) - MSK, left = Math.ceil((end - now)/86400000);
-    if(!greet && left > 0 && m.getUTCMonth() >= 10) setTxt(ny.dead, 'Заказы на этот Новый год принимаем до 28 декабря. Осталось ' + left + ' ' + plural(left, ['день','дня','дней']) + '.');
+    var end = Date.UTC(y, 11, 30, 23, 59, 59) - MSK, left = Math.ceil((end - now)/86400000);
+    if(!greet && left > 0 && m.getUTCMonth() >= 10) setTxt(ny.dead, 'Заказы на этот Новый год принимаем до 30 декабря. Осталось ' + left + ' ' + plural(left, ['день','дня','дней']) + '.');
     else if(!greet && m.getUTCMonth() === 11 && left <= 0) setTxt(ny.dead, 'Приём заказов на этот Новый год закрыт. Заказы на следующий откроем в ноябре.');
     setTimeout(nyTick, 1000 - (Date.now() % 1000) + 5);
   }
@@ -1496,6 +1503,21 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;background:linear-gr
   }
   document.addEventListener('visibilitychange', function(){ if(!document.hidden){ dirty = true; wake(); } });
   wake();
+})();
+</script>
+<script>
+/* защита материалов: без контекстного меню, копирования, перетаскивания и сохранения страницы (поля формы работают как обычно) */
+(function(){
+  function field(t){ return t && t.closest && t.closest('input,textarea,select,[contenteditable]'); }
+  ['contextmenu','copy','cut','dragstart','selectstart'].forEach(function(ev){
+    document.addEventListener(ev, function(e){ if(!field(e.target)) e.preventDefault(); }, {capture:true});
+  });
+  document.addEventListener('keydown', function(e){
+    var k = (e.key || '').toLowerCase(), mod = e.ctrlKey || e.metaKey;
+    if(e.key === 'F12' || (mod && e.shiftKey && 'ijc'.indexOf(k) > -1) || (mod && (k === 'u' || k === 's' || k === 'p'))) { e.preventDefault(); return; }
+    if(mod && (k === 'c' || k === 'x' || k === 'a') && !field(e.target)) e.preventDefault();
+  }, {capture:true});
+  document.querySelectorAll('img').forEach(function(i){ i.setAttribute('draggable','false'); });
 })();
 </script>
 </body>
