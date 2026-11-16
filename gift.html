@@ -234,6 +234,7 @@ footer a{color:var(--lamp)}
 
   if(!demo && !/^[A-Za-z0-9_-]{16,40}$/.test(token)) { fail('В ссылке не хватает кусочка. Попросите прислать её ещё раз целиком.'); return; }
 
+  if(demo && /^(classic|forest|garland|post|gzhel)$/.test(qs.get('tpl') || '')) DEMO.template = qs.get('tpl');
   (demo ? Promise.resolve(DEMO) : fetch(API + '?gift=' + encodeURIComponent(token)).then(function(r){ return r.json().catch(function(){ return {ok:false}; }); }))
     .then(function(j){
       if(!j || !j.ok) throw new Error((j && j.error) || 'Письмо пока не нашлось. Попробуйте открыть ссылку чуть позже.');
@@ -261,7 +262,15 @@ footer a{color:var(--lamp)}
       if(e.key === 'F12' || (mod && e.shiftKey && 'ijc'.indexOf(k) > -1) || (mod && 'uspcax'.indexOf(k) > -1)) e.preventDefault();
     }, {capture:true});
   }
+  var BG = {classic:'bg-a4.jpg', forest:'tpl-forest.jpg', garland:'tpl-garland.jpg', post:'tpl-post.jpg', gzhel:'tpl-gzhel.jpg'};
+  function setBg(j){
+    var file = j.bg || ('letter/' + (BG[j.template] || BG.classic));
+    $('inner').style.backgroundImage = 'url(' + file + ')';
+    document.querySelector('.peek').style.backgroundImage = 'url(' + file + ')';
+    var im = new Image(); im.src = file;
+  }
   function buildLetter(j){
+    setBg(j);
     var d = new Date(Date.UTC(j.year, 11, 31));
     var html = '<div class="date">' + d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + ' года</div>';
     html += '<div class="greet">' + runs(j.letter.greeting) + '</div>';

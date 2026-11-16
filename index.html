@@ -427,6 +427,26 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
 
 /* быстрее: браузер не рисует блоки, пока до них далеко */
 #how,#order,#faq,#adult,footer{content-visibility:auto;contain-intrinsic-size:auto 900px}
+
+/* шаблоны оформления письма */
+.tpl-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tpl-tab{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;border-radius:999px;border:1px solid var(--line);background:rgba(10,28,20,.55);color:var(--frost);font:600 .9rem/1 inherit;cursor:pointer;transition:border-color .2s,background .2s}
+.tpl-tab img{width:26px;height:36px;object-fit:cover;border-radius:3px}
+.tpl-tab[aria-pressed="true"]{border-color:var(--lamp);background:rgba(246,197,95,.14)}
+.sample-pic img{transition:opacity .35s ease}
+.tpls{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:6px}
+.tpl{position:relative;display:flex;flex-direction:column;gap:6px;cursor:pointer;text-align:center;font-size:.78rem;color:var(--muted);line-height:1.2}
+.tpl input{position:absolute;opacity:0;pointer-events:none}
+.tpl img{width:100%;aspect-ratio:220/311;object-fit:cover;border-radius:4px;border:2px solid transparent;box-shadow:0 6px 16px -8px rgba(0,0,0,.7);transition:border-color .2s,transform .2s}
+.tpl:hover img{transform:translateY(-2px)}
+.tpl input:checked + img{border-color:var(--lamp)}
+.tpl input:checked ~ span{color:var(--frost)}
+.tpl input:focus-visible + img{outline:3px solid var(--lamp);outline-offset:2px}
+@media (max-width:520px){.tpls{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.letter[data-tpl="forest"]{background-image:linear-gradient(#f4f8fc,#e4edf6)}
+.letter[data-tpl="garland"]{background-image:radial-gradient(ellipse 80% 70% at 50% 40%,#fbfdf8,#e6f1e4 70%,#d4e6d4)}
+.letter[data-tpl="post"]{background-image:radial-gradient(ellipse 80% 70% at 50% 40%,#fdfbff,#efe7f8 70%,#e1d5f0)}
+.letter[data-tpl="gzhel"]{background-image:linear-gradient(#fff,#eef3fc)}
 /* новогодние украшения на словах заголовков */
 .deco{position:relative;display:inline-block}
 .deco::before,.deco::after{content:"";position:absolute;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:contain}
@@ -572,13 +592,15 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
 <section class="sample" id="sample" data-bg="wood">
   <div class="wrap sample-grid">
     <figure class="sample-pic">
-      <img src="letter/sample.webp?v=1" width="860" height="1217" draggable="false" alt="Образец письма от Деда Мороза для девочки Маши: шапка резиденции с гербом, рукописный текст, портрет Деда Мороза в золотом медальоне, подпись и сургучная печать" loading="lazy" decoding="async">
+      <img id="sampleImg" src="letter/sample-classic.webp?v=1" width="860" height="1217" draggable="false" alt="Образец письма от Деда Мороза для девочки Маши: шапка резиденции с гербом, рукописный текст, портрет Деда Мороза в золотом медальоне, подпись и сургучная печать" loading="lazy" decoding="async">
     </figure>
     <div class="sample-text">
       <h2>Так выглядит <span class="deco bauble">письмо</span></h2>
-      <p class="lead">Это образец для девочки Маши, 5 лет. Ваше письмо будет таким же, только с именем, делами и мечтой вашего ребёнка.</p>
+      <p class="lead">Пять вариантов оформления на выбор. Нажмите, чтобы посмотреть каждый.</p>
+      <div class="tpl-tabs" role="group" aria-label="Оформление письма"><button type="button" class="tpl-tab" data-tpl="classic" aria-pressed="true"><img src="letter/thumb-classic.webp?v=1" alt="" width="26" height="36" loading="lazy">Классика</button><button type="button" class="tpl-tab" data-tpl="forest" aria-pressed="false"><img src="letter/thumb-forest.webp?v=1" alt="" width="26" height="36" loading="lazy">Зимний лес</button><button type="button" class="tpl-tab" data-tpl="garland" aria-pressed="false"><img src="letter/thumb-garland.webp?v=1" alt="" width="26" height="36" loading="lazy">Изумрудная гирлянда</button><button type="button" class="tpl-tab" data-tpl="post" aria-pressed="false"><img src="letter/thumb-post.webp?v=1" alt="" width="26" height="36" loading="lazy">Почта Деда Мороза</button><button type="button" class="tpl-tab" data-tpl="gzhel" aria-pressed="false"><img src="letter/thumb-gzhel.webp?v=1" alt="" width="26" height="36" loading="lazy">Гжель</button></div>
+      <p class="lead" style="font-size:1rem">Это образец для девочки Маши, 5 лет. Ваше письмо будет таким же, только с именем, делами и мечтой вашего ребёнка.</p>
       <ul class="checks">
-        <li>Бланк резиденции Деда Мороза с золотым гербом и рамкой</li>
+        <li>Бланк резиденции Деда Мороза в одном из пяти оформлений</li>
         <li>Тёплый текст от первого лица: про ночной визит, похвалу за настоящие дела и подарок под ёлкой</li>
         <li>Портрет Деда Мороза, его подпись и сургучная печать</li>
         <li>Номер письма, как у настоящей почты</li>
@@ -591,7 +613,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
 
 <section id="gift" style="padding-top:0" data-bg="bokeh">
   <div class="wrap gift-demo">
-    <a class="mini-env" href="gift.html?demo=1" target="_blank" rel="noopener" aria-label="Открыть пример конверта с письмом"><img src="letter/seal.webp?v=1" alt="" width="340" height="367" loading="lazy" decoding="async" draggable="false"></a>
+    <a class="mini-env" href="gift.html?demo=1" data-demo target="_blank" rel="noopener" aria-label="Открыть пример конверта с письмом"><img src="letter/seal.webp?v=1" alt="" width="340" height="367" loading="lazy" decoding="async" draggable="false"></a>
     <div>
       <h2>Письмо приходит в конверте с печатью</h2>
       <p class="lead" style="margin-top:12px">Кроме PDF вы получите подарочную ссылку. Ребёнок открывает её на телефоне, сам ломает сургучную печать, и из конверта появляется письмо, а следом видео.</p>
@@ -600,7 +622,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
         <li>Есть QR-код: распечатайте и вложите в открытку под ёлкой</li>
         <li>Если ребёнок писал Деду Морозу, пришлите фото письма: Дед Мороз поблагодарит за него</li>
       </ul>
-      <div class="cta-row"><a class="btn btn-main" href="gift.html?demo=1" target="_blank" rel="noopener">Открыть пример конверта</a></div>
+      <div class="cta-row"><a class="btn btn-main" href="gift.html?demo=1" data-demo target="_blank" rel="noopener">Открыть пример конверта</a></div>
     </div>
   </div>
 </section>
@@ -672,6 +694,9 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
             <label class="opt"><input type="radio" name="product" id="p-both" value="both"><div><b>Письмо и видео</b><span>Одна история в двух форматах</span></div><span class="p">1490 ₽</span></label>
             <label class="opt"><input type="radio" name="product" id="p-letter" value="letter"><div><b>Только письмо</b><span>PDF для печати</span></div><span class="p">390 ₽</span></label>
             <label class="opt"><input type="radio" name="product" id="p-video" value="video"><div><b>Только видео</b><span>40–60 секунд, MP4</span></div><span class="p">1490 ₽</span></label>
+          </div>
+          <div class="field" style="margin-top:18px"><span class="flabel" id="tpl-label">Оформление письма</span>
+            <div class="tpls" role="radiogroup" aria-labelledby="tpl-label"><label class="tpl"><input type="radio" name="tpl" value="classic" checked><img src="letter/thumb-classic.webp?v=1" alt="" width="220" height="311" loading="lazy"><span>Классика</span></label><label class="tpl"><input type="radio" name="tpl" value="forest"><img src="letter/thumb-forest.webp?v=1" alt="" width="220" height="311" loading="lazy"><span>Зимний лес</span></label><label class="tpl"><input type="radio" name="tpl" value="garland"><img src="letter/thumb-garland.webp?v=1" alt="" width="220" height="311" loading="lazy"><span>Изумрудная гирлянда</span></label><label class="tpl"><input type="radio" name="tpl" value="post"><img src="letter/thumb-post.webp?v=1" alt="" width="220" height="311" loading="lazy"><span>Почта Деда Мороза</span></label><label class="tpl"><input type="radio" name="tpl" value="gzhel"><img src="letter/thumb-gzhel.webp?v=1" alt="" width="220" height="311" loading="lazy"><span>Гжель</span></label></div>
           </div>
           <div class="addons">
             <span class="flabel">Добавить к заказу</span>
@@ -748,7 +773,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
 
       <aside class="side">
         <p>Так письмо увидит ребёнок</p>
-        <div class="letter">
+        <div class="letter" id="previewLetter" data-tpl="classic">
           <div class="from">Великий Устюг · канун Нового года</div>
           <div class="letter-body" data-letter></div>
           <div class="seal">Д. М.</div>
@@ -840,7 +865,8 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
   var SELLER = {name:'', inn:''};
   var $ = function(id){ return document.getElementById(id); };
   var ORDER_URL = 'https://tribgnfjiiwmiktzjeyy.supabase.co/functions/v1/dm-order';
-  var state = {product:'both', recipient:'child', addons:[], name:'', age:'', gender:'', praise:'', wish:'', gift:'', parent:'', contact:'', consent:false, step:0, sentId:0};
+  var TPLS = {classic:'Классика', forest:'Зимний лес', garland:'Изумрудная гирлянда', post:'Почта Деда Мороза', gzhel:'Гжель'};
+  var state = {tpl:'classic', product:'both', recipient:'child', addons:[], name:'', age:'', gender:'', praise:'', wish:'', gift:'', parent:'', contact:'', consent:false, step:0, sentId:0};
   function adult(){ return state.recipient === 'adult'; }
   function addonsOn(){ return state.addons.filter(function(a){ return ADDONS[a] && !(adult() && ADDONS[a].childOnly); }); }
   function total(){ return PRICES[state.product] + addonsOn().reduce(function(s, a){ return s + ADDONS[a].price; }, 0); }
@@ -925,6 +951,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
   function summaryText(){
     var t = [
       'Заказ: ' + NAMES[state.product] + ', ' + PRICES[state.product] + ' ₽',
+      'Оформление письма: ' + TPLS[state.tpl],
     ];
     addonsOn().forEach(function(a){ t.push('Добавить: ' + ADDONS[a].title + ', ' + ADDONS[a].price + ' ₽'); });
     if(addonsOn().length) t.push('Итого: ' + total() + ' ₽');
@@ -963,6 +990,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
     var r = $('p-' + state.product); if(r) r.checked = true;
     $('g-m').checked = state.gender === 'm'; $('g-f').checked = state.gender === 'f';
     $('r-' + state.recipient).checked = true;
+    var tr = document.querySelector('input[name=tpl][value="' + state.tpl + '"]'); if(tr) tr.checked = true; $('previewLetter').dataset.tpl = state.tpl;
     $('a-tags').checked = state.addons.indexOf('tags') > -1; $('a-blank').checked = state.addons.indexOf('blank') > -1;
     applyRecipient();
   }
@@ -984,7 +1012,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
     fd.append('gender', state.gender); fd.append('praise', state.praise.trim()); fd.append('wish', state.wish.trim());
     fd.append('gift', state.gift.trim()); fd.append('parent', state.parent.trim()); fd.append('contact', state.contact.trim());
     fd.append('consent', state.consent ? '1' : ''); fd.append('website', $('f-website').value);
-    fd.append('recipient', state.recipient); fd.append('addons', addonsOn().join(','));
+    fd.append('template', state.tpl); fd.append('recipient', state.recipient); fd.append('addons', addonsOn().join(','));
     var letterPhoto = $('f-letter').files[0];
     if(letterPhoto && !adult()){
       if(letterPhoto.size > 10*1024*1024){ msg.textContent = 'Фото письма больше 10 МБ. Вернитесь назад и выберите снимок поменьше.'; return; }
@@ -1022,6 +1050,18 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
     $('f-consent').addEventListener('change', function(e){ state.consent = e.target.checked; });
     document.querySelectorAll('input[name=product]').forEach(function(r){
       r.addEventListener('change', function(){ state.product = r.value; renderStep(); });
+    });
+    document.querySelectorAll('input[name=tpl]').forEach(function(r){
+      r.addEventListener('change', function(){ state.tpl = r.value; $('previewLetter').dataset.tpl = r.value; renderStep(); });
+    });
+    document.querySelectorAll('.tpl-tab').forEach(function(b){
+      b.addEventListener('click', function(){
+        document.querySelectorAll('.tpl-tab').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        var img = $('sampleImg'), src = 'letter/sample-' + b.dataset.tpl + '.webp?v=1', pre = new Image();
+        pre.onload = function(){ img.style.opacity = 0; setTimeout(function(){ img.src = src; img.style.opacity = 1; }, 200); }; pre.src = src;
+        document.querySelectorAll('[data-demo]').forEach(function(a){ a.href = 'gift.html?demo=1&tpl=' + b.dataset.tpl; });
+        var r = document.querySelector('input[name=tpl][value="' + b.dataset.tpl + '"]'); if(r){ r.checked = true; r.dispatchEvent(new Event('change')); }
+      });
     });
     document.querySelectorAll('input[name=recipient]').forEach(function(r){
       r.addEventListener('change', function(){ state.recipient = r.value; applyRecipient(); renderLetter(); renderStep(); });

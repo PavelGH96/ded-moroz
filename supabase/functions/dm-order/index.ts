@@ -54,7 +54,6 @@ const ASSETS: Record<string, string[]> = {
   hand: [`${SITE}/letter/BadScript-Regular.ttf`, "https://raw.githubusercontent.com/google/fonts/main/ofl/badscript/BadScript-Regular.ttf"],
   callig: [`${SITE}/letter/GreatVibes-Regular.ttf`, "https://raw.githubusercontent.com/google/fonts/main/ofl/greatvibes/GreatVibes-Regular.ttf"],
   serif: [`${SITE}/letter/CormorantSC-SemiBold.ttf`, "https://raw.githubusercontent.com/google/fonts/main/ofl/cormorantsc/CormorantSC-SemiBold.ttf"],
-  bg: [`${SITE}/letter/bg-a4.jpg`],
   tagsBg: [`${SITE}/letter/tags-a4.jpg`],
   blankBg: [`${SITE}/letter/blank-a4.jpg`],
 };
@@ -71,17 +70,35 @@ function loadAssets() {
       .then((list) => {
         const a = Object.fromEntries(list);
         for (const k of ["hand", "callig", "serif"]) if (!a[k]) throw new Error(`не загрузился шрифт ${k}`);
-        if (!a.bg || !a.tagsBg || !a.blankBg) assetsPromise = null; // без фона письмо соберётся, но в следующий раз попробуем снова
+        if (!a.tagsBg || !a.blankBg) assetsPromise = null; // без фона письмо соберётся, но в следующий раз попробуем снова
         return a;
       })
       .catch((e) => { assetsPromise = null; throw e; });
   }
   return assetsPromise;
 }
+// шаблоны оформления письма: свой фон у каждого, зона текста одинаковая
+const TEMPLATES: Record<string, { title: string; file: string }> = {
+  classic: { title: "Классика", file: "bg-a4.jpg" },
+  forest: { title: "Зимний лес", file: "tpl-forest.jpg" },
+  garland: { title: "Изумрудная гирлянда", file: "tpl-garland.jpg" },
+  post: { title: "Почта Деда Мороза", file: "tpl-post.jpg" },
+  gzhel: { title: "Гжель", file: "tpl-gzhel.jpg" },
+};
+const bgCache = new Map<string, Promise<Uint8Array | null>>();
+function templateBg(tpl: string) {
+  const t = TEMPLATES[tpl] ? tpl : "classic";
+  if (!bgCache.has(t)) {
+    const p = fetchFirst([`${SITE}/letter/${TEMPLATES[t].file}`]);
+    p.then((b) => { if (!b) bgCache.delete(t); });
+    bgCache.set(t, p);
+  }
+  return bgCache.get(t)!;
+}
 const newYear = () => { const m = new Date(Date.now() + 3 * 3600e3); return m.getUTCMonth() === 0 ? m.getUTCFullYear() - 1 : m.getUTCFullYear(); };
 async function letterPdf(data: Record<string, unknown>, orderId: number) {
-  const fonts = await loadAssets();
-  return await makeLetterPdf({ ...PL, fontkit }, fonts, data, { year: newYear(), orderId });
+  const [fonts, bg] = await Promise.all([loadAssets(), templateBg(String(data.template || "classic"))]);
+  return await makeLetterPdf({ ...PL, fontkit }, { ...fonts, bg }, data, { year: newYear(), orderId });
 }
 async function addonPdf(kind: string, data: Record<string, unknown>) {
   const fonts = await loadAssets();
@@ -202,6 +219,7 @@ async function notify(order: any, data: any, files: { photo: File | null; letter
   const lines = [
     `🎄 <b>Заказ №${order.id}</b> · ${esc(p.title)} · <b>${order.total} ₽</b>`,
     addons.length ? `➕ ${esc(addons.join(", "))}` : "",
+    `🎨 Оформление: ${esc(TEMPLATES[data.template]?.title || "Классика")}`,
     ``,
     `${adult ? "🧑 Взрослому" : "👶"} ${who}`,
     data.praise ? `⭐ ${adult ? "Поблагодарить" : "Похвалить"}: ${esc(data.praise)}` : "",
@@ -235,6 +253,7 @@ function parse(raw: Record<string, unknown>) {
   const d = {
     product: str(raw.product, 10),
     recipient: str(raw.recipient, 5) === "adult" ? "adult" : "child",
+    template: TEMPLATES[str(raw.template, 10)] ? str(raw.template, 10) : "classic",
     addons: [...new Set(str(raw.addons, 40).split(",").map((s) => s.trim()).filter((a) => ADDONS[a]))],
     child_letter: false,
     name: str(raw.name, 24),
@@ -266,7 +285,7 @@ async function ipHash(req: Request) {
 
 // ---------- подарочная страница ----------
 function rowToData(r: any) {
-  return { recipient: r.recipient, name: r.child_name, age: r.child_age, gender: r.child_gender || "", praise: r.praise || "", wish: r.wish || "", gift: r.gift || "", child_letter: r.has_letter_photo };
+  return { template: r.template || "classic", recipient: r.recipient, name: r.child_name, age: r.child_age, gender: r.child_gender || "", praise: r.praise || "", wish: r.wish || "", gift: r.gift || "", child_letter: r.has_letter_photo };
 }
 async function giftHandler(req: Request) {
   const u = new URL(req.url);
@@ -276,7 +295,7 @@ async function giftHandler(req: Request) {
   }
   const token = (u.searchParams.get("gift") || "").trim();
   if (!/^[A-Za-z0-9_-]{16,40}$/.test(token)) return json(req, 400, { ok: false, error: "Ссылка неполная. Проверьте, что она скопирована целиком." });
-  const [r] = await sql`select id, recipient, child_name, child_age, child_gender, praise, wish, gift, has_letter_photo, video_url, created_at, anonymized_at
+  const [r] = await sql`select id, template, recipient, child_name, child_age, child_gender, praise, wish, gift, has_letter_photo, video_url, created_at, anonymized_at
                           from dedmoroz.orders where gift_token = ${token}`;
   if (!r || r.anonymized_at || !r.child_name) return json(req, 404, { ok: false, error: "Это письмо уже вернулось в Великий Устюг. Ссылка больше не работает." });
   const data = rowToData(r);
@@ -289,7 +308,7 @@ async function giftHandler(req: Request) {
     catch (e) { console.error("voice", (e as Error).message); return json(req, 503, { ok: false, error: "Озвучка сейчас недоступна." }); }
   }
   sql`update dedmoroz.orders set gift_opened_at = now() where id = ${r.id} and gift_opened_at is null`.catch(() => {});
-  return json(req, 200, { ok: true, id: Number(r.id), year: newYear(), recipient: r.recipient, gender: data.gender, letter: buildLetter(data), video: r.video_url || null, voice: !!XI });
+  return json(req, 200, { ok: true, id: Number(r.id), year: newYear(), recipient: r.recipient, gender: data.gender, template: data.template, bg: `letter/${(TEMPLATES[data.template] || TEMPLATES.classic).file}`, letter: buildLetter(data), video: r.video_url || null, voice: !!XI });
 }
 
 // ---------- обработчик ----------
@@ -339,9 +358,9 @@ Deno.serve(async (req) => {
 
   const letter = letterPlain(d);
   const [order] = await sql`
-    insert into dedmoroz.orders (product, price_rub, recipient, addons, child_name, child_age, child_gender, praise, wish, gift, parent_name, contact,
+    insert into dedmoroz.orders (template, product, price_rub, recipient, addons, child_name, child_age, child_gender, praise, wish, gift, parent_name, contact,
                                  has_photo, has_letter_photo, letter_text, consent_at, ip_hash, gift_token)
-    values (${d.product}, ${total}, ${d.recipient}, ${d.addons}, ${d.name}, ${d.age}, ${d.gender || null}, ${d.praise || null}, ${d.wish || null}, ${d.gift || null},
+    values (${d.template}, ${d.product}, ${total}, ${d.recipient}, ${d.addons}, ${d.name}, ${d.age}, ${d.gender || null}, ${d.praise || null}, ${d.wish || null}, ${d.gift || null},
             ${d.parent || null}, ${d.contact}, ${!!photo}, ${!!letterPhoto}, ${letter}, now(), ${ih}, ${token})
     returning id, gift_token`;
   order.total = total;
