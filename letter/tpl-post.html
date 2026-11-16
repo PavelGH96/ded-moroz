@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><title>Почта Деда Мороза</title>
+<!-- Шаблон бланка письма «Почта Деда Мороза». Снимается в tpl-post.jpg скриптом letter/render.py.
+     Зона текста, которую заполняет сервер: x 104…690 px, y 252…842 px — её оставляем светлой и пустой. -->
+<style>
+@font-face{font-family:"Cormorant SC";src:url(CormorantSC-SemiBold.ttf);font-weight:600}
+@font-face{font-family:"Bad Script";src:url(BadScript-Regular.ttf)}
+@font-face{font-family:"Great Vibes";src:url(GreatVibes-Regular.ttf)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:794px;height:1123px;overflow:hidden}
+.page{position:relative;width:794px;height:1123px;overflow:hidden;background:radial-gradient(ellipse 70% 60% at 50% 45%,#fffdf6,#f8f1e1 65%,#efe3c8)}
+svg.layer{position:absolute;inset:0;width:100%;height:100%}
+.abs{position:absolute}
+.title{left:0;right:0;top:0px;text-align:center;font:600 17px/1 "Cormorant SC",serif;letter-spacing:.32em;padding-left:.32em;color:#1f3a8a}
+.subtitle{left:0;right:0;top:0px;text-align:center;font:600 13px/1 "Cormorant SC",serif;letter-spacing:.42em;padding-left:.42em;color:#1f3a8a}
+.medal{left:86px;top:842px;width:150px;height:192px}
+.medal .photo{position:absolute;inset:9px;border-radius:50%;background:#2a1418 url(portrait.jpg) center 18%/cover;box-shadow:inset 0 0 18px rgba(30,10,5,.5)}
+.medal svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.medal-cap{left:46px;top:1042px;width:230px;text-align:center;font:600 10.5px/1.2 "Cormorant SC",serif;letter-spacing:.22em;color:#1f3a8a}
+.sig-pre{right:118px;top:872px;font:22px/1 "Bad Script",cursive;color:#1b2a5e}
+.sig{right:96px;top:896px;font:64px/1 "Great Vibes",cursive;color:#1b2a5e}
+.sig-fl{right:74px;top:954px;width:250px;height:46px}
+.seal{left:268px;top:888px;width:146px;filter:drop-shadow(1.5px 3px 3px rgba(58,21,5,.45))}
+.title,.subtitle{display:none}
+</style></head><body><div class="page">
+<svg class="layer" viewBox="0 0 794 1123" aria-hidden="true"><defs><symbol id="flake" viewBox="-50 -50 100 100"><g fill="none" stroke-linecap="round"><g id="arm"><line x1="0" y1="0" x2="0" y2="-46"/><polyline points="-9,-19 0,-28 9,-19"/><polyline points="-7,-34 0,-40 7,-34"/></g><use href="#arm" transform="rotate(60)"/><use href="#arm" transform="rotate(120)"/><use href="#arm" transform="rotate(180)"/><use href="#arm" transform="rotate(240)"/><use href="#arm" transform="rotate(300)"/></g></symbol>
+<pattern id="air" width="44" height="44" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="44" height="44" fill="#fbf6ea"/><rect width="12" height="44" fill="#c8281d"/><rect x="22" width="12" height="44" fill="#1f3a8a"/></pattern>
+<filter id="tex"><feTurbulence type="fractalNoise" baseFrequency=".9 .6" numOctaves="3" seed="2"/><feColorMatrix values="0 0 0 0 .4 0 0 0 0 .34 0 0 0 0 .22 0 0 0 .1 0"/></filter>
+<clipPath id="stampclip"><rect x="0" y="0" width="128" height="156"/></clipPath>
+<mask id="perf"><rect x="-6" y="-6" width="140" height="168" fill="#fff"/><circle cx="4" cy="-6" r="5" fill="#000"/><circle cx="4" cy="162" r="5" fill="#000"/><circle cx="16" cy="-6" r="5" fill="#000"/><circle cx="16" cy="162" r="5" fill="#000"/><circle cx="28" cy="-6" r="5" fill="#000"/><circle cx="28" cy="162" r="5" fill="#000"/><circle cx="40" cy="-6" r="5" fill="#000"/><circle cx="40" cy="162" r="5" fill="#000"/><circle cx="52" cy="-6" r="5" fill="#000"/><circle cx="52" cy="162" r="5" fill="#000"/><circle cx="64" cy="-6" r="5" fill="#000"/><circle cx="64" cy="162" r="5" fill="#000"/><circle cx="76" cy="-6" r="5" fill="#000"/><circle cx="76" cy="162" r="5" fill="#000"/><circle cx="88" cy="-6" r="5" fill="#000"/><circle cx="88" cy="162" r="5" fill="#000"/><circle cx="100" cy="-6" r="5" fill="#000"/><circle cx="100" cy="162" r="5" fill="#000"/><circle cx="112" cy="-6" r="5" fill="#000"/><circle cx="112" cy="162" r="5" fill="#000"/><circle cx="124" cy="-6" r="5" fill="#000"/><circle cx="124" cy="162" r="5" fill="#000"/><circle cx="136" cy="-6" r="5" fill="#000"/><circle cx="136" cy="162" r="5" fill="#000"/><circle cx="-6" cy="4" r="5" fill="#000"/><circle cx="134" cy="4" r="5" fill="#000"/><circle cx="-6" cy="16" r="5" fill="#000"/><circle cx="134" cy="16" r="5" fill="#000"/><circle cx="-6" cy="28" r="5" fill="#000"/><circle cx="134" cy="28" r="5" fill="#000"/><circle cx="-6" cy="40" r="5" fill="#000"/><circle cx="134" cy="40" r="5" fill="#000"/><circle cx="-6" cy="52" r="5" fill="#000"/><circle cx="134" cy="52" r="5" fill="#000"/><circle cx="-6" cy="64" r="5" fill="#000"/><circle cx="134" cy="64" r="5" fill="#000"/><circle cx="-6" cy="76" r="5" fill="#000"/><circle cx="134" cy="76" r="5" fill="#000"/><circle cx="-6" cy="88" r="5" fill="#000"/><circle cx="134" cy="88" r="5" fill="#000"/><circle cx="-6" cy="100" r="5" fill="#000"/><circle cx="134" cy="100" r="5" fill="#000"/><circle cx="-6" cy="112" r="5" fill="#000"/><circle cx="134" cy="112" r="5" fill="#000"/><circle cx="-6" cy="124" r="5" fill="#000"/><circle cx="134" cy="124" r="5" fill="#000"/><circle cx="-6" cy="136" r="5" fill="#000"/><circle cx="134" cy="136" r="5" fill="#000"/><circle cx="-6" cy="148" r="5" fill="#000"/><circle cx="134" cy="148" r="5" fill="#000"/><circle cx="-6" cy="160" r="5" fill="#000"/><circle cx="134" cy="160" r="5" fill="#000"/></mask></defs>
+<rect width="794" height="1123" filter="url(#tex)"/>
+<rect x="0" y="0" width="794" height="1123" fill="none" stroke="url(#air)" stroke-width="30"/>
+<rect x="20" y="20" width="754" height="1083" fill="none" stroke="#1f3a8a" stroke-width="1" opacity=".5"/>
+<g transform="translate(66 64)" font-family="Cormorant SC" font-weight="600" fill="#1f3a8a">
+  <text font-size="26" letter-spacing="3">ПОЧТА ДЕДА МОРОЗА</text>
+  <text y="28" font-size="13" letter-spacing="2.4" fill="#b8292a">ВЕЛИКИЙ УСТЮГ · ВОТЧИНА ДЕДА МОРОЗА</text>
+  <text y="52" font-size="12" letter-spacing="2" opacity=".75">ЛИЧНОЕ ПИСЬМО · ДОСТАВИТЬ ЛИЧНО В РУКИ</text>
+  <rect y="70" width="148" height="30" rx="3" fill="none" stroke="#b8292a" stroke-width="2"/>
+  <text x="74" y="91" font-size="15" letter-spacing="4" text-anchor="middle" fill="#b8292a">АВИА · СРОЧНО</text>
+</g>
+<g transform="translate(600 52) rotate(3)">
+  <g mask="url(#perf)"><rect x="-6" y="-6" width="140" height="168" fill="#fffdf6"/></g>
+  <rect x="8" y="8" width="112" height="112" fill="#a3241a"/>
+  <image href="portrait.jpg" x="10" y="10" width="108" height="108" preserveAspectRatio="xMidYMin slice" clip-path="inset(0)"/>
+  <rect x="8" y="8" width="112" height="112" fill="none" stroke="#1f3a8a" stroke-width="2"/>
+  <text x="64" y="137" text-anchor="middle" font-family="Cormorant SC" font-weight="600" font-size="11" letter-spacing="1.5" fill="#1f3a8a">ПОЧТА ДЕДА МОРОЗА</text>
+  <text x="64" y="151" text-anchor="middle" font-family="Cormorant SC" font-weight="600" font-size="13" fill="#b8292a">2027</text>
+</g>
+<g transform="translate(560 170) rotate(-12)" opacity=".75">
+  <circle r="46" fill="none" stroke="#2d3f7a" stroke-width="2.2"/><circle r="36" fill="none" stroke="#2d3f7a" stroke-width="1"/>
+  <path id="pm" d="M-40 0 A40 40 0 0 1 40 0" fill="none"/><text font-family="Cormorant SC" font-weight="600" font-size="10.5" letter-spacing="1.4" fill="#2d3f7a"><textPath href="#pm" startOffset="50%" text-anchor="middle">ВЕЛИКИЙ УСТЮГ</textPath></text>
+  <text y="6" text-anchor="middle" font-family="Cormorant SC" font-weight="600" font-size="17" fill="#2d3f7a">31·12</text>
+  <text y="24" text-anchor="middle" font-family="Cormorant SC" font-weight="600" font-size="8" letter-spacing="1" fill="#2d3f7a">ПОЛНОЧЬ</text>
+  <g transform="translate(56 -14)"><path d="M-20 -18 q20 -6 40 0 t40 0 t40 0 t40 0" fill="none" stroke="#2d3f7a" stroke-width="1.6" opacity=".55"/><path d="M-20 -9 q20 -6 40 0 t40 0 t40 0 t40 0" fill="none" stroke="#2d3f7a" stroke-width="1.6" opacity=".55"/><path d="M-20 0 q20 -6 40 0 t40 0 t40 0 t40 0" fill="none" stroke="#2d3f7a" stroke-width="1.6" opacity=".55"/><path d="M-20 9 q20 -6 40 0 t40 0 t40 0 t40 0" fill="none" stroke="#2d3f7a" stroke-width="1.6" opacity=".55"/><path d="M-20 18 q20 -6 40 0 t40 0 t40 0 t40 0" fill="none" stroke="#2d3f7a" stroke-width="1.6" opacity=".55"/></g>
+</g>
+<path d="M66 228 H728" stroke="#1f3a8a" stroke-width="1" opacity=".35" stroke-dasharray="4 5"/>
+<use href="#flake" x="388" y="219" width="18" height="18" stroke="#b8292a" stroke-width="5"/>
+</svg>
+<div class="abs sig-pre">С любовью,</div><div class="abs sig">Дед Мороз</div>
+<svg class="abs sig-fl" viewBox="60 0 270 50" preserveAspectRatio="none" aria-hidden="true"><path d="M18 22 C80 46 170 44 238 30 C276 22 300 16 312 8 C318 4 316 0 310 3 C290 14 300 30 322 34" fill="none" stroke="#1b2a5e" stroke-width="2.2" stroke-linecap="round" opacity=".9"/><path d="M60 40 C120 52 190 50 250 38" fill="none" stroke="#1b2a5e" stroke-width="1" stroke-linecap="round" opacity=".55"/></svg>
+<img class="abs seal" src="seal.png" alt="" style="left:96px">
+</div></body></html>

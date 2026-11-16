@@ -1,5 +1,5 @@
 """Снимает фоны документов в JPG (A4, 1588×2246 px):
-letter/bg.html → bg-a4.jpg (письмо), tags.html → tags-a4.jpg (бирки), blank.html → blank-a4.jpg (бланк письма Деду Морозу).
+letter/bg.html → bg-a4.jpg (письмо, шаблон «Классика»), tpl-*.html → tpl-*.jpg (другие шаблоны письма), tags.html → tags-a4.jpg (бирки), blank.html → blank-a4.jpg (бланк письма Деду Морозу).
 
 Запуск: python3 letter/render.py [путь к Chrome]   (нужны playwright и Chrome)
 """
@@ -9,7 +9,8 @@ from PIL import Image
 
 here = pathlib.Path(__file__).resolve().parent
 chrome = sys.argv[1] if len(sys.argv) > 1 else "/usr/bin/google-chrome"
-pages = [("bg.html", "bg-a4.jpg"), ("tags.html", "tags-a4.jpg"), ("blank.html", "blank-a4.jpg")]
+pages = [("bg.html", "bg-a4.jpg"), ("tags.html", "tags-a4.jpg"), ("blank.html", "blank-a4.jpg"),
+         ("tpl-forest.html", "tpl-forest.jpg"), ("tpl-garland.html", "tpl-garland.jpg"), ("tpl-post.html", "tpl-post.jpg"), ("tpl-gzhel.html", "tpl-gzhel.jpg")]
 
 with sync_playwright() as p:
     b = p.chromium.launch(executable_path=chrome, args=["--no-sandbox", "--allow-file-access-from-files"])
