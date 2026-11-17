@@ -554,7 +554,7 @@ h1 .deco,h2 .deco{background:inherit;-webkit-background-clip:text;background-cli
             </span>
           </span>
         </button>
-        <span class="dm-hint" id="dmHint"><span class="dm-hand" aria-hidden="true">👆</span>Нажмите на Деда Мороза<span class="dm-hint-sub">он стукнет посохом</span></span>
+        <span class="dm-hint" id="dmHint"><span class="dm-hand" aria-hidden="true">👆</span>Нажмите на Деда Мороза<span class="dm-hint-sub">начнётся волшебство</span></span>
         <span class="dm-tap" id="dmTap" aria-hidden="true"><i></i><i></i></span>
       </div>
       <div class="letter hero-letter" aria-live="polite">
@@ -1592,9 +1592,10 @@ h1 .deco,h2 .deco{background:inherit;-webkit-background-clip:text;background-cli
   }
 
 
-  /* фоновая музыка: «Jingle Bells» (Дж. Пирпонт, 1857, общественное достояние), музыкальная шкатулка + колокольчики */
+  /* фоновая музыка: «Jingle Bells» (Дж. Пирпонт, 1857) и «В лесу родилась ёлочка» (Л. Бекман, 1903), обе в общественном достоянии.
+     Бодрый темп, бубенцы восьмыми, бас и аккорды «ум-ца»: шкатулка, бас, пиццикато, бубенцы */
   var music = (function(){
-    var btn = $('music'), BPM = 100, B = 60/BPM, LOOK = 0.5;
+    var btn = $('music'), BPM = 138, B = 60/BPM, LOOK = 0.5;
     var NOTE = {C:0, D:2, E:4, F:5, G:7, A:9, B:11};
     function hz(n){ var m = 12*(+n.slice(-1) + 1) + NOTE[n[0]] + (n[1] === '#' ? 1 : 0); return 440*Math.pow(2, (m - 69)/12); }
     function seq(str){ return str.trim().split(/\s+/).map(function(t){ var a = t.split(':'); return [a[0], +a[1]]; }); }
@@ -1606,15 +1607,25 @@ h1 .deco,h2 .deco{background:inherit;-webkit-background-clip:text;background-cli
     var bassVerse = 'C3 C3 C3 F2 F2 G2 G2 C3 C3 C3 C3 F2 F2 G2 G2 C3'.split(' ');
     var bassChorus = 'C3 C3 C3 C3 F2 C3 D3 G2 C3 C3 C3 C3 F2 C3 G2 C3'.split(' ');
     var bassInter = 'C3 C3'.split(' ');
+    /* «В лесу родилась ёлочка», до мажор */
+    var yolka = seq('G4:.5 E5:.5 E5:.5 D5:.5 E5:.5 C5:.5 G4:.5 G4:.5 G4:.5 E5:.5 E5:.5 F5:.5 D5:.5 G5:1.5 G5:.5 A4:.5 A4:.5 F5:.5 F5:.5 E5:.5 D5:.5 C5:.5 C5:.5 E5:.5 E5:.5 D5:.5 E5:.5 C5:1.5');
+    var bassYolka = 'C3 G2 F2 C3'.split(' ');
     var song = [], bells = [], bars = [], t = 0;
-    function add(mel, bass, withBells){
+    /* bellMode: 2 — бубенцы каждой восьмой, 1 — на слабые доли */
+    function add(mel, bass, bellMode){
       var start = t;
       mel.forEach(function(n){ if(n[0] !== 'r') song.push([t, n[0], n[1]]); t += n[1]; });
-      bass.forEach(function(b, i){ bars.push([start + i*4, b]); if(withBells) for(var k=0;k<4;k++) bells.push([start + i*4 + k, k % 2 ? 1 : 0.55]); });
+      bass.forEach(function(b, i){
+        bars.push([start + i*4, b]);
+        if(bellMode === 2) for(var k=0;k<8;k++) bells.push([start + i*4 + k*0.5, k % 2 ? 0.5 : (k % 4 === 2 ? 1 : 0.75)]);
+        else if(bellMode === 1) { bells.push([start + i*4 + 1, 0.7]); bells.push([start + i*4 + 3, 0.7]); }
+      });
     }
-    add(verseA.concat(verseB), bassVerse, false);
-    add(chorusA.concat(chorusB), bassChorus, true);
-    add(interlude, bassInter, false);
+    add(chorusA.concat(chorusB), bassChorus, 2);
+    add(verseA.concat(verseB), bassVerse, 1);
+    add(chorusA.concat(chorusB), bassChorus, 2);
+    add(yolka.concat(yolka), bassYolka.concat(bassYolka), 2);
+    add(interlude, bassInter, 1);
     var LEN = t;
 
     var ctx, out, wet, noise, playing = false, timer = 0, loopAt = 0, iS = 0, iB = 0, iR = 0;
@@ -1624,14 +1635,14 @@ h1 .deco,h2 .deco{background:inherit;-webkit-background-clip:text;background-cli
       out = ctx.createGain(); out.gain.value = 0; out.connect(ctx.destination);
       var len = ctx.sampleRate*2.4, ir = ctx.createBuffer(2, len, ctx.sampleRate);
       for(var c=0;c<2;c++){ var d = ir.getChannelData(c); for(var i=0;i<len;i++) d[i] = (Math.random()*2 - 1)*Math.pow(1 - i/len, 3.2); }
-      var conv = ctx.createConvolver(); conv.buffer = ir; wet = ctx.createGain(); wet.gain.value = 0.32; wet.connect(conv); conv.connect(out);
+      var conv = ctx.createConvolver(); conv.buffer = ir; wet = ctx.createGain(); wet.gain.value = 0.22; wet.connect(conv); conv.connect(out);
       noise = ctx.createBuffer(1, ctx.sampleRate*0.25, ctx.sampleRate);
       var nd = noise.getChannelData(0); for(var j=0;j<nd.length;j++) nd[j] = Math.random()*2 - 1;
       return true;
     }
     function send(node){ node.connect(out); node.connect(wet); }
     function box(at, f, beats){
-      var g = ctx.createGain(), dur = Math.min(2.2, 0.9 + beats*B);
+      var g = ctx.createGain(), dur = Math.min(1.6, 0.5 + beats*B);
       g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(0.22, at + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
       [[1, 1], [2, 0.28], [4.02, 0.07], [5.4, 0.035]].forEach(function(p){
         var o = ctx.createOscillator(), og = ctx.createGain(); o.type = 'sine'; o.frequency.value = f*p[0];
@@ -1640,18 +1651,27 @@ h1 .deco,h2 .deco{background:inherit;-webkit-background-clip:text;background-cli
       });
       send(g);
     }
+    /* короткий аккорд-пиццикато на слабые доли: «ум-ца» */
+    function stab(at, f){
+      [1, 1.26, 1.5].forEach(function(m){
+        var o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'triangle'; o.frequency.value = f*2*m;
+        g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(0.035, at + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, at + 0.18);
+        o.connect(g); send(g); o.start(at); o.stop(at + 0.2);
+      });
+    }
     function bass(at, f){
-      [[0, 1, 0.16], [2*B, 1.5, 0.09]].forEach(function(p){
+      stab(at + B, f); stab(at + 3*B, f);
+      [[0, 1, 0.16], [2*B, 1.5, 0.1]].forEach(function(p){
         var o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter(), s = at + p[0];
         o.type = 'triangle'; o.frequency.value = f*p[1]; lp.type = 'lowpass'; lp.frequency.value = 700;
-        g.gain.setValueAtTime(0.0001, s); g.gain.exponentialRampToValueAtTime(p[2], s + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, s + 1.7*B);
-        o.connect(lp).connect(g); send(g); o.start(s); o.stop(s + 1.8*B);
+        g.gain.setValueAtTime(0.0001, s); g.gain.exponentialRampToValueAtTime(p[2], s + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, s + 0.9*B);
+        o.connect(lp).connect(g); send(g); o.start(s); o.stop(s + B);
       });
     }
     function bell(at, v){
       var src = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), g = ctx.createGain();
       src.buffer = noise; hp.type = 'bandpass'; hp.frequency.value = 9000; hp.Q.value = 1.4;
-      g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(0.05*v, at + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, at + 0.11);
+      g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(0.065*v, at + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, at + 0.09);
       src.connect(hp).connect(g); send(g); src.start(at); src.stop(at + 0.13);
     }
     function pump(){
