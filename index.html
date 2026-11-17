@@ -173,6 +173,20 @@ nav .ny-chip{color:var(--frost)}
 .sample-text{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
 .sample-text .checks{margin:0}
 @media (max-width:900px){.sample-grid{grid-template-columns:1fr;gap:28px}.sample-pic{max-width:440px;margin:0 auto}}
+/* телефон: заголовок, вкладки и само письмо помещаются на один экран */
+@media (max-width:900px){
+  .sample-grid{gap:14px}
+  .sample-text{display:contents}
+  .sample-text h2{order:1}
+  .sample-text .lead:first-of-type{order:2;margin:0}
+  .sample .tpl-tabs{order:3}
+  .sample-pic{order:4;width:min(100%,440px,calc((100svh - 225px)*.7066));margin:4px auto 0}
+  .sample-text > :nth-child(n+4){order:5}
+  .sample-text > .btn{justify-self:start}
+  .sample .tpl-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;position:sticky;top:94px;z-index:5;padding:8px 0;margin:-8px 0;background:linear-gradient(rgba(18,52,38,.96) 75%,rgba(18,52,38,0))}
+  .sample .tpl-tab{flex-direction:column;gap:4px;padding:5px 2px 6px;border-radius:10px;font-size:.66rem;line-height:1.15;text-align:center}
+  .sample .tpl-tab img{width:30px;height:42px}
+}
 
 /* музыка */
 .music{position:fixed;right:16px;bottom:16px;z-index:40;display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 16px 0 14px;border-radius:999px;border:1px solid rgba(255,196,107,.45);background:rgba(18,52,38,.92);color:var(--frost);font:500 .9rem var(--body);cursor:pointer;box-shadow:0 8px 24px -10px rgba(0,0,0,.7);-webkit-tap-highlight-color:transparent;transition:border-color .2s,background .2s}
@@ -1165,7 +1179,7 @@ h1 .deco,h2 .deco{background:inherit;-webkit-background-clip:text;background-cli
   }
   var lastW = 0;
   function size(){
-    var d = Math.min(window.devicePixelRatio || 1, window.innerWidth < 700 ? 1.5 : 2);
+    var d = Math.min(window.devicePixelRatio || 1, 1.5);
     var w = window.innerWidth, h = window.innerHeight;
     cv.width = w*d; cv.height = h*d; ctx.setTransform(d,0,0,d,0,0);
     /* на телефоне высота окна меняется при прокрутке (панель Safari): снег не пересоздаём */
@@ -1279,7 +1293,7 @@ h1 .deco,h2 .deco{background:inherit;-webkit-background-clip:text;background-cli
   var shells = [], embers = [], glows = [];
   var PAL = [['#ffd27a','#fff1c9'], ['#ff6b5e','#ffd0c9'], ['#8fd3ff','#e6f6ff'], ['#9dffb0','#eafff0'], ['#ff9df0','#ffe6fb'], ['#ffffff','#ffd27a']];
   function fireworks(){
-    if(still || shells.length > 8) return;
+    if(still || shells.length > 5 || embers.length > 250) return; /* не копим салюты при частых нажатиях */
     var now = performance.now(), n = 4 + Math.floor(Math.random()*2);
     for(var i=0;i<n;i++){
       var tx = VW*(0.08 + 0.84*((i + Math.random()*0.8)/n)), ty = VH*(0.12 + Math.random()*0.3);
@@ -1340,7 +1354,7 @@ h1 .deco,h2 .deco{background:inherit;-webkit-background-clip:text;background-cli
   var cur = {x:0, y:0}, target = {x:0, y:0}, lastMove = 0, t0 = performance.now();
 
   function fxSize(){
-    var r = hero.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, window.innerWidth < 700 ? 1.5 : 2);
+    var r = hero.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 1.5);
     fx.width = r.width*d; fx.height = r.height*d; fctx.setTransform(d,0,0,d,0,0);
   }
   fxSize(); window.addEventListener('resize', fxSize);
@@ -1463,6 +1477,7 @@ h1 .deco,h2 .deco{background:inherit;-webkit-background-clip:text;background-cli
   function burst(){
     var p = tipPoint(), i, a, s;
     var many = still ? 0.4 : 1;
+    if(parts.length > 120) many *= 0.35; /* частые нажатия: частиц не больше, чем нужно для эффекта */
     flashes.push({x:p.x, y:p.y, life:0, max:16});
     if(dm3) dm3.u.uFlash.value = 1;
     fireworks();
@@ -1486,12 +1501,17 @@ h1 .deco,h2 .deco{background:inherit;-webkit-background-clip:text;background-cli
     if(!looping){ looping = true; requestAnimationFrame(fxTick); }
   }
 
+  /* звёздочка рисуется один раз в отдельный холст: размытая тень на каждом кадре сильно грузила ПК */
+  var starSpr = (function(){
+    var c = document.createElement('canvas'), S = 64; c.width = c.height = S; var x = c.getContext('2d');
+    x.translate(S/2, S/2); x.fillStyle = '#fff6dc'; x.shadowColor = '#ffd27a'; x.shadowBlur = 10; x.beginPath();
+    for(var i=0;i<8;i++){ var r = i%2 ? 20*0.22 : 20; var an = i*Math.PI/4; x.lineTo(Math.cos(an)*r, Math.sin(an)*r); }
+    x.closePath(); x.fill(); return c;
+  })();
   function star(x, y, size, rot, alpha){
+    var k = size/20*32;
     fctx.save(); fctx.translate(x, y); fctx.rotate(rot); fctx.globalAlpha = alpha;
-    fctx.fillStyle = '#fff6dc'; fctx.shadowColor = '#ffd27a'; fctx.shadowBlur = 12;
-    fctx.beginPath();
-    for(var i=0;i<8;i++){ var r = i%2 ? size*0.22 : size; var an = i*Math.PI/4; fctx.lineTo(Math.cos(an)*r, Math.sin(an)*r); }
-    fctx.closePath(); fctx.fill(); fctx.restore();
+    fctx.drawImage(starSpr, -k, -k, k*2, k*2); fctx.restore();
   }
 
   function fxTick(){
