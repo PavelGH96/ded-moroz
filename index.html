@@ -6,7 +6,7 @@
 <style>html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}</style>
 <script>(function(){function p(e){e.preventDefault()}["gesturestart","gesturechange","gestureend"].forEach(function(t){document.addEventListener(t,p,{passive:false})});document.addEventListener("touchmove",function(e){if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});var l=0;document.addEventListener("touchend",function(e){var n=Date.now();if(n-l<300&&!e.target.closest("input,textarea,select,a,button,label"))e.preventDefault();l=n},{passive:false})})();</script>
 <meta name="theme-color" content="#123426">
-<meta name="description" content="Именное письмо и видео от Деда Мороза: он заходит в комнату вашего ребёнка, пока тот спит. Заказы к Новому году до 30 декабря.">
+<meta name="description" content="Именное письмо от Деда Мороза: по имени, с похвалой за настоящие дела и обещанием подарка. PDF и конверт с сургучной печатью. Заказы к Новому году до 30 декабря.">
 <title>Дед Мороз заходил</title>
 <link rel="icon" href="favicon.ico?v=20261113b" sizes="48x48">
 <link rel="icon" type="image/png" href="favicon-32.png?v=20261113b" sizes="32x32">
@@ -17,7 +17,7 @@
 <meta property="og:locale" content="ru_RU">
 <meta property="og:url" content="https://pavelgh96.github.io/ded-moroz/">
 <meta property="og:title" content="Утром ребёнок узнает, что ночью к нему приходил Дед Мороз">
-<meta property="og:description" content="Именное письмо и видео, где Дед Мороз стоит у кроватки вашего спящего малыша. Заказы до 30 декабря.">
+<meta property="og:description" content="Именное письмо от Деда Мороза в конверте с сургучной печатью. Заказы до 30 декабря.">
 <meta property="og:image" content="https://pavelgh96.github.io/ded-moroz/og.jpg?v=20261113b">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -255,6 +255,12 @@ main,footer{position:relative;z-index:1}
 .price s{font:400 1rem var(--body);color:var(--muted);margin-left:8px}
 .card ul{margin:0;padding-left:20px;color:var(--muted);display:flex;flex-direction:column;gap:6px;flex:1}
 .card .btn{margin-top:6px}
+.card.soon{opacity:.72;position:relative}
+.card.soon .price{color:var(--muted)}
+.tag-soon{background:var(--lamp);color:#3a2606}
+.btn-soon{cursor:default;pointer-events:none;opacity:.8}
+.soon-badge{display:inline-block;background:var(--lamp);color:#3a2606;font:700 .8rem var(--body);padding:4px 12px;border-radius:999px;margin-bottom:12px}
+.opt-soon{opacity:.5;cursor:not-allowed}
 
 /* шаги */
 .steps{margin-top:36px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s;list-style:none;padding:0}
@@ -439,7 +445,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
 .tpls{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:6px}
 .tpl{position:relative;display:flex;flex-direction:column;gap:6px;cursor:pointer;text-align:center;font-size:.78rem;color:var(--muted);line-height:1.2}
 .tpl input{position:absolute;opacity:0;pointer-events:none}
-.tpl img{width:100%;aspect-ratio:220/311;object-fit:cover;border-radius:4px;border:2px solid transparent;box-shadow:0 6px 16px -8px rgba(0,0,0,.7);transition:border-color .2s,transform .2s}
+.tpl img{width:100%;height:auto;aspect-ratio:220/311;object-fit:cover;border-radius:4px;border:2px solid transparent;box-shadow:0 6px 16px -8px rgba(0,0,0,.7);transition:border-color .2s,transform .2s}
 .tpl:hover img{transform:translateY(-2px)}
 .tpl input:checked + img{border-color:var(--lamp)}
 .tpl input:checked ~ span{color:var(--frost)}
@@ -485,9 +491,9 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <p class="eyebrow">Письмо и видео к Новому году</p>
+      <p class="eyebrow">Именное письмо к Новому году</p>
       <h1>Утром <span class="deco hat hat-end">ребёнок</span> узнает, что ночью к нему приходил <em>Дед Мороз</em></h1>
-      <p class="lead">Именное письмо и короткое видео: Дед Мороз в комнате вашего ребёнка, пока тот спит. В письме он называет по имени и хвалит за настоящие дела, а на видео стоит у кроватки и шёпотом поздравляет.</p>
+      <p class="lead">Именное письмо из резиденции Деда Мороза. Он пишет, что ночью заходил к ребёнку, называет его по имени, хвалит за настоящие дела и обещает подарок под ёлкой.</p>
       <div class="try">
         <label for="heroName">Впишите имя ребёнка и посмотрите на письмо</label>
         <input id="heroName" type="text" maxlength="24" placeholder="Например, Миша" autocomplete="off">
@@ -499,7 +505,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
       <p class="guarantee"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.1 4.9-4.9 1.4 1.4-6.3 6.3z"/></svg><span>Если что-то не так, бесплатно переделаем. Не успеем к Новому году — вернём деньги.</span></p>
       <ul class="facts">
         <li>Письмо готово за час</li>
-        <li>Видео за 24 часа</li>
+        <li>5 вариантов оформления</li>
         <li>Правки до 31 декабря</li>
       </ul>
     </div>
@@ -535,7 +541,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
       <h2>До <span class="deco tinsel">Нового года</span> осталось</h2>
       <p class="lead" id="nyLead">До 1 января по московскому времени.</p>
       <p class="note" id="nyDeadline">Заказы на этот Новый год принимаем до 30 декабря.</p>
-      <a class="btn btn-main" href="#order">Заказать письмо и видео</a>
+      <a class="btn btn-main" href="#order">Заказать письмо</a>
     </div>
     <div class="timer-wrap">
       <ol class="baubles" role="timer" aria-label="Обратный отсчёт до Нового года">
@@ -552,31 +558,33 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
   <div class="wrap">
     <h2>Три <span class="deco holly">формата</span></h2>
     <div class="cards">
-      <article class="card">
+      <article class="card hit">
+        <span class="tag">Доступно сейчас</span>
         <h3>Письмо</h3>
         <div class="price">390 ₽</div>
         <ul>
           <li>Имя, возраст и 3 личных факта о ребёнке</li>
+          <li>Пять вариантов оформления</li>
           <li>PDF для печати на А4</li>
           <li>Подарочная ссылка: конверт с печатью на телефоне</li>
           <li>Готово за час</li>
         </ul>
-        <a class="btn btn-ghost" href="#order" data-pick="letter">Выбрать письмо</a>
+        <a class="btn btn-main" href="#order" data-pick="letter">Заказать письмо</a>
       </article>
-      <article class="card hit">
-        <span class="tag">Берут чаще всего</span>
+      <article class="card soon">
+        <span class="tag tag-soon">Скоро</span>
         <h3>Письмо и видео</h3>
-        <div class="price">1490 ₽ <s>1880 ₽</s></div>
+        <div class="price">1490 ₽</div>
         <ul>
           <li>Всё из письма</li>
           <li>Видео 40–60 секунд в комнате ребёнка</li>
           <li>Дед Мороз у кроватки на фоне вашей комнаты</li>
           <li>Письмо и видео в одной подарочной ссылке</li>
-          <li>Одна бесплатная правка</li>
         </ul>
-        <a class="btn btn-main" href="#order" data-pick="both">Выбрать комплект</a>
+        <span class="btn btn-ghost btn-soon" aria-disabled="true">Скоро будет</span>
       </article>
-      <article class="card">
+      <article class="card soon">
+        <span class="tag tag-soon">Скоро</span>
         <h3>Видео</h3>
         <div class="price">1490 ₽</div>
         <ul>
@@ -584,7 +592,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
           <li>Шёпотом поздравляет и обещает утренний сюрприз</li>
           <li>Файл MP4 и подарочная ссылка с конвертом</li>
         </ul>
-        <a class="btn btn-ghost" href="#order" data-pick="video">Выбрать видео</a>
+        <span class="btn btn-ghost btn-soon" aria-disabled="true">Скоро будет</span>
       </article>
     </div>
     <p class="lead" style="margin-top:22px;font-size:1rem">К любому заказу можно добавить <b style="color:var(--frost)">именные бирки на подарки</b> («Кому: Миша, от Деда Мороза») и <b style="color:var(--frost)">бланк «Письмо Деду Морозу»</b>, который ребёнок заполнит сам. 99 ₽ за каждый.</p>
@@ -618,7 +626,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
     <a class="mini-env" href="gift.html?demo=1" data-demo target="_blank" rel="noopener" aria-label="Открыть пример конверта с письмом"><img src="letter/seal.webp?v=1" alt="" width="340" height="367" loading="lazy" decoding="async" draggable="false"></a>
     <div>
       <h2>Письмо приходит в конверте с печатью</h2>
-      <p class="lead" style="margin-top:12px">Кроме PDF вы получите подарочную ссылку. Ребёнок открывает её на телефоне, сам ломает сургучную печать, и из конверта появляется письмо, а следом видео.</p>
+      <p class="lead" style="margin-top:12px">Кроме PDF вы получите подарочную ссылку. Ребёнок открывает её на телефоне, сам ломает сургучную печать, и из конверта появляется письмо.</p>
       <ul class="checks">
         <li>Ссылку можно переслать бабушке и дедушке в Telegram или ВКонтакте</li>
         <li>Есть QR-код: распечатайте и вложите в открытку под ёлкой</li>
@@ -634,9 +642,9 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
     <h2>От анкеты до утра с чудом</h2>
     <ol class="steps">
       <li><h3>Анкета</h3><p>Имя, возраст, за что похвалить и о каком подарке мечтает. Пять минут.</p></li>
-      <li><h3>Фото комнаты</h3><p>Для видео нужен один снимок спящего ребёнка или его кровати. Лицо в кадре не обязательно.</p></li>
-      <li><h3>Мы готовим</h3><p>Письмо приходит в течение часа, видео в течение суток. Присылаем в Telegram или на почту.</p></li>
-      <li><h3>Утро</h3><p>Письмо кладёте под ёлку, а видео показываете как запись, которую «случайно сняла камера».</p></li>
+      <li><h3>Оформление</h3><p>Выберите один из пяти бланков: от классики до гжели.</p></li>
+      <li><h3>Мы готовим</h3><p>Письмо приходит в течение часа: PDF и подарочная ссылка в Telegram или на почту.</p></li>
+      <li><h3>Утро</h3><p>Распечатанное письмо кладёте под ёлку или ребёнок сам открывает конверт на телефоне.</p></li>
     </ol>
   </div>
 </section>
@@ -666,15 +674,16 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
         <rect x="426" y="120" width="6" height="190" rx="3" fill="#cfd8ea"/>
         <circle cx="429" cy="116" r="9" fill="#cfe4ff"/>
       </svg>
-      <figcaption>Схема кадра. Сюда встанет ваш пример видео</figcaption>
+      <figcaption>Схема кадра. Видео появится совсем скоро</figcaption>
     </figure>
     <div>
+      <span class="soon-badge">Скоро</span>
       <h2>Дед Мороз не в своём тереме, а в вашей детской</h2>
+      <p class="lead" style="margin-top:10px">Готовим видео, где Дед Мороз стоит у кроватки вашего ребёнка. Скоро его можно будет добавить к письму.</p>
       <ul class="checks">
         <li>Ребёнок узнаёт свою кровать, своё одеяло и свои игрушки. Поэтому верит.</li>
         <li>В тексте только настоящие факты: как зовут кота, чему научился за год, что просил в подарок.</li>
         <li>Письмо называет ребёнка по имени, а видео показывает, что Дед Мороз правда был в его комнате.</li>
-        <li>Фото ребёнка используем только для заказа и удаляем через 7 дней после выдачи.</li>
       </ul>
     </div>
   </div>
@@ -693,9 +702,9 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
           <legend>Что готовим?</legend>
           <div class="field" style="margin-bottom:14px"><span class="flabel" id="r-label">Кого поздравляем</span><div class="seg" role="radiogroup" aria-labelledby="r-label"><label class="seg-opt"><input type="radio" name="recipient" id="r-child" value="child"><span>Ребёнка</span></label><label class="seg-opt"><input type="radio" name="recipient" id="r-adult" value="adult"><span>Взрослого</span></label></div></div>
           <div class="opts">
-            <label class="opt"><input type="radio" name="product" id="p-both" value="both"><div><b>Письмо и видео</b><span>Одна история в двух форматах</span></div><span class="p">1490 ₽</span></label>
-            <label class="opt"><input type="radio" name="product" id="p-letter" value="letter"><div><b>Только письмо</b><span>PDF для печати</span></div><span class="p">390 ₽</span></label>
-            <label class="opt"><input type="radio" name="product" id="p-video" value="video"><div><b>Только видео</b><span>40–60 секунд, MP4</span></div><span class="p">1490 ₽</span></label>
+            <label class="opt opt-soon"><input type="radio" name="product" id="p-both" value="both" disabled><div><b>Письмо и видео</b><span>Скоро будет</span></div><span class="p">1490 ₽</span></label>
+            <label class="opt"><input type="radio" name="product" id="p-letter" value="letter"><div><b>Письмо</b><span>PDF для печати и подарочная ссылка</span></div><span class="p">390 ₽</span></label>
+            <label class="opt opt-soon"><input type="radio" name="product" id="p-video" value="video" disabled><div><b>Только видео</b><span>Скоро будет</span></div><span class="p">1490 ₽</span></label>
           </div>
           <div class="field" style="margin-top:18px"><span class="flabel" id="tpl-label">Оформление письма</span>
             <div class="tpls" role="radiogroup" aria-labelledby="tpl-label"><label class="tpl"><input type="radio" name="tpl" value="classic" checked><img src="letter/thumb-classic.webp?v=1" alt="" width="220" height="311" loading="lazy"><span>Классика</span></label><label class="tpl"><input type="radio" name="tpl" value="forest"><img src="letter/thumb-forest.webp?v=1" alt="" width="220" height="311" loading="lazy"><span>Зимний лес</span></label><label class="tpl"><input type="radio" name="tpl" value="garland"><img src="letter/thumb-garland.webp?v=1" alt="" width="220" height="311" loading="lazy"><span>Изумрудная гирлянда</span></label><label class="tpl"><input type="radio" name="tpl" value="post"><img src="letter/thumb-post.webp?v=1" alt="" width="220" height="311" loading="lazy"><span>Почта Деда Мороза</span></label><label class="tpl"><input type="radio" name="tpl" value="gzhel"><img src="letter/thumb-gzhel.webp?v=1" alt="" width="220" height="311" loading="lazy"><span>Гжель</span></label></div>
@@ -817,7 +826,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
         <p>Письмо от Деда Мороза маме, бабушке или любимому человеку. Дед Мороз поблагодарит за то, что вы расскажете, пожелает главного и пообещает исполнить мечту. Хороший подарок от детей и внуков.</p>
       </div>
       <div style="display:flex;flex-direction:column;gap:14px;align-items:flex-start">
-        <ul class="checks" style="margin-top:0"><li>Тот же бланк, печать и подпись</li><li>Свой тёплый текст для взрослого</li><li>Письмо 390 ₽, с видео 1490 ₽</li></ul>
+        <ul class="checks" style="margin-top:0"><li>Тот же бланк, печать и подпись</li><li>Свой тёплый текст для взрослого</li><li>Письмо 390 ₽</li></ul>
         <a class="btn btn-main" href="#order" data-recipient="adult">Поздравить взрослого</a>
       </div>
     </div>
@@ -828,12 +837,12 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
   <div class="wrap">
     <h2>Что обычно <span class="deco holly">спрашивают</span></h2>
     <div class="faq">
-      <details><summary>Как быстро придёт заказ?</summary><p>Письмо в течение часа после оплаты, видео в течение 24 часов. В последнюю неделю декабря сроки те же, но заказы принимаем только до 30 числа.</p></details>
-      <details><summary>Что такое подарочная ссылка?</summary><p>Это страница с конвертом, запечатанным сургучной печатью. Ребёнок нажимает на печать, она ломается, и появляется его письмо, а если заказано видео, то и видео. Ссылку присылаем вместе с PDF. Работает 90 дней.</p></details>
+      <details><summary>Как быстро придёт заказ?</summary><p>Письмо в течение часа после оплаты. В последнюю неделю декабря сроки те же, но заказы принимаем только до 30 числа.</p></details>
+      <details><summary>Что такое подарочная ссылка?</summary><p>Это страница с конвертом, запечатанным сургучной печатью. Ребёнок нажимает на печать, она ломается, и появляется его письмо. Ссылку присылаем вместе с PDF. Работает 90 дней.</p></details>
       <details><summary>Обязательно ли показывать лицо ребёнка?</summary><p>Нет. Подойдёт кадр со спины, под одеялом или просто кровать в детской. Главное, чтобы ребёнок узнал свою комнату.</p></details>
-      <details><summary>Как сделано видео?</summary><p>Образ и голос Деда Мороза созданы с помощью нейросетей. В кадр с вашей комнатой он попадает при монтаже по вашему фото. Домой к вам никто не приходит.</p></details>
-      <details><summary>Как показать это ребёнку?</summary><p>Письмо распечатайте и положите под ёлку, на подоконник или в морозилку. Видео покажите утром на телефоне: «Смотри, что ночью записала камера».</p></details>
-      <details><summary>У меня двое детей. Как заказать?</summary><p>Для каждого ребёнка делаем своё письмо и своё видео. На второй заказ действует скидка 20%, напишите об этом в заявке.</p></details>
+      <details><summary>Как сделано видео?</summary><p>Видео появится совсем скоро. Образ и голос Деда Мороза созданы с помощью нейросетей. В кадр с вашей комнатой он попадает при монтаже по вашему фото. Домой к вам никто не приходит.</p></details>
+      <details><summary>Как показать это ребёнку?</summary><p>Письмо распечатайте и положите под ёлку, на подоконник или в морозилку. Или отправьте подарочную ссылку: ребёнок сам сломает печать и откроет конверт.</p></details>
+      <details><summary>У меня двое детей. Как заказать?</summary><p>Для каждого ребёнка делаем своё письмо. На второй заказ действует скидка 20%, напишите об этом в заявке.</p></details>
       <details><summary>Как оплатить?</summary><p>После заявки пришлём ссылку на оплату картой или через СБП. Чек приходит на почту или в Telegram.</p></details>
       <details><summary>Можно ли вернуть деньги?</summary><p>Да, если мы ещё не начали работу или не уложились в срок. Если результат не понравился, сначала бесплатно переделаем.</p></details>
     </div>
@@ -851,7 +860,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
 
 <footer id="contacts">
   <div class="wrap foot">
-    <div><b style="color:var(--frost)">Дед Мороз заходил</b><span>Письма и видео от Деда Мороза для детей</span><span>Заказы на этот Новый год до 30 декабря</span></div>
+    <div><b style="color:var(--frost)">Дед Мороз заходил</b><span>Письма от Деда Мороза для детей и взрослых</span><span>Заказы на этот Новый год до 30 декабря</span></div>
     <div><b style="color:var(--frost)">Связаться</b><span>Telegram: укажите ваш контакт</span><span>Почта: укажите вашу почту</span></div>
     <div class="seller" id="seller" hidden><b style="color:var(--frost)">Продавец</b><span id="sellerName"></span><span id="sellerInn"></span></div>
     <div id="docs"><b style="color:var(--frost)">Документы</b><span>Публичная оферта</span><span>Политика конфиденциальности</span><span>Согласие на обработку персональных данных</span></div>
@@ -861,14 +870,15 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
 <script>
 (function(){
   var PRICES = {both:1490, letter:390, video:1490};
-  var NAMES = {both:'Письмо и видео', letter:'Только письмо', video:'Только видео'};
+  var SOON = {both:1, video:1}; /* видео пока не делаем */
+  var NAMES = {both:'Письмо и видео', letter:'Письмо', video:'Только видео'};
   var ADDONS = {tags:{title:'Бирки на подарки', price:99}, blank:{title:'Бланк «Письмо Деду Морозу»', price:99, childOnly:true}};
   /* реквизиты продавца для подвала сайта: заполните, и блок «Продавец» появится сам */
   var SELLER = {name:'', inn:''};
   var $ = function(id){ return document.getElementById(id); };
   var ORDER_URL = 'https://tribgnfjiiwmiktzjeyy.supabase.co/functions/v1/dm-order';
   var TPLS = {classic:'Классика', forest:'Зимний лес', garland:'Изумрудная гирлянда', post:'Почта Деда Мороза', gzhel:'Гжель'};
-  var state = {tpl:'classic', product:'both', recipient:'child', addons:[], name:'', age:'', gender:'', praise:'', wish:'', gift:'', parent:'', contact:'', consent:false, step:0, sentId:0};
+  var state = {tpl:'classic', product:'letter', recipient:'child', addons:[], name:'', age:'', gender:'', praise:'', wish:'', gift:'', parent:'', contact:'', consent:false, step:0, sentId:0};
   function adult(){ return state.recipient === 'adult'; }
   function addonsOn(){ return state.addons.filter(function(a){ return ADDONS[a] && !(adult() && ADDONS[a].childOnly); }); }
   function total(){ return PRICES[state.product] + addonsOn().reduce(function(s, a){ return s + ADDONS[a].price; }, 0); }
@@ -989,7 +999,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
     $('heroName').value = state.name; $('f-name').value = state.name;
     $('f-age').value = state.age; $('f-praise').value = state.praise; $('f-wish').value = state.wish; $('f-gift').value = state.gift;
     $('f-parent').value = state.parent; $('f-contact').value = state.contact; $('f-consent').checked = !!state.consent;
-    var r = $('p-' + state.product); if(r) r.checked = true;
+    if(SOON[state.product]) state.product = 'letter'; var r = $('p-' + state.product); if(r) r.checked = true;
     $('g-m').checked = state.gender === 'm'; $('g-f').checked = state.gender === 'f';
     $('r-' + state.recipient).checked = true;
     var tr = document.querySelector('input[name=tpl][value="' + state.tpl + '"]'); if(tr) tr.checked = true; $('previewLetter').dataset.tpl = state.tpl;
@@ -1051,7 +1061,7 @@ section[data-bg]+section[data-bg]{padding-top:clamp(64px,7vw,104px)}
     bind('heroName','name'); bind('f-name','name'); bind('f-age','age'); bind('f-praise','praise'); bind('f-wish','wish'); bind('f-gift','gift'); bind('f-parent','parent'); bind('f-contact','contact');
     $('f-consent').addEventListener('change', function(e){ state.consent = e.target.checked; });
     document.querySelectorAll('input[name=product]').forEach(function(r){
-      r.addEventListener('change', function(){ state.product = r.value; renderStep(); });
+      r.addEventListener('change', function(){ if(SOON[r.value]) return; state.product = r.value; renderStep(); });
     });
     document.querySelectorAll('input[name=tpl]').forEach(function(r){
       r.addEventListener('change', function(){ state.tpl = r.value; $('previewLetter').dataset.tpl = r.value; renderStep(); });

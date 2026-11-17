@@ -294,12 +294,13 @@ footer a{color:var(--lamp)}
   window.addEventListener('resize', scaleSheet);
 
   /* озвучка письма голосом Деда Мороза */
+  var VOICE_ON = false; /* озвучка пока выключена: включить, когда будет готова */
   var voice = null, voiceWanted = false;
   function voiceUrl(){ return demo ? API + '?demo_voice=1' : API + '?gift=' + encodeURIComponent(token) + '&voice=1'; }
   function setVoice(state, text){ var b = $('voiceBox'); b.classList.toggle('playing', state === 'playing'); b.classList.toggle('loading', state === 'loading'); if(text) $('vstate').textContent = text; }
   function fmt(t){ t = Math.max(0, Math.round(t || 0)); return Math.floor(t/60) + ':' + String(t%60).padStart(2, '0'); }
   function prepVoice(){
-    if(voice || !(data && (data.voice || demo))) return;
+    if(!VOICE_ON || voice || !(data && (data.voice || demo))) return;
     voice = new Audio(); voice.preload = 'auto'; voice.src = voiceUrl();
     try { var p = voice.play(); voice.pause(); if(p && p.catch) p.catch(function(){}); } catch(e){}  /* разблокировка звука на iPhone в момент нажатия */
     voice.addEventListener('canplay', function(){ if(voiceWanted && voice.paused) playVoice(); else if(voice.paused) setVoice('', 'Нажмите, чтобы послушать · ' + fmt(voice.duration)); });
