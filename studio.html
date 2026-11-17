@@ -54,17 +54,23 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
 .hint{color:var(--muted);font-size:12px;margin:4px 0}
 .check{display:flex;align-items:center;gap:8px;margin:6px 0;color:var(--muted)}
 .status{color:var(--gold);min-height:1.4em}
+body.photo .vid-only{display:none!important}
+[hidden]{display:none!important}
 .progress{height:6px;border-radius:6px;background:rgba(255,255,255,.1);overflow:hidden;flex:1;min-width:120px}
 .progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#e2b45a,#ffe08a)}
 @media (max-width:900px){.app{grid-template-columns:1fr;height:auto}.view{height:60vh}aside{border-left:0;border-top:1px solid var(--line)}}
 </style>
 </head>
-<body>
+<body class="photo">
 <div class="app">
   <section class="stage">
     <header>
-      <h1>Студия видео · <span>Дед Мороз заходил</span></h1>
-      <div class="seg" id="fmt" role="group" aria-label="Формат">
+      <h1>Студия · <span>Дед Мороз заходил</span></h1>
+      <div class="seg" id="mode" role="group" aria-label="Что делаем">
+        <button type="button" data-v="photo" class="on">Фото</button>
+        <button type="button" data-v="video">Видео</button>
+      </div>
+      <div class="seg vid-only" id="fmt" role="group" aria-label="Формат">
         <button type="button" data-v="16:9" class="on">16:9 гориз.</button>
         <button type="button" data-v="9:16">9:16 верт.</button>
       </div>
@@ -75,31 +81,31 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
     </header>
     <div class="view" id="view">
       <canvas id="out"></canvas>
-      <div class="empty" id="empty"><b>Добавьте мастер-ролик и фото комнаты</b>Мастер-ролик: Дед Мороз на зелёном фоне со звуком. Фото: снимок, который прислали родители.<br>Потом перетащите Деда Мороза к кровати, колёсиком мыши поменяйте размер.</div>
+      <div class="empty" id="empty"><b id="emptyT">Добавьте фото комнаты</b><span id="emptyS">Дед Мороз уже готов: перетащите его к кроватке, колесо мыши меняет рост.</span></div>
     </div>
-    <div class="bar">
+    <div class="bar vid-only">
       <button type="button" class="btn" id="play">▶ Просмотр</button>
       <input type="range" id="seek" min="0" max="1000" value="300" aria-label="Кадр">
       <span class="time" id="time">0:00 / 0:00</span>
     </div>
     <div class="bar">
-      <button type="button" class="btn main" id="export">Сохранить видео</button>
+      <button type="button" class="btn main" id="export">Сохранить фото</button>
       <div class="progress"><i id="prog"></i></div>
       <span class="status" id="status"></span>
     </div>
   </section>
 
   <aside>
-    <h2>1. Мастер-ролик</h2>
-    <div class="masters" id="masters"></div>
-    <div class="full"><input type="file" id="masterFile" accept="video/*"><span class="hint">Ролики сохраняются в этом браузере, загружать каждый раз не нужно.</span></div>
+    <h2 class="vid-only">1. Мастер-ролик</h2>
+    <div class="masters vid-only" id="masters"></div>
+    <div class="full vid-only"><input type="file" id="masterFile" accept="video/*"><span class="hint">Ролики сохраняются в этом браузере, загружать каждый раз не нужно.</span></div>
 
-    <h2>2. Фото комнаты</h2>
+    <h2>Фото комнаты</h2>
     <div class="full"><input type="file" id="photoFile" accept="image/*"></div>
-    <div class="row"><label for="zoom">Приближение</label><input type="range" id="zoom" min="0" max="15" step="0.5" value="6"><output></output></div>
-    <div class="row"><label for="pan">Сдвиг фото</label><input type="range" id="pan" min="-50" max="50" value="0"><output></output></div>
+    <div class="row vid-only"><label for="zoom">Наезд камеры</label><input type="range" id="zoom" min="0" max="15" step="0.5" value="6"><output></output></div>
+    <div class="row vid-only"><label for="pan">Сдвиг фото</label><input type="range" id="pan" min="-50" max="50" value="0"><output></output></div>
 
-    <h2>3. Дед Мороз</h2>
+    <h2>Дед Мороз</h2>
     <label class="check"><input type="checkbox" id="flip"> Отразить (смотрит в другую сторону)</label>
     <div class="row"><label for="size">Рост</label><input type="range" id="size" min="20" max="120" value="72"><output></output></div>
     <button type="button" class="btn" id="auto" style="width:100%;margin:6px 0">Подогнать цвет под фото</button>
@@ -109,12 +115,12 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
     <div class="row"><label for="sat">Насыщенность</label><input type="range" id="sat" min="-60" max="30" value="0"><output></output></div>
     <div class="row"><label for="soft">Мягкость</label><input type="range" id="soft" min="0" max="3" step="0.5" value="0.5"><output></output></div>
 
-    <h2>4. Зелёный фон</h2>
-    <div class="row"><label for="keySim">Порог</label><input type="range" id="keySim" min="5" max="60" value="30"><output></output></div>
-    <div class="row"><label for="keySmooth">Края</label><input type="range" id="keySmooth" min="1" max="30" value="10"><output></output></div>
-    <div class="row"><label for="spill">Убрать зелень</label><input type="range" id="spill" min="0" max="100" value="80"><output></output></div>
+    <h2 class="vid-only">Зелёный фон</h2>
+    <div class="row vid-only"><label for="keySim">Порог</label><input type="range" id="keySim" min="5" max="60" value="30"><output></output></div>
+    <div class="row vid-only"><label for="keySmooth">Края</label><input type="range" id="keySmooth" min="1" max="30" value="10"><output></output></div>
+    <div class="row vid-only"><label for="spill">Убрать зелень</label><input type="range" id="spill" min="0" max="100" value="80"><output></output></div>
 
-    <h2>5. Атмосфера</h2>
+    <h2>Атмосфера</h2>
     <div class="row"><label for="shadow">Тень</label><input type="range" id="shadow" min="0" max="100" value="55"><output></output></div>
     <div class="row"><label for="glow">Отсвет</label><input type="range" id="glow" min="0" max="100" value="45"><output></output></div>
     <div class="full"><label for="glowColor">Цвет света</label>
@@ -122,11 +128,11 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
     <div class="row"><label for="grain">Зерно</label><input type="range" id="grain" min="0" max="100" value="35"><output></output></div>
     <div class="row"><label for="snow">Снежинки</label><input type="range" id="snow" min="0" max="100" value="35"><output></output></div>
 
-    <h2>6. Титры и музыка</h2>
-    <div class="full"><label for="title">Титр в начале</label><input type="text" id="title" value="31 декабря · Дед Мороз заходил"></div>
-    <div class="full"><label for="musicFile">Фоновая музыка (необязательно)</label><input type="file" id="musicFile" accept="audio/*"></div>
-    <div class="row"><label for="musicVol">Громкость</label><input type="range" id="musicVol" min="0" max="100" value="18"><output></output></div>
-    <p class="hint">Видео: 1,5 с титр и появление в искрах, затем мастер-ролик, в конце Дед Мороз растворяется в снежинках. Сохраняется в реальном времени: не сворачивайте вкладку, пока идёт запись.</p>
+    <h2 class="vid-only">Титры и музыка</h2>
+    <div class="full vid-only"><label for="title">Титр в начале</label><input type="text" id="title" value="31 декабря · Дед Мороз заходил"></div>
+    <div class="full vid-only"><label for="musicFile">Фоновая музыка (необязательно)</label><input type="file" id="musicFile" accept="audio/*"></div>
+    <div class="row vid-only"><label for="musicVol">Громкость</label><input type="range" id="musicVol" min="0" max="100" value="18"><output></output></div>
+    <p class="hint vid-only">Видео: 1,5 с титр и появление в искрах, затем мастер-ролик, в конце Дед Мороз растворяется в снежинках. Сохраняется в реальном времени: не сворачивайте вкладку, пока идёт запись.</p>
   </aside>
 </div>
 
@@ -140,7 +146,7 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
   var out = $('out'), ctx = out.getContext('2d');
   var mv = $('mv'), music = $('music');
   var photo = null, masterUrl = null, masterId = null;
-  var st = { fmt:'16:9', drag:'dm', x:.72, y:.93, light:{x:.8, y:.62} };
+  var st = { mode:'photo', fmt:'16:9', drag:'dm', x:.72, y:.93, light:{x:.8, y:.62} };
   var P = {}; /* значения ползунков */
   var running = false, recording = false, t0 = 0, tNow = 0, ready = false;
 
@@ -153,9 +159,30 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
   ['flip','glowColor','title'].forEach(function(id){ $(id).addEventListener('input', function(){ if(!running) drawStill(); }); });
   function segs(id, key, cb){ $(id).querySelectorAll('button').forEach(function(b){ b.addEventListener('click', function(){
     $(id).querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === b); }); st[key] = b.dataset.v; if(cb) cb(); if(!running) drawStill(); }); }); }
-  segs('fmt', 'fmt', size); segs('drag', 'drag');
+  segs('fmt', 'fmt', size); segs('drag', 'drag'); segs('mode', 'mode', setMode);
 
-  function size(){ if(st.fmt === '16:9'){ out.width = 1920; out.height = 1080; } else { out.width = 1080; out.height = 1920; } }
+  function size(){
+    if(st.mode === 'photo'){ /* фото сохраняется в пропорциях и разрешении снимка (длинная сторона до 3200 px) */
+      if(photo){ var k = Math.min(1, 3200/Math.max(photo.width, photo.height)); out.width = Math.round(photo.width*k); out.height = Math.round(photo.height*k); }
+      else { out.width = 1600; out.height = 1200; }
+      return;
+    }
+    if(st.fmt === '16:9'){ out.width = 1920; out.height = 1080; } else { out.width = 1080; out.height = 1920; } }
+  /* Дед Мороз для фото: готовый вырез с прозрачным фоном */
+  var dmImg = new Image(); dmImg.onload = function(){ if(st.mode === 'photo'){ bbox = null; measure(); drawStill(); } }; dmImg.src = 'ded-photo.webp?v=1';
+  function isPhoto(){ return st.mode === 'photo'; }
+  function srcEl(){ return isPhoto() ? dmImg : mv; }
+  function srcW(){ return isPhoto() ? dmImg.naturalWidth : mv.videoWidth; }
+  function srcH(){ return isPhoto() ? dmImg.naturalHeight : mv.videoHeight; }
+  function hasDM(){ return isPhoto() ? !!dmImg.naturalWidth : !!(masterUrl && mv.videoWidth); }
+  function setMode(){
+    document.body.classList.toggle('photo', isPhoto());
+    $('export').textContent = isPhoto() ? 'Сохранить фото' : 'Сохранить видео';
+    $('emptyT').textContent = isPhoto() ? 'Добавьте фото комнаты' : 'Добавьте мастер-ролик и фото комнаты';
+    $('emptyS').textContent = isPhoto() ? 'Дед Мороз уже готов: перетащите его к кроватке, колесо мыши меняет рост.' : 'Мастер-ролик: Дед Мороз на зелёном фоне со звуком. Фото: снимок комнаты.';
+    if(running) stop();
+    size(); bbox = null; if(hasDM()) measure(); drawStill();
+  }
   size();
 
   /* ---------- WebGL: хромакей и цвет Деда Мороза ---------- */
@@ -164,11 +191,11 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
   (function initGL(){
     var vs = 'attribute vec2 p;varying vec2 uv;uniform float flip;void main(){float u=p.x*0.5+0.5;uv=vec2(flip>0.5?1.0-u:u,0.5-p.y*0.5);gl_Position=vec4(p,0.0,1.0);}';
     var fs = [
-      'precision mediump float;varying vec2 uv;uniform sampler2D t;uniform vec3 key;uniform float sim,smooth,spill,bright,contrast,temp,sat,alpha;',
+      'precision mediump float;varying vec2 uv;uniform sampler2D t;uniform vec3 key;uniform float sim,smooth,spill,bright,contrast,temp,sat,alpha,usekey;',
       'vec2 rgb2uv(vec3 c){return vec2(c.r*-0.169+c.g*-0.331+c.b*0.5+0.5,c.r*0.5+c.g*-0.419+c.b*-0.081+0.5);}',
       'void main(){vec4 c=texture2D(t,uv);',
-      'float d=distance(rgb2uv(c.rgb),rgb2uv(key));float a=smoothstep(sim,sim+smooth,d);',
-      'float g=c.g-max(c.r,c.b);if(g>0.0){c.g-=g*spill;}',
+      'float d=distance(rgb2uv(c.rgb),rgb2uv(key));float a=usekey>0.5?smoothstep(sim,sim+smooth,d):c.a;',
+      'float g=c.g-max(c.r,c.b);if(g>0.0&&usekey>0.5){c.g-=g*spill;}',
       'vec3 col=c.rgb;col=(col-0.5)*(1.0+contrast)+0.5;col*=1.0+bright;',
       'col.r*=1.0+temp*0.18;col.b*=1.0-temp*0.18;col.g*=1.0+temp*0.03;',
       'float l=dot(col,vec3(0.299,0.587,0.114));col=mix(vec3(l),col,1.0+sat);',
@@ -181,21 +208,21 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
     tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
     [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(function(k){ gl.texParameteri(gl.TEXTURE_2D, k, gl.CLAMP_TO_EDGE); });
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    ['t','key','sim','smooth','spill','bright','contrast','temp','sat','alpha','flip'].forEach(function(n){ uLoc[n] = gl.getUniformLocation(prog, n); });
+    ['t','key','sim','smooth','spill','bright','contrast','temp','sat','alpha','flip','usekey'].forEach(function(n){ uLoc[n] = gl.getUniformLocation(prog, n); });
   })();
   var keyColor = [0, 0.69, 0.25];
   var fc = document.createElement('canvas'), fcx = fc.getContext('2d', {willReadFrequently:false});
   function renderDM(alpha){
-    if(!mv.videoWidth) return null;
-    if(gc.width !== mv.videoWidth || gc.height !== mv.videoHeight){ gc.width = mv.videoWidth; gc.height = mv.videoHeight; }
+    if(!hasDM()) return null;
+    if(gc.width !== srcW() || gc.height !== srcH()){ gc.width = srcW(); gc.height = srcH(); }
     gl.viewport(0, 0, gc.width, gc.height);
     gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
     gl.bindTexture(gl.TEXTURE_2D, tex);
     /* кадр сначала копируется в обычный холст: так цветокоррекция одинаково работает и на паузе, и при воспроизведении */
     if(fc.width !== gc.width || fc.height !== gc.height){ fc.width = gc.width; fc.height = gc.height; }
-    fcx.drawImage(mv, 0, 0, fc.width, fc.height);
+    fcx.clearRect(0, 0, fc.width, fc.height); fcx.drawImage(srcEl(), 0, 0, fc.width, fc.height);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, fc);
-    gl.uniform3fv(uLoc.key, keyColor);
+    gl.uniform3fv(uLoc.key, keyColor); gl.uniform1f(uLoc.usekey, isPhoto() ? 0 : 1);
     gl.uniform1f(uLoc.sim, P.keySim/300); gl.uniform1f(uLoc.smooth, P.keySmooth/300); gl.uniform1f(uLoc.spill, P.spill/100);
     gl.uniform1f(uLoc.bright, P.bright/100); gl.uniform1f(uLoc.contrast, P.contrast/100); gl.uniform1f(uLoc.temp, P.temp/50); gl.uniform1f(uLoc.sat, P.sat/100);
     gl.uniform1f(uLoc.alpha, alpha); gl.uniform1f(uLoc.flip, $('flip').checked ? 1 : 0);
@@ -261,8 +288,8 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
     var mDur = dur ? dur - INTRO - OUTRO : 0;
     var a = 1;
     if(dur){ if(t < INTRO) a = Math.max(0, (t - INTRO + .9)/.9); else if(t > INTRO + mDur) a = Math.max(0, 1 - (t - INTRO - mDur)/OUTRO); }
-    var flick = 1 + Math.sin(t*9.1)*.025 + Math.sin(t*23.7)*.015 + (Math.random()-.5)*.02;
-    if(masterUrl && bbox && mv.videoWidth){
+    var flick = !dur ? 1 : 1 + Math.sin(t*9.1)*.025 + Math.sin(t*23.7)*.015 + (Math.random()-.5)*.02;
+    if(hasDM() && bbox){
       var r = dmRect();
       /* тень */
       if(P.shadow > 0 && a > 0){
@@ -325,7 +352,8 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
   function fmtT(s){ s = Math.max(0, s||0); return Math.floor(s/60) + ':' + String(Math.floor(s%60)).padStart(2,'0'); }
   function drawStill(){
     if(!ready) return;
-    $('empty').hidden = !!(photo || masterUrl);
+    $('empty').hidden = isPhoto() ? !!photo : !!(photo || masterUrl);
+    if(isPhoto()){ frame(0, 0, false); return; }
     var D = totalDur();
     frame(INTRO + (mv.currentTime || 0), D, false);
     $('time').textContent = fmtT(INTRO + (mv.currentTime||0)) + ' / ' + fmtT(D);
@@ -334,7 +362,7 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
   /* ---------- загрузка фото ---------- */
   $('photoFile').addEventListener('change', function(e){
     var f = e.target.files[0]; if(!f) return;
-    var img = new Image(); img.onload = function(){ photo = img; drawStill(); }; img.src = URL.createObjectURL(f);
+    var img = new Image(); img.onload = function(){ photo = img; if(isPhoto()) size(); drawStill(); }; img.src = URL.createObjectURL(f);
   });
 
   /* ---------- мастер-ролики в памяти браузера ---------- */
@@ -391,7 +419,7 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
 
   /* ---------- подгонка цвета под фото ---------- */
   $('auto').addEventListener('click', function(){
-    if(!photo || !mv.videoWidth) return;
+    if(!photo || !hasDM()) return;
     var c = document.createElement('canvas'); c.width = 64; c.height = 36; var x = c.getContext('2d'); x.drawImage(photo, 0, 0, 64, 36);
     var d = x.getImageData(0,0,64,36).data, R=0,G=0,B=0,n=0; for(var i=0;i<d.length;i+=4){ R+=d[i]; G+=d[i+1]; B+=d[i+2]; n++; } R/=n; G/=n; B/=n;
     ['bright','contrast','temp','sat'].forEach(function(id){ P[id] = 0; });
@@ -463,7 +491,16 @@ input[type=file]{width:100%;color:var(--muted);font-size:13px}
     requestAnimationFrame(loop);
   }
   $('play').addEventListener('click', function(){ running ? stop() : start(false); });
-  $('export').addEventListener('click', function(){ if(!running) start(true); });
+  $('export').addEventListener('click', function(){
+    if(!isPhoto()){ if(!running) start(true); return; }
+    if(!photo){ $('status').textContent = 'Добавьте фото комнаты.'; return; }
+    recording = true; frame(0, 0, false); recording = false; /* без маркера света */
+    out.toBlob(function(b){
+      var a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'ded-moroz-foto-' + new Date().toISOString().slice(0,10) + '.jpg';
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+      $('status').textContent = 'Фото сохранено: ' + out.width + '×' + out.height; drawStill();
+    }, 'image/jpeg', 0.93);
+  });
   $('seek').addEventListener('input', function(){ if(running || !mv.duration) return; mv.currentTime = mv.duration*this.value/1000; });
   ready = true;
   document.fonts && document.fonts.load('40px "Great Vibes"').then(drawStill);

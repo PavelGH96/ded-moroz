@@ -19,6 +19,7 @@ import { makeLetterPdf, makeTagsPdf, makeBlankPdf } from "./pdf.js";
 const PRODUCTS: Record<string, { title: string; price: number }> = {
   both: { title: "Письмо и видео", price: 1490 },
   letter: { title: "Только письмо", price: 390 },
+  photo: { title: "Письмо и фото с Дедом Морозом", price: 490 },
   video: { title: "Только видео", price: 1490 },
 };
 const ADDONS: Record<string, { title: string; price: number; childOnly?: boolean }> = {
@@ -225,8 +226,8 @@ async function notify(order: any, data: any, files: { photo: File | null; letter
     data.praise ? `⭐ ${adult ? "Поблагодарить" : "Похвалить"}: ${esc(data.praise)}` : "",
     data.wish ? `🎯 ${adult ? "Пожелать" : "Постараться"}: ${esc(data.wish)}` : "",
     data.gift ? `🎁 Подарок: ${esc(data.gift)}` : "",
-    data.product !== "letter" ? `📷 Фото комнаты: ${files.photo ? "ниже" : "пришлют позже"}` : "",
-    files.letterPhoto ? `✉️ Письмо ребёнка Деду Морозу: фото ниже${data.product === "letter" ? "" : " (показать в видео)"}` : "",
+    data.product !== "letter" ? `📷 Фото комнаты${data.product === "photo" ? " (вписать Деда Мороза)" : ""}: ${files.photo ? "ниже" : "пришлют позже"}` : "",
+    files.letterPhoto ? `✉️ Письмо ребёнка Деду Морозу: фото ниже${data.product === "video" || data.product === "both" ? " (показать в видео)" : ""}` : "",
     `👤 ${esc(data.parent || "без имени")} · ${contactHtml(data.contact)}`,
     ``,
     `🔗 Подарочная ссылка (отправить после оплаты):\n${esc(giftUrl(order.gift_token))}`,
