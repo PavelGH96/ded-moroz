@@ -227,6 +227,7 @@ async function notify(order: any, data: any, files: { photo: File | null; letter
     data.wish ? `🎯 ${adult ? "Пожелать" : "Постараться"}: ${esc(data.wish)}` : "",
     data.gift ? `🎁 Подарок: ${esc(data.gift)}` : "",
     data.product !== "letter" ? `📷 Фото комнаты${data.product === "photo" ? " (вписать Деда Мороза)" : ""}: ${files.photo ? "ниже" : "пришлют позже"}` : "",
+    data.product !== "letter" ? (data.consent_foreign ? "🌐 Согласие на обработку фото зарубежным сервисом: есть" : "🔒 Согласия на зарубежный сервис нет: монтаж только в своей студии") : "",
     files.letterPhoto ? `✉️ Письмо ребёнка Деду Морозу: фото ниже${data.product === "video" || data.product === "both" ? " (показать в видео)" : ""}` : "",
     `👤 ${esc(data.parent || "без имени")} · ${contactHtml(data.contact)}`,
     ``,
@@ -266,12 +267,14 @@ function parse(raw: Record<string, unknown>) {
     parent: str(raw.parent, 40),
     contact: str(raw.contact, 60),
     consent: ["1", "true", "on", "yes"].includes(String(raw.consent ?? "").toLowerCase()) || raw.consent === true,
+    consent_foreign: ["1", "true", "on", "yes"].includes(String(raw.consent_foreign ?? "").toLowerCase()) || raw.consent_foreign === true,
   };
   if (!PRODUCTS[d.product]) errors.product = "Выберите, что готовить.";
   if (!d.name) errors.name = d.recipient === "adult" ? "Впишите имя получателя." : "Впишите имя ребёнка.";
   if (d.age !== null && (d.age < 1 || d.age > 17)) d.age = null;
   if (d.recipient === "adult") { d.age = null; d.addons = d.addons.filter((a) => !ADDONS[a].childOnly); }
   if (d.gender !== "m" && d.gender !== "f") d.gender = "";
+  if (d.product === "letter") d.consent_foreign = false;
   if (d.contact.length < 3) errors.contact = "Укажите, куда прислать готовый заказ.";
   if (!d.consent) errors.consent = "Без согласия на обработку данных мы не можем принять заказ.";
   return { d, errors };
@@ -360,9 +363,9 @@ Deno.serve(async (req) => {
   const letter = letterPlain(d);
   const [order] = await sql`
     insert into dedmoroz.orders (template, product, price_rub, recipient, addons, child_name, child_age, child_gender, praise, wish, gift, parent_name, contact,
-                                 has_photo, has_letter_photo, letter_text, consent_at, ip_hash, gift_token)
+                                 has_photo, has_letter_photo, letter_text, consent_at, consent_foreign_at, ip_hash, gift_token)
     values (${d.template}, ${d.product}, ${total}, ${d.recipient}, ${d.addons}, ${d.name}, ${d.age}, ${d.gender || null}, ${d.praise || null}, ${d.wish || null}, ${d.gift || null},
-            ${d.parent || null}, ${d.contact}, ${!!photo}, ${!!letterPhoto}, ${letter}, now(), ${ih}, ${token})
+            ${d.parent || null}, ${d.contact}, ${!!photo}, ${!!letterPhoto}, ${letter}, now(), ${d.consent_foreign ? new Date() : null}, ${ih}, ${token})
     returning id, gift_token`;
   order.total = total;
 
